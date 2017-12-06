@@ -11,7 +11,7 @@ exports.list_latest_feed = function(req, res){
   var limit = 100;  var counter = 0;
   Post.find().limit(limit).sort('-postDate').exec(function(err, posts){
     posts.forEach(function(post,index){
-      Users.findById(post.author_id,function(err,user){
+      Users.findById(post.author_id,"-hash",function(err,user){
         if(err) return res.status(500).json({error: constants.errors.badServer})
         if(user){
           response[index] ={post:post,user:user};

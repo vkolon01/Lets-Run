@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import LoginPage from './auth/LoginPage';
-import RegistrationPage from './auth/RegistrationPage';
 import {Route, Link} from 'react-router-dom';
 import LoginStore from '../stores/LoginStore';
 import AuthService from '../services/AuthService';
@@ -52,8 +50,6 @@ class NavBar extends Component{
         )}
 
         <hr/>
-        <Route path="/sign_in" component={LoginPage}/>
-        <Route path="/register" component={RegistrationPage}/>
       </div>
     )
   }

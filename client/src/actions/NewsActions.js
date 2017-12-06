@@ -21,6 +21,7 @@ export default{
       message: "loading..."
     });
   },
+
   receiveNews(news){
     dispatcher.dispatch({
       type: "RECEIVE_NEWS",

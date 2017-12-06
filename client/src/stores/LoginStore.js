@@ -18,7 +18,6 @@ class LoginStore extends BaseStore{
         this._user = jwt_decode(this._jwt);
         localStorage.setItem('jwt', this._jwt);
         this.emitChange();
-        history.replace('/')
         break;
       case "LOGOUT_USER":
         this._user = null;

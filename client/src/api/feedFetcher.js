@@ -6,8 +6,10 @@ import MessageActions from '../actions/MessageActions';
 import LoginStore from '../stores/LoginStore';
 import when from 'when';
 import request  from 'reqwest';
+import constants from '../constants/constants';
+import History from '../services/History';
 
-const API_URL = 'http://localhost:3000/';
+const API_URL = constants.SEVER_URL;
 const API_HEADERS = {
   'Content-Type': 'application/json',
   'Authorization': "nothing yet"
@@ -16,7 +18,7 @@ const API_HEADERS = {
 class FeedFetcher{
       fetchNews(){
         return when(request({
-          url: 'http://localhost:3000/',
+          url: API_URL,
           method: 'GET',
           crossOrigin: true,
           contentType: "application/json",
@@ -31,9 +33,9 @@ class FeedFetcher{
         }));
       }
 
-      sendNews(post){
+      createPost(post){
         return when(request({
-          url: 'http://localhost:3000/newpost',
+          url: API_URL + '/newpost',
           method: 'POST',
           crossOrigin: true,
           contentType: "application/json",
@@ -44,6 +46,10 @@ class FeedFetcher{
           },
           error: function(err){
             if(err.status === 404){
+              MessageActions.displayErrors(JSON.parse(err.response));
+            }
+            if(err.status === 401){
+              History.replace('/sign_in');
               MessageActions.displayErrors(JSON.parse(err.response));
             }
           },

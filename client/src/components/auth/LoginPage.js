@@ -59,7 +59,6 @@ class LoginPage extends Component{
       <Card className="container">
         <form onSubmit={this.login.bind(this)}>
           <h2 className="card-heading">Login</h2>
-          <p className="error-message">{summary}</p>
           <div className="field-line">
             <TextField
               floatingLabelText="Email"

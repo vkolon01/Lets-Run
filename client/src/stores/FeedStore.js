@@ -11,7 +11,7 @@ class FeedStore  extends BaseStore{
 }
   createPost(post){
     const id = post.id;
-    FeedFetcher.sendNews(post);
+    FeedFetcher.createPost(post);
     this.emit('change');
   }
 

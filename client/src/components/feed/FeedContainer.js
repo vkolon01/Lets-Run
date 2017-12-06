@@ -33,13 +33,10 @@ class FeedContainer extends Component{
 
   render(){
     const news = this.state.news;
-    //const NewsComponents = news.map((post) => {
-    //  return <p key={post._id}> {post.message} </p>
-    //})
     var NewsComponents = news.map((post) => {
       return <Post
         key={post.post._id}
-        post = {post.post}
+        post = {post}
       />
     })
     return(
@@ -49,7 +46,6 @@ class FeedContainer extends Component{
         </div>
         <div className="newsfeed">
 
-          <Messages/>
           <button onClick={NewsActions.reloadPosts}> Refresh Posts </button>
 
             {NewsComponents}

@@ -2,12 +2,20 @@ import LoginActions from '../actions/LoginActions';
 import MessageActions from '../actions/MessageActions';
 import when from 'when';
 import request  from 'reqwest';
+import constants from '../constants/constants';
+import History from './History';
+
+const API_URL = constants.SEVER_URL;
+const API_HEADERS = {
+  'Content-Type': 'application/json',
+  'Authorization': "nothing yet"
+};
 
 class AuthService{
 
   register(form){
     return when(request({
-      url: 'http://localhost:3000/users/register',
+      url: API_URL + '/users/register',
       method: 'POST',
       crossOrigin: true,
       type: 'json',
@@ -23,13 +31,14 @@ class AuthService{
       },
       success: function(res){
         MessageActions.displayMessage(res.message);
+        History.replace('/');
       }
     }));
   }
 
   login(form){
     return when(request({
-      url: 'http://localhost:3000/users/sign_in',
+      url: API_URL + '/users/sign_in',
       method: 'POST',
       crossOrigin: true,
       type: 'json',
@@ -41,13 +50,13 @@ class AuthService{
       error: function(err){
         if(err.status === 404){
           MessageActions.displayErrors(JSON.parse(err.response));
-          //alert(JSON.parse(err.response).message);
         }
       },
       success: function(res){
         var jwt = res.token;
         LoginActions.loginUser(jwt);
         MessageActions.displayMessage(res.message);
+        History.replace('/');
       }
     }));
   }
