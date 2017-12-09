@@ -2,9 +2,6 @@ import {EventEmitter} from 'events';
 import dispatcher from '../dispatcher';
 
 export default class BaseStore extends EventEmitter{
-  constructor(){
-    super();
-  }
   subscribe(actionSubscribe){
     this._dispatchToken = dispatcher.register(actionSubscribe());
   }

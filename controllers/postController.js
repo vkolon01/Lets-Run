@@ -37,11 +37,12 @@ exports.createPost = function(req,res){
 }
 
 exports.addComment = function(req,res){
+  console.log(req.body)
   var post_id = req.body.post_id;
   var author_id = req.user._id
   var comment = {
     author_id: author_id,
-    body: req.body.body
+    body: req.body.comment.body
   }
 
   Post.findByIdAndUpdate(post_id,

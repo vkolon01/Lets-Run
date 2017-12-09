@@ -1,4 +1,3 @@
-import dispatcher from '../dispatcher';
 import BaseStore from './BaseStore';
 
 class MessagesStore extends BaseStore{
@@ -21,6 +20,7 @@ class MessagesStore extends BaseStore{
         this._summary = action.summary;
         this.emitChange();
         this.reset();
+        break;
       default:
         break;
     }

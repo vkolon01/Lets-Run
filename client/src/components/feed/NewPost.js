@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import {PropTypes} from 'prop-types';
 import NewsActions from '../../actions/NewsActions';
 
 class NewPost extends Component{

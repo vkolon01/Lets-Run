@@ -50,7 +50,6 @@ class LoginPage extends Component{
     })
   }
   render(){
-    const summary = this.state.summary;
     const redirect = this.state.redirect;
     if(redirect){
       return <Redirect to = '/'/>;

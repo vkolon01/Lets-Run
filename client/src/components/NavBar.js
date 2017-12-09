@@ -1,27 +1,26 @@
 import React, {Component} from 'react';
-import {Route, Link} from 'react-router-dom';
-import LoginStore from '../stores/LoginStore';
+import {Link} from 'react-router-dom';
+import UserStore from '../stores/UserStore';
 import AuthService from '../services/AuthService';
-import MessagesStore from '../stores/MessagesStore';
 
 class NavBar extends Component{
 
   constructor(){
     super();
     this.state={
-      username: LoginStore.username
+      username: UserStore.username
     }
     this.update = this.update.bind(this);
   }
   componentWillMount(){
-    LoginStore.on('change',this.update);
+    UserStore.on('change',this.update);
   }
   componentWillUnmount(){
-    LoginStore.removeListener('change', this.update);
+    UserStore.removeListener('change', this.update);
   }
   update(){
     this.setState({
-      username: LoginStore.username
+      username: UserStore.username
     })
   }
 
@@ -33,7 +32,7 @@ class NavBar extends Component{
         <div className="logo"><Link to="/">Home</Link></div>
         <div><Link to="/index">Base</Link></div>
         {summary}
-        {LoginStore.isLoggedIn() ? (
+        {UserStore.isLoggedIn() ? (
           <div className="navbar_auth">
             <p> user: {username} </p>
             <ul>

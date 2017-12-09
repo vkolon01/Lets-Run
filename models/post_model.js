@@ -25,6 +25,10 @@ var PostSchema = new Schema({
         type: String,
         required: true
       },
+      postDate: {
+        type: Date,
+        default: Date.now()
+      },
       body: String
     }]
 });

@@ -3,7 +3,7 @@ import 'whatwg-fetch';
 import {Redirect} from 'react-router-dom';
 import NewsActions from '../actions/NewsActions';
 import MessageActions from '../actions/MessageActions';
-import LoginStore from '../stores/LoginStore';
+import UserStore from '../stores/UserStore';
 import when from 'when';
 import request  from 'reqwest';
 import constants from '../constants/constants';
@@ -42,7 +42,33 @@ class FeedFetcher{
           data: post,
           headers:{
             'Content-Type': 'application/x-www-form-urlencoded',
-            'authorization': 'JWT ' + LoginStore.jwt
+            'authorization': 'JWT ' + UserStore.jwt
+          },
+          error: function(err){
+            if(err.status === 404){
+              MessageActions.displayErrors(JSON.parse(err.response));
+            }
+            if(err.status === 401){
+              History.replace('/sign_in');
+              MessageActions.displayErrors(JSON.parse(err.response));
+            }
+          },
+          success: function(res){
+            NewsActions.reloadPosts();
+          }
+        }));
+      }
+
+      postComment(comment){
+        return when(request({
+          url: API_URL + '/newcomment',
+          method: 'POST',
+          crossOrigin: true,
+          contentType: "application/json",
+          data: comment,
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'authorization': 'JWT ' + UserStore.jwt
           },
           error: function(err){
             if(err.status === 404){

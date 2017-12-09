@@ -1,5 +1,4 @@
 import dispatcher from '../dispatcher';
-import React from 'react';
 import constants from '../constants/constants';
 
 export default{

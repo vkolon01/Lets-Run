@@ -67,7 +67,7 @@ body {
   position: relative;
   z-index: 1;
   background: #fff;
-  width:20%;
+  width:40%;
   padding: 10px 10px 10px 15px;
   margin: 0 0 10px 0;
   overflow: auto;
@@ -75,16 +75,26 @@ body {
   border-radius: 3px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
+.post_comments{
+  color: #384394;
+  cursor: pointer;
+}
+.post_comments:hover{
+  color: #5D70F8;
+}
 .post_comments:before{
   display: inline-block;
   width: 1em;
-  content: '►';
-}.post_comments--are-open:before{
-  content: '▼';
 }
 .post_comments_section{
-
   margin-top: 10px;
   padding-top: 10px;
   border-top: dashed 1px #ddd;
+}
+.leave_comment{
+  color: #384394;
+  cursor: pointer;
+}
+.leave_comment:hover{
+  color: #5D70F8;
 }

@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router';
 import { Link } from 'react-router-dom';
 import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import when from 'when';
-import request  from 'reqwest';
 import MessagesStore from '../../stores/MessagesStore';
 import AuthService from '../../services/AuthService';
 
@@ -54,42 +51,6 @@ class RegistrationPage extends Component{
     event.preventDefault();
     AuthService.register(this.state.user);
   }
-    //strings for an HTTP body message
-    //encodeURIComponent escapes certain form characters that
-    //can be intepreted as part of the code at the server
-    /*
-    const firstName = encodeURIComponent(this.state.user.firstName);
-    const lastName = encodeURIComponent(this.state.user.lastName);
-    const username = encodeURIComponent(this.state.user.username);
-    const email = encodeURIComponent(this.state.user.email);
-    const password = encodeURIComponent(this.state.user.password);
-    const formData = `firstName=${firstName}&lastName=${lastName}&username=${username}&email=${email}&password=${password}`;
-    console.log(formData);
-    //Ajax request
-    const xhr = new XMLHttpRequest();
-    xhr.open('post','http://localhost:3000/users/register');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'json';
-    xhr.addEventListener('load',() => {
-      if (xhr.status === 200){
-        this.setState({
-          errors: {},
-          redirect: true
-        });
-        localStorage.setItem('duccessMessage', xhr.response.message);
-
-      }else{
-        const errors = xhr.response.errors ? xhr.response.errors : {};
-        errors.summary = xhr.response.message;
-
-        this.setState({
-          errors
-        });
-      }
-    });
-    xhr.send(formData);
-  }
-*/
   render(){
     const user = this.state.user;
     const summary = this.state.summary;

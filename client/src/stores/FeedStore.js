@@ -1,7 +1,5 @@
 import BaseStore from './BaseStore';
-import dispatcher from '../dispatcher';
 import FeedFetcher from '../api/feedFetcher';
-import MessageActions from '../actions/MessageActions';
 
 class FeedStore  extends BaseStore{
   constructor(){
@@ -10,15 +8,20 @@ class FeedStore  extends BaseStore{
     this.subscribe(() => this._registerToActions.bind(this))
 }
   createPost(post){
-    const id = post.id;
     FeedFetcher.createPost(post);
     this.emit('change');
   }
-
+  postComment(comment){
+    FeedFetcher.postComment(comment);
+    this.emit('change');
+  }
   _registerToActions(action){
     switch(action.type){
       case "CREATE_POST":
         this.createPost(action.post);
+        break;
+      case "POST_COMMENT":
+        this.postComment(action.comment);
         break;
       case "DELETE_POST":
         break;

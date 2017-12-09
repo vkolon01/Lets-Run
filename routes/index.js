@@ -4,10 +4,9 @@ var feedController = require('../controllers/feedController');
 var postController = require('../controllers/postController');
 var authController = require('../controllers/authController');
 
-/* GET home page. */
+/* returns an array of all posts. */
 router.route('/')
-  //.get(feedController.loginRequired, feedController.list_latest_feed) //protected
-  .get(feedController.list_latest_feed) //not protected
+  .get(feedController.list_latest_feed)
 router.route('/newpost')
   .post(authController.loginRequired, postController.createPost);
 router.route('/newcomment')

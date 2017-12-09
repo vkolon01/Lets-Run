@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import 'whatwg-fetch';
 import FeedStore from '../../stores/FeedStore';
-import MessagesStore from '../../stores/MessagesStore';
-import Messages from '../Messages';
 import Post from './Post';
 import NewPost from './NewPost';
 import NewsActions from '../../actions/NewsActions';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class FeedContainer extends Component{
   constructor(){
@@ -33,7 +30,7 @@ class FeedContainer extends Component{
 
   render(){
     const news = this.state.news;
-    var NewsComponents = news.map((post) => {
+    var NewsComponents = news.reverse().map((post) => {
       return <Post
         key={post.post._id}
         post = {post}

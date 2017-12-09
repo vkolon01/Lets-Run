@@ -7,6 +7,12 @@ export default{
       post
     });
   },
+  postComment(comment){
+    dispatcher.dispatch({
+      type: "POST_COMMENT",
+      comment
+    });
+  },
 
   deletePost(id){
     dispatcher.dispatch({

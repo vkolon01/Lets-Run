@@ -7,8 +7,7 @@ import History from './History';
 
 const API_URL = constants.SEVER_URL;
 const API_HEADERS = {
-  'Content-Type': 'application/json',
-  'Authorization': "nothing yet"
+  'Content-Type': 'application/x-www-form-urlencoded'
 };
 
 class AuthService{
@@ -21,9 +20,7 @@ class AuthService{
       type: 'json',
       contentType: "application/json",
       data: form,
-      headers:{
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
+      headers: API_HEADERS,
       error: function(err){
         if(err.status === 404){
           MessageActions.displayErrors(JSON.parse(err.response));
@@ -44,9 +41,7 @@ class AuthService{
       type: 'json',
       contentType: "application/json",
       data: form,
-      headers:{
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
+      headers: API_HEADERS,
       error: function(err){
         if(err.status === 404){
           MessageActions.displayErrors(JSON.parse(err.response));

@@ -1,9 +1,8 @@
 import dispatcher from '../dispatcher';
-import React from 'react';
 
 export default {
   loginUser: (jwt) => {
-    var existingJwt = localStorage.getItem('jwt');
+    //var existingJwt = localStorage.getItem('jwt');
     dispatcher.dispatch({
       type: "LOGIN_USER",
       jwt: jwt

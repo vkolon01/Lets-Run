@@ -3,7 +3,7 @@ import BaseStore from './BaseStore';
 import jwt_decode from 'jwt-decode';
 import history from '../services/History';
 
-class LoginStore extends BaseStore{
+class UserStore extends BaseStore{
   constructor(){
     super();
     this.subscribe(() => this._registerToActions.bind(this))
@@ -44,4 +44,4 @@ class LoginStore extends BaseStore{
   }
 }
 
-export default new LoginStore();
+export default new UserStore();
