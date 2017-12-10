@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import MessagesStore from '../stores/MessagesStore';
 
+/**
+  The Messages component is used to display a message to the user once
+*/
 class Messages extends Component{
   constructor(){
     super();
