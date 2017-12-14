@@ -1,23 +1,57 @@
 import React,{Component} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NewComment from './NewComment';
+import UserStore from '../../stores/UserStore';
+import NewsActions  from '../../actions/NewsActions';
+import CommentStore from '../../stores/CommentStore';
 
 class Post extends Component{
   constructor(){
     super(...arguments);
     this.state = {
       showComments: false,
-      showCommentInputContainer: false
+      showCommentInputContainer: false,
+      comments: CommentStore.comments
     };
+    this.updateComments = this.updateComments.bind(this);
   }
 
-  toggleComments(){
-    this.setState({
-      showComments: !this.state.showComments,
-    })
+  componentWillMount(){
+    CommentStore.on('change',this.updateComments);
   }
-  showComments(){
-    if(!this.state.showComments) this.toggleComments();
+  componentWillUnmount(){
+    CommentStore.removeListener('change', this.updateComments);
+  }
+
+  /*
+    If comments are currently non-visible, fetches related comments from the server
+    and turns comments visible.
+  */
+  toggleComments(){
+    if(!this.state.showComments){
+      NewsActions.loadComments(this.props.post.post._id);
+    }else{
+      this.setState({
+        showComments: false
+      });
+    }
+  }
+
+  loadComments(){
+    NewsActions.loadComments(this.props.post.post._id);
+  }
+
+  updateComments(){
+    if(CommentStore.comments[0] && this.props.post.post._id === CommentStore.comments[0].parent_id){
+      this.setState({
+        comments: CommentStore.comments,
+        showComments: true
+      });
+    }
+  }
+
+  deletePost(){
+    NewsActions.deletePost(this.props.post.post._id)
   }
 
   toggleCommentInputContainer(){
@@ -32,11 +66,11 @@ class Post extends Component{
     let postComments;
 
     if(this.state.showComments){
-      postComments = post.comments.reverse().map((comment) => {
+      postComments = this.state.comments.map((comment) => {
         return (
           <div key={comment._id} className = "comment">
-            <h3 className="comment_author"> {comment.author} </h3>
-            <p className="comment_body"> {comment.body} </p>
+            <h3 className="comment_author"> {comment.author ? comment.author.username : ""} </h3>
+            <p className="comment_message"> {comment.message} </p>
           </div>
         )
       })
@@ -45,22 +79,25 @@ class Post extends Component{
     return(
       <div className="post">
         <div className="post_body">
+          {UserStore.username === author.username ?
+            <div className="remove_post"> <button onClick={this.deletePost.bind(this)}> x </button></div>
+          :
+            ""
+          }
           <div className="post_username"> {author.username} : </div>
           <div className="post_message"> {post.message} </div>
-
-
           {this.state.showCommentInputContainer ?
             <NewComment
               cancel = {this.toggleCommentInputContainer.bind(this)}
-              showComments = {this.showComments.bind(this)}
+              showComments = {this.loadComments.bind(this)}
               post_id = {post_id}
             />
-            :
+          :
             <div className="leave_comment" onClick={this.toggleCommentInputContainer.bind(this)}> Leave comment</div>
           }
 
           <div className={this.state.showDetails? "post_comments post_comments--are-open": "post_comments"} onClick={this.toggleComments.bind(this)}>
-            {post.comments.length ? post.comments.length + (post.comments.length > 1 ? " comments" : " comment") : ""}
+            {post.comments && post.comments.length ? post.comments.length + (post.comments.length > 1 ? " comments" : " comment") : ""}
           </div>
         </div>
         <div className="post_comments_section">

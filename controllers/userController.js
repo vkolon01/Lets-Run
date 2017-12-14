@@ -50,6 +50,18 @@ exports.sign_in = function(req,res){
   })
 };
 
+/*
+  Returns user with the given id.
+*/
+exports.getUser = function(user_id){
+  return new Promise(function(fulfill,reject){
+    User.findById(user_id,"-hash",function(err,user){
+      if(err) reject (constants.errors.badServer);
+      fulfill(user);
+    })
+  })
+}
+
 exports.loginRequired = function(req,res,next){
   if(req.user){
     next();

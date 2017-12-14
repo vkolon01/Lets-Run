@@ -4,6 +4,7 @@ class MessagesStore extends BaseStore{
   constructor(){
     super();
     this._summary = '';
+    this._error = '';
     this._errors = {};
     this.subscribe(() => this._registerToActions.bind(this));
   }
@@ -11,7 +12,7 @@ class MessagesStore extends BaseStore{
   _registerToActions(action){
     switch(action.type){
       case "BAD_AUTH":
-        this._summary = action.errors.summary;
+        this._error = action.errors.summary;
         this._errors = action.errors.errors;
         this.emitChange();
         this.reset();
@@ -31,11 +32,15 @@ class MessagesStore extends BaseStore{
   */
   reset(){
     this._summary = '';
+    this._error = '';
     this._errors = {};
   }
 
   get summary(){
     return this._summary;
+  }
+  get error(){
+    return this._error;
   }
 
   get errors(){

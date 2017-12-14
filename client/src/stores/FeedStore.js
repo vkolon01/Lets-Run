@@ -11,6 +11,10 @@ class FeedStore  extends BaseStore{
     FeedFetcher.createPost(post);
     this.emit('change');
   }
+  deletePost(post_id){
+    FeedFetcher.deletePost(post_id);
+    this.emit('change');
+  }
   postComment(comment){
     FeedFetcher.postComment(comment);
     this.emit('change');
@@ -24,6 +28,7 @@ class FeedStore  extends BaseStore{
         this.postComment(action.comment);
         break;
       case "DELETE_POST":
+        this.deletePost(action.id);
         break;
       case "FETCH_NEWS":
         FeedFetcher.fetchNews();

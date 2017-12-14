@@ -11,7 +11,6 @@ class Comment extends Component{
 
   if(this.state.showComments){
     postComments = post.comments.map((comment) => {
-      console.log(comment);
       return (
         <div key={comment._id} className = "comment">
           <h3 className="comment_author"> {comment.author_id} </h3>

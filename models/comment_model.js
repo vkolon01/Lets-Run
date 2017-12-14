@@ -4,8 +4,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var AttachedEvent = require('./event_model');
 
-var PostSchema = new Schema({
+var CommentSchema = new Schema({
   message: String,
+  parent_id: String,
   author_id: {
     type: String,
     required: true,
@@ -15,11 +16,6 @@ var PostSchema = new Schema({
     type: Date,
     default: Date.now()
   },
-  AttachedEvent:{
-    type: String,
-    default: null
-  },
-  comments: [String]
 });
 
-module.exports = PostSchema;
+module.exports = CommentSchema;

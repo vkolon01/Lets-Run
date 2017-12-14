@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var Post = mongoose.model('Posts',require('../models/post_model'));
+var PostComment = mongoose.model('Comments',require('../models/comment_model'));
 var AttachedEvent = mongoose.model("Events",require('../models/event_model'));
 var constants = require('../constants/messages');
 
@@ -18,7 +19,6 @@ exports.createPost = function(req,res){
   new Post(req.body.post)
     .save(function(err,post){
     if(err){
-      console.log(err);
       res.send(err)
     }else{
       if(attachment){
@@ -37,23 +37,75 @@ exports.createPost = function(req,res){
 }
 
 exports.addComment = function(req,res){
-  console.log(req.body)
+  var message = req.body.comment.body;
   var post_id = req.body.post_id;
-  var author_id = req.user._id
+  var author_id = req.user._id;
   var comment = {
     author_id: author_id,
-    body: req.body.comment.body
+    message: message,
+    parent_id: post_id
   }
-
-  Post.findByIdAndUpdate(post_id,
-    {$push:{comments: comment}},
-    function(err,updatedPost){
-      if(err) res.send(constants.errors.genericError);
-      res.send(updatedPost);
-    }
-  )
+  new PostComment(comment)
+    .save(function(err,comment){
+      if(err){
+        res.send(err);
+      }else{
+        Post.findByIdAndUpdate(post_id,
+          {$push:{comments: comment._id}},
+          function(err,updatedPost){
+            if(err) {
+              res.send(constants.errors.genericError);
+            }
+            res.status(200).json(constants.success.commentPosted);
+          }
+        )
+      }
+    })
 }
 
+exports.getComments = function(req,res){
+  var post_id = req.params.post_id;
+  PostComment.find({parent_id: post_id},function(err,comments){
+    if(err) res.send(constants.errors.genericError);
+    res.send(comments);
+  })
+}
+
+exports.deletePost = function(req,res){
+  var post_id = req.params.post_id;
+  deletePost(post_id).then(function(message){
+    res.send(message);
+  },function(err){
+    res.status(500).send(err);
+  })
+}
+
+/*
+  Removes a post document with the given id.
+  Once the post is deleted, all the associate comments
+  are also removed.
+*/
+function deletePost(post_id){
+  return new Promise(function(fulfill, reject){
+    Post.findById(post_id).remove(function(err,deletedPost){
+      if(err){
+        reject(err)
+      }else{
+        PostComment.remove({parent_id: post_id},function(err){});
+        fulfill(constants.success.postDeleted)
+      }
+    })
+  })
+}
+
+function deleteComment(comment_id){
+  return new Promise(function(fulfill,reject){
+    PostComment.findById(comment_id).remove(function(err){
+      if(err) reject(err)
+      fulfill(constants.success.commentDeleted)
+    })
+  })
+}
 
 function createEvent(attachment){
   return new Promise(function(fulfill,reject){

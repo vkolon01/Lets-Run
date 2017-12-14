@@ -28,10 +28,23 @@ export default{
     });
   },
 
+  loadComments(post_id){
+    dispatcher.dispatch({
+      type: "FETCH_COMMENTS",
+      message: "loading...",
+      post_id
+    });
+  },
   receiveNews(news){
     dispatcher.dispatch({
       type: "RECEIVE_NEWS",
       news
      });
+  },
+  receiveComments(comments){
+    dispatcher.dispatch({
+      type: "RECEIVE_COMMENTS",
+      comments
+    });
   }
 }

@@ -12,7 +12,6 @@ export default{
     })
   },
   displayMessage: (message) => {
-    console.log(message)
     dispatcher.dispatch({
       type: "SUCCESS",
       summary: message

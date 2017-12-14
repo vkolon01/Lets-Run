@@ -9,6 +9,7 @@ class Messages extends Component{
     super();
     this.state = {
       summary: MessagesStore.summary,
+      error: MessagesStore.error
     };
     this.updateMessages = this.updateMessages.bind(this);
   }
@@ -20,13 +21,18 @@ class Messages extends Component{
   }
   updateMessages(){
     this.setState({
-      summary:MessagesStore.summary
+      summary:MessagesStore.summary,
+      error: MessagesStore.error
     })
   }
   render(){
     const messages = this.state.summary
+    const error = this.state.error
     return(
-      <p className="messages">{messages}</p>
+      <div>
+        {messages ? <p className="messages">{messages}</p> : ""}
+        {error ? <p className="error">{error}</p> : ""}
+      </div>
     )
   }
 }

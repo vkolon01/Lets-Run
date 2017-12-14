@@ -7,5 +7,8 @@ exports.errors = {
 exports.success = {
   registration: 'Registration successful',
   login: "You logged in successfully",
-  logout:"You logged out successfully"
+  logout:"You logged out successfully",
+  postDeleted: "Post have been successfully deleted",
+  commentPosted: "Comment have been posted",
+  commentDeleted: "Comment has been deleted"
 };

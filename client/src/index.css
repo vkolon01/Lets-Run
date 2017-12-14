@@ -98,3 +98,13 @@ body {
 .leave_comment:hover{
   color: #5D70F8;
 }
+.messages{
+  color: #FFFFFF;
+  background-color: #2C9E00;
+  padding: 10px;
+}
+.error{
+  color: #FFFFFF;
+  padding: 10px;
+  background-color: #FF0400;
+}

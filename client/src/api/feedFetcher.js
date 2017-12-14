@@ -58,6 +58,25 @@ class FeedFetcher{
           }
         }));
       }
+      deletePost(post_id){
+        return when(request({
+          url: API_URL + '/posts/' + post_id,
+          method: 'DELETE',
+          crossOrigin: true,
+          contentType: "application/json",
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'authorization': 'JWT ' + UserStore.jwt
+          },
+          error: function(err){
+              MessageActions.displayErrors(JSON.parse(err.response));
+          },
+          success: function(res){
+            NewsActions.reloadPosts();
+            MessageActions.displayMessage(res);
+          }
+        }));
+      }
 
       postComment(comment){
         return when(request({
@@ -72,7 +91,7 @@ class FeedFetcher{
           },
           error: function(err){
             if(err.status === 404){
-              MessageActions.displayErrors(JSON.parse(err.response));
+              MessageActions.displayErrors(err.response);
             }
             if(err.status === 401){
               History.replace('/sign_in');
@@ -80,7 +99,25 @@ class FeedFetcher{
             }
           },
           success: function(res){
+            MessageActions.displayMessage(res);
             NewsActions.reloadPosts();
+          }
+        }));
+      }
+
+      fetchComments(post_id){
+        return when(request({
+          url: API_URL + '/posts/' + post_id,
+          method: 'GET',
+          crossOrigin: true,
+          contentType: "application/json",
+          error: function(err){
+            if(err.status === 404){
+              MessageActions.displayErrors(JSON.parse(err.response));
+            }
+          },
+          success: function(res){
+            NewsActions.receiveComments(res,post_id);
           }
         }));
       }
