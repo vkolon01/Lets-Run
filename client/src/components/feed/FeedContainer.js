@@ -9,9 +9,10 @@ class FeedContainer extends Component{
   constructor(){
     super();
     this.state = {
-      news: FeedStore.news
+      news: FeedStore.posts
     };
     this.getAllPosts = this.getAllPosts.bind(this);
+    this.reloadPosts = this.reloadPosts.bind(this);
   }
   componentWillMount(){
     FeedStore.on('change', this.getAllPosts);
@@ -20,21 +21,28 @@ class FeedContainer extends Component{
     FeedStore.removeListener("change",this.getAllPosts);
   }
   componentDidMount(){
-    NewsActions.reloadPosts();
+    this.reloadPosts();
   }
   getAllPosts(){
     this.setState({
-      news: FeedStore.news
+      news: FeedStore.posts
     });
+  }
+  reloadPosts(){
+    NewsActions.fetchPosts();
   }
 
   render(){
     const news = this.state.news;
-    var NewsComponents = news.reverse().map((post) => {
-      return <Post
-        key={post.post._id}
-        post = {post}
-      />
+    var NewsComponents = news.map((post) => {
+      if(post.user){
+        return <Post
+          key={post.post._id}
+          author = {post.user}
+          post = {post.post}
+          handleReload = {this.reloadPosts}
+        />
+      }
     })
     return(
       <div>

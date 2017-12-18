@@ -1,4 +1,4 @@
-import LoginActions from '../actions/LoginActions';
+import AuthActions from '../actions/AuthActions';
 import MessageActions from '../actions/MessageActions';
 import when from 'when';
 import request  from 'reqwest';
@@ -49,7 +49,7 @@ class AuthService{
       },
       success: function(res){
         var jwt = res.token;
-        LoginActions.loginUser(jwt);
+        AuthActions.loginUser(jwt);
         MessageActions.displayMessage(res.message);
         History.replace('/');
       }
@@ -57,7 +57,7 @@ class AuthService{
   }
 
   logout(){
-    LoginActions.logoutUser();
+    AuthActions.logoutUser();
     MessageActions.displayMessage('You logged out successfully');
   }
 }

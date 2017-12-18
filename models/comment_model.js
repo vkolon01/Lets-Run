@@ -12,6 +12,7 @@ var CommentSchema = new Schema({
     required: true,
     trim: true
   },
+  author: Object,
   postDate: {
     type: Date,
     default: Date.now()

@@ -8,13 +8,13 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import App from './App';
-import LoginActions from './actions/LoginActions';
+import AuthActions from './actions/AuthActions';
 
 injectTapEventPlugin();
 
 let jwt = localStorage.getItem('jwt');
 if(jwt){
-  LoginActions.loginUser(jwt);
+  AuthActions.loginUser(jwt);
 }
 
 ReactDOM.render((

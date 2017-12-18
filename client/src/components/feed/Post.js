@@ -1,9 +1,10 @@
 import React,{Component} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NewComment from './NewComment';
-import UserStore from '../../stores/UserStore';
+import AuthStore from '../../stores/AuthStore';
 import NewsActions  from '../../actions/NewsActions';
 import CommentStore from '../../stores/CommentStore';
+import {Link} from 'react-router-dom';
 
 class Post extends Component{
   constructor(){
@@ -29,7 +30,7 @@ class Post extends Component{
   */
   toggleComments(){
     if(!this.state.showComments){
-      NewsActions.loadComments(this.props.post.post._id);
+      NewsActions.loadComments(this.props.post._id);
     }else{
       this.setState({
         showComments: false
@@ -38,11 +39,11 @@ class Post extends Component{
   }
 
   loadComments(){
-    NewsActions.loadComments(this.props.post.post._id);
+    NewsActions.loadComments(this.props.post._id);
   }
 
   updateComments(){
-    if(CommentStore.comments[0] && this.props.post.post._id === CommentStore.comments[0].parent_id){
+    if(CommentStore.comments[0] && this.props.post._id === CommentStore.comments[0].parent_id){
       this.setState({
         comments: CommentStore.comments,
         showComments: true
@@ -51,7 +52,8 @@ class Post extends Component{
   }
 
   deletePost(){
-    NewsActions.deletePost(this.props.post.post._id)
+    NewsActions.deletePost(this.props.post._id)
+    this.props.handleReload();
   }
 
   toggleCommentInputContainer(){
@@ -60,8 +62,8 @@ class Post extends Component{
     })
   }
   render(){
-    let author = this.props.post.user;
-    let post = this.props.post.post;
+    let author = this.props.author;
+    let post = this.props.post;
     let post_id = post._id;
     let postComments;
 
@@ -69,7 +71,7 @@ class Post extends Component{
       postComments = this.state.comments.map((comment) => {
         return (
           <div key={comment._id} className = "comment">
-            <h3 className="comment_author"> {comment.author ? comment.author.username : ""} </h3>
+            <h3 className="comment_author"> <Link to={`/user/${comment.author_id}`}>{comment.author.username}</Link> </h3>
             <p className="comment_message"> {comment.message} </p>
           </div>
         )
@@ -79,12 +81,17 @@ class Post extends Component{
     return(
       <div className="post">
         <div className="post_body">
-          {UserStore.username === author.username ?
+          {author && AuthStore.username === author.username ?
             <div className="remove_post"> <button onClick={this.deletePost.bind(this)}> x </button></div>
           :
             ""
           }
-          <div className="post_username"> {author.username} : </div>
+          {this.props.author ?
+            <div className="post_username"> <Link to={`/user/${author._id}`}>{author.username}</Link> : </div>
+          :
+            ""
+          }
+
           <div className="post_message"> {post.message} </div>
           {this.state.showCommentInputContainer ?
             <NewComment

@@ -31,6 +31,22 @@ var UserSchema = new Schema({
   registrationDate:{
     type: Date,
     default: Date.now
+  },
+  dob:{
+    type: Date,
+    required: true
+  },
+  connections: {
+    type: [String],
+    default: []
+  },
+  blackList: {
+    type: [String],
+    default: []
+  },
+  createdPosts: {
+    type: [String],
+    default: []
   }
 })
 

@@ -16,34 +16,27 @@ exports.list_latest_feed = function(req, res){
   Post.find().limit(limit).sort('postDate.getTime()').exec(function(err, posts){
     posts.forEach(function(post,postIndex){
       UserController.getUser(post.author_id).then(function(user){
-        /*
-        if(post.comments.length > 0){
-          var commentCounter = 0;
-          post.comments.forEach(function(comment,commentIndex){
-            getUser(comment.author_id).then(function(user){
-              post.comments[commentIndex].author = user;
-              response[postIndex] = {post:post,user:user};
-              if(++postCounter == posts.length){
-                res.status(200).json(cleanArray(response));
-              }
-            },function(error){
-                return res.status(500).json(constants.errors.badServer); //Does not work properly. Needs to break loop.
-            })
-          })
-        }else{
-
-        }
-        */
           response[postIndex] = {post:post,user:user};
           if(++postCounter == posts.length){
             res.status(200).json(cleanArray(response));
           }
       },function(error){
-        return res.status(500).json(constants.errors.badServer); //Does not work properly. Needs to break loop.
+        return res.status(500).json(constants.errors.badServer);
       })
     })
   });
 };
+
+exports.getPostsById = function(req,res){
+  Users.findById(req.params.user_id,function(err,user){
+    if(err) res.status(500).json(constants.errors.badServer);
+    Post.find({
+      '_id': { $in: user.createdPosts}
+    },function(err, posts){
+      res.status(200).json(cleanArray(posts));
+    })
+  })
+}
 
 /**
   Cleans the given array from empty elements.

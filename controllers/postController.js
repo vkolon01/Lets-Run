@@ -4,7 +4,9 @@ var mongoose = require('mongoose');
 var Post = mongoose.model('Posts',require('../models/post_model'));
 var PostComment = mongoose.model('Comments',require('../models/comment_model'));
 var AttachedEvent = mongoose.model("Events",require('../models/event_model'));
+var userController = require('./userController');
 var constants = require('../constants/messages');
+var async = require('async');
 
   /**
     Creates a post using the given form.
@@ -21,6 +23,8 @@ exports.createPost = function(req,res){
     if(err){
       res.send(err)
     }else{
+      fieldName = 'createdPosts';
+      userController.pushToUser(req.user._id,fieldName,post._id); //saves the created post's id in the authors record
       if(attachment){
         createEvent(attachment).then(function(newEvent){
           post.set({AttachedEvent: newEvent._id});
@@ -45,29 +49,45 @@ exports.addComment = function(req,res){
     message: message,
     parent_id: post_id
   }
-  new PostComment(comment)
-    .save(function(err,comment){
-      if(err){
-        res.send(err);
-      }else{
-        Post.findByIdAndUpdate(post_id,
-          {$push:{comments: comment._id}},
-          function(err,updatedPost){
-            if(err) {
-              res.send(constants.errors.genericError);
+  if(post_id){
+    new PostComment(comment)
+      .save(function(err,comment){
+        if(err){
+          res.send(err);
+        }else{
+          Post.findByIdAndUpdate(post_id,
+            {$push:{comments: comment._id}},
+            function(err,updatedPost){
+              if(err) {
+                res.status(500).send(constants.errors.genericError);
+              }
+              res.status(200).json(constants.success.commentPosted);
             }
-            res.status(200).json(constants.success.commentPosted);
-          }
-        )
-      }
-    })
+          )
+        }
+      })
+  }else{
+      res.status(500).send(constants.errors.genericError);
+  }
 }
 
 exports.getComments = function(req,res){
   var post_id = req.params.post_id;
+  var response = [];
   PostComment.find({parent_id: post_id},function(err,comments){
     if(err) res.send(constants.errors.genericError);
-    res.send(comments);
+    async.forEach(comments,function(comment,callback){
+      userController.getUser(comment.author_id).then(function(user){
+        comment.author = user;
+        response.push(comment);
+        callback()
+      },function(err){
+        callback(err);
+      })
+    },function(err){
+      if(err) res.status(500).send(err);
+      res.send(response);
+    })
   })
 }
 

@@ -49,6 +49,13 @@ exports.sign_in = function(req,res){
     }
   })
 };
+exports.getUserProfile = function(req,res){
+  exports.getUser(req.params.user_id).then(function(user){
+    res.send(user);
+  },function(err){
+    res.send(constants.errors.badServer);
+  })
+}
 
 /*
   Returns user with the given id.
@@ -62,13 +69,17 @@ exports.getUser = function(user_id){
   })
 }
 
-exports.loginRequired = function(req,res,next){
-  if(req.user){
-    next();
-  }else{
-    return res.status(401).json({message: 'Please sign in'});
-  }
-};
+/*
+  Push element into the record
+*/
+exports.pushToUser = function(user_id,field,value){
+  return new Promise(function(fulfill,reject){
+    User.findByIdAndUpdate(user_id,{$push:{[field]:value}},function(err,user){
+      if(err) reject (constants.errors.badServer);
+      fulfill(user);
+    })
+  })
+}
 
   function validateRegistrationForm(payload){
     return new Promise(function(fulfill,reject){
@@ -116,6 +127,11 @@ exports.loginRequired = function(req,res,next){
       errors.password = 'The password must have at least 8 characters.';
     }
 
+    //Date validation. Needs further validation in order to check if the user is old enough
+    if(!payload || !payload.dob){
+      isFormValid = false;
+      errors.dob = "Please provide date of birth.";
+    }
     if(!payload || typeof payload.firstName !== 'string' || payload.firstName.trim().length === 0){
       isFormValid = false;
       errors.firstName = "Please provide your first name.";
@@ -127,16 +143,16 @@ exports.loginRequired = function(req,res,next){
     }
 
     Promise.all([emailValidation,usernameValidation]).then(function(){
-
         if(isFormValid){
           validatedForm = {
             firstName: payload.firstName.trim(),
             lastName: payload.lastName.trim(),
             username: payload.username.trim(),
             email: payload.email.trim(),
+            dob: payload.dob,
             password: payload.password.trim()
           };
-          fulfill({ validatedForm});
+          fulfill({validatedForm});
         }else{
           reject(errors);
         }

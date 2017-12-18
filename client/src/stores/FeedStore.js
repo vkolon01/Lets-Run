@@ -4,20 +4,20 @@ import FeedFetcher from '../api/feedFetcher';
 class FeedStore  extends BaseStore{
   constructor(){
     super();
-    this._news = [];
+    this._posts = [];
     this.subscribe(() => this._registerToActions.bind(this))
 }
   createPost(post){
     FeedFetcher.createPost(post);
-    this.emit('change');
+    this.emitChange();
   }
   deletePost(post_id){
     FeedFetcher.deletePost(post_id);
-    this.emit('change');
+    this.emitChange();
   }
   postComment(comment){
     FeedFetcher.postComment(comment);
-    this.emit('change');
+    this.emitChange();
   }
   _registerToActions(action){
     switch(action.type){
@@ -30,20 +30,23 @@ class FeedStore  extends BaseStore{
       case "DELETE_POST":
         this.deletePost(action.id);
         break;
-      case "FETCH_NEWS":
-        FeedFetcher.fetchNews();
+      case "FETCH_POSTS":
+        FeedFetcher.fetchPosts();
         break;
-      case "RECEIVE_NEWS":
-        this._news = action.news;
-        this.emit('change');
+      case "FETCH_POSTS_BY_USER_ID":
+        FeedFetcher.fetchPostsByUserId(action.user_id);
+        break;
+      case "RECEIVE_POSTS":
+        this._posts = action.posts;
+        this.emitChange();
         break;
       default:
         break;
     }
   }
 
-  get news(){
-    return this._news ? this._news : [];
+  get posts(){
+    return this._posts ? this._posts : [];
   }
 }
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import DatePicker from 'material-ui/DatePicker';
 import MessagesStore from '../../stores/MessagesStore';
 import AuthService from '../../services/AuthService';
 
@@ -18,30 +19,35 @@ class RegistrationPage extends Component{
         lastName: '',
         email: '',
         username: '',
-        password: ''
+        password: '',
+        dob: new Date
       }
     };
     this.updateForm = this.updateForm.bind(this);
     this.register = this.register.bind(this);
-    this.update = this.update.bind(this);
+    this.updateMessages = this.updateMessages.bind(this);
   }
   componentWillMount(){
-    MessagesStore.on('change',this.update);
+    MessagesStore.on('change',this.updateMessages);
   }
   componentWillUnmount(){
-    MessagesStore.removeListener('change', this.update);
+    MessagesStore.removeListener('change', this.updateMessages);
   }
 
-  updateForm(event){
-    const field = event.target.name;
+  updateForm(event,value){
     const user = this.state.user;
-    user[field] = event.target.value;
-
+    if(event){
+      const field = event.target.name;
+      user[field] = event.target.value;
+    }else{
+      user["dob"] = value
+    }
     this.setState({
       user
     });
   }
-  update(){
+
+  updateMessages(){
     this.setState({
       summary: MessagesStore.summary,
       errors: MessagesStore.errors
@@ -76,6 +82,17 @@ class RegistrationPage extends Component{
               errorText = {errors.lastName}
               onChange={this.updateForm}
               value={user.lastName}
+            />
+          </div>
+          <div className="field-line">
+            <DatePicker
+              hintText="Date of Birth"
+              mode="landscape"
+              maxDate={new Date}
+              name="dob"
+              errorText = {errors.dob}
+              onChange={this.updateForm}
+              value={user.dob}
             />
           </div>
           <div className="field-line">

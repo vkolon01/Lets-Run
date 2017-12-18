@@ -11,11 +11,11 @@ class CommentStore extends BaseStore{
   _registerToActions(action){
     switch(action.type){
       case "FETCH_COMMENTS":
-        this.fetchComments(action.post_id);
+        FeedFetcher.fetchComments(action.post_id);
         break;
       case "RECEIVE_COMMENTS":
         this._comments = action.comments;
-        this.emit('change');
+        this.emitChange();
         this.reset();
         break;
       default:
@@ -25,10 +25,6 @@ class CommentStore extends BaseStore{
 
   reset(){
     this._comments = [];
-  }
-  fetchComments(post_id){
-    FeedFetcher.fetchComments(post_id);
-    this.emit('change');
   }
 
   get comments(){

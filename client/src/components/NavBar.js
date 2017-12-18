@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 import {Link} from 'react-router-dom';
-import UserStore from '../stores/UserStore';
+import AuthStore from '../stores/AuthStore';
 import AuthService from '../services/AuthService';
 
 class NavBar extends Component{
@@ -8,43 +12,76 @@ class NavBar extends Component{
   constructor(){
     super();
     this.state={
-      username: UserStore.username
+      username: AuthStore.username,
+      user_id: AuthStore.user_id,
+      menuOpen: false
     }
     this.update = this.update.bind(this);
   }
   componentWillMount(){
-    UserStore.on('change',this.update);
+    AuthStore.on('change',this.update);
   }
   componentWillUnmount(){
-    UserStore.removeListener('change', this.update);
+    AuthStore.removeListener('change', this.update);
   }
   update(){
     this.setState({
-      username: UserStore.username
+      username: AuthStore.username,
+      user_id: AuthStore.user_id
+    })
+  }
+
+  toggleMenu = (event) =>{
+    event.preventDefault();
+    this.setState({
+      menuOpen: true,
+      anchorEl: event.target
+    })
+  }
+
+  handleRequestClose = () =>{
+    this.setState({
+      menuOpen:false
     })
   }
 
   render(){
     const username = this.state.username;
     const summary = this.state.summary;
+    const user_id = this.state.user_id;
     return (
       <div className="navbar">
         <div className="logo"><Link to="/">Home</Link></div>
-        <div><Link to="/index">Base</Link></div>
         {summary}
-        {UserStore.isLoggedIn() ? (
+        {AuthStore.isLoggedIn() ? (
           <div className="navbar_auth">
-            <p> user: {username} </p>
-            <ul>
-              <li><Link to="/" onClick={AuthService.logout}>Log out</Link></li>
-            </ul>
+            <RaisedButton
+              onClick={this.toggleMenu}
+              label={username}
+            />
+            <Popover
+              open={this.state.menuOpen}
+              anchorEl={this.state.anchorEl}
+              anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}
+              onRequestClose={this.handleRequestClose}
+            >
+              <Menu onClick={this.handleRequestClose}>
+                <MenuItem primaryText="My account" containerElement={<Link to={`/user/${user_id}`}/>}/>
+                <MenuItem primaryText="Log Out" onClick={AuthService.logout}/>
+              </Menu>
+            </Popover>
           </div>
         ) : (
           <div className="navbar_auth">
-            <ul>
-              <li><Link to="/sign_in">Sign in</Link></li>
-              <li><Link to="/register">Register</Link></li>
-            </ul>
+            <RaisedButton
+              containerElement={<Link to="/sign_in"/>}
+              label={"Sign In"}
+            />
+            <RaisedButton
+              containerElement={<Link to="/register"/>}
+              label={"Register"}
+            />
           </div>
         )}
 

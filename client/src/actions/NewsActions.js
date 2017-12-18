@@ -21,11 +21,17 @@ export default{
     });
   },
 
-  reloadPosts(){
+  fetchPosts(){
     dispatcher.dispatch({
-      type: "FETCH_NEWS",
-      message: "loading..."
+      type: "FETCH_POSTS",
     });
+  },
+
+  fetchPostsByUserId(user_id){
+    dispatcher.dispatch({
+      type: "FETCH_POSTS_BY_USER_ID",
+      user_id
+    })
   },
 
   loadComments(post_id){
@@ -35,10 +41,10 @@ export default{
       post_id
     });
   },
-  receiveNews(news){
+  receivePosts(posts){
     dispatcher.dispatch({
-      type: "RECEIVE_NEWS",
-      news
+      type: "RECEIVE_POSTS",
+      posts
      });
   },
   receiveComments(comments){

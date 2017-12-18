@@ -3,7 +3,8 @@ import 'whatwg-fetch';
 import {Redirect} from 'react-router-dom';
 import NewsActions from '../actions/NewsActions';
 import MessageActions from '../actions/MessageActions';
-import UserStore from '../stores/UserStore';
+import UserActions from '../actions/UserActions';
+import AuthStore from '../stores/AuthStore';
 import when from 'when';
 import request  from 'reqwest';
 import constants from '../constants/constants';
@@ -16,7 +17,7 @@ const API_HEADERS = {
 };
 
 class FeedFetcher{
-      fetchNews(){
+      fetchPosts(){
         return when(request({
           url: API_URL,
           method: 'GET',
@@ -28,11 +29,26 @@ class FeedFetcher{
             }
           },
           success: function(res){
-            NewsActions.receiveNews(res);
+            NewsActions.receivePosts(res);
           }
         }));
       }
-
+      fetchPostsByUserId(user_id){
+        return when(request({
+          url: API_URL + "/users/" + user_id + "/posts",
+          method: 'GET',
+          crossOrigin: true,
+          contentType: "application/json",
+          error: function(err){
+            if(err.status === 404){
+              MessageActions.displayErrors(err.responseText);
+            }
+          },
+          success: function(res){
+            NewsActions.receivePosts(res);
+          }
+        }));
+      }
       createPost(post){
         return when(request({
           url: API_URL + '/newpost',
@@ -42,7 +58,7 @@ class FeedFetcher{
           data: post,
           headers:{
             'Content-Type': 'application/x-www-form-urlencoded',
-            'authorization': 'JWT ' + UserStore.jwt
+            'authorization': 'JWT ' + AuthStore.jwt
           },
           error: function(err){
             if(err.status === 404){
@@ -54,7 +70,7 @@ class FeedFetcher{
             }
           },
           success: function(res){
-            NewsActions.reloadPosts();
+            NewsActions.fetchPosts();
           }
         }));
       }
@@ -66,13 +82,12 @@ class FeedFetcher{
           contentType: "application/json",
           headers:{
             'Content-Type': 'application/x-www-form-urlencoded',
-            'authorization': 'JWT ' + UserStore.jwt
+            'authorization': 'JWT ' + AuthStore.jwt
           },
           error: function(err){
               MessageActions.displayErrors(JSON.parse(err.response));
           },
           success: function(res){
-            NewsActions.reloadPosts();
             MessageActions.displayMessage(res);
           }
         }));
@@ -87,7 +102,7 @@ class FeedFetcher{
           data: comment,
           headers:{
             'Content-Type': 'application/x-www-form-urlencoded',
-            'authorization': 'JWT ' + UserStore.jwt
+            'authorization': 'JWT ' + AuthStore.jwt
           },
           error: function(err){
             if(err.status === 404){
@@ -100,7 +115,6 @@ class FeedFetcher{
           },
           success: function(res){
             MessageActions.displayMessage(res);
-            NewsActions.reloadPosts();
           }
         }));
       }
@@ -118,6 +132,23 @@ class FeedFetcher{
           },
           success: function(res){
             NewsActions.receiveComments(res,post_id);
+          }
+        }));
+      }
+
+      fetchUser(user_id){
+        return when(request({
+          url: API_URL + '/users/' + user_id,
+          method: 'GET',
+          crossOrigin: true,
+          contentType: "application/json",
+          error: function(err){
+            if(err.status === 404){
+              MessageActions.displayErrors(JSON.parse(err.response));
+            }
+          },
+          success: function(res){
+            UserActions.receiveUser(res);
           }
         }));
       }
