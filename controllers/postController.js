@@ -91,6 +91,31 @@ exports.getComments = function(req,res){
   })
 }
 
+exports.likePost = function(req,res){
+  var post_id = req.params.post_id;
+  var user_id = req.user._id;
+  Post.findById(post_id,function(err,post){
+    if(err) res.status(500).send(constants.errors.genericError);
+    if(post && post.likes){
+      if(!post.likes.includes(user_id)){
+        post.likes.push(user_id);
+        post.save(function(err){
+          if(err) res.status(500).send(constants.errors.genericError);
+        })
+        res.send(constants.success.postLiked);
+      }else{
+        post.likes.splice(post.likes.indexOf(user_id),1);
+        post.save(function(err){
+          if(err) res.status(500).send(constants.errors.genericError);
+        })
+        res.send(constants.success.postDisliked);
+      }
+    }else{
+      res.status(500).send(constants.errors.genericError);
+    }
+  })
+}
+
 exports.deletePost = function(req,res){
   var post_id = req.params.post_id;
   deletePost(post_id).then(function(message){

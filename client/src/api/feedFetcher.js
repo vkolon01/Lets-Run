@@ -1,6 +1,4 @@
-import React, {Component} from 'react';
 import 'whatwg-fetch';
-import {Redirect} from 'react-router-dom';
 import NewsActions from '../actions/NewsActions';
 import MessageActions from '../actions/MessageActions';
 import UserActions from '../actions/UserActions';
@@ -11,10 +9,12 @@ import constants from '../constants/constants';
 import History from '../services/History';
 
 const API_URL = constants.SEVER_URL;
+/*
 const API_HEADERS = {
   'Content-Type': 'application/json',
   'Authorization': "nothing yet"
 };
+*/
 
 class FeedFetcher{
       fetchPosts(){
@@ -41,7 +41,7 @@ class FeedFetcher{
           contentType: "application/json",
           error: function(err){
             if(err.status === 404){
-              MessageActions.displayErrors(err.responseText);
+              MessageActions.displayErrors(JSON.parse(err.response));
             }
           },
           success: function(res){
@@ -135,7 +135,23 @@ class FeedFetcher{
           }
         }));
       }
-
+      likePost(post_id){
+        return when(request({
+          url: API_URL + '/posts/' + post_id,
+          method: 'PUT',
+          crossOrigin: true,
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'authorization': 'JWT ' + AuthStore.jwt
+          },
+          contentType: "application/json",
+          error: function(err){
+            if(err.status === 401){
+              MessageActions.displayErrors(JSON.parse(err.response));
+            }
+          }
+        }));
+      }
       fetchUser(user_id){
         return when(request({
           url: API_URL + '/users/' + user_id,
@@ -144,7 +160,7 @@ class FeedFetcher{
           contentType: "application/json",
           error: function(err){
             if(err.status === 404){
-              MessageActions.displayErrors(JSON.parse(err.response));
+              MessageActions.displayErrors(err.response);
             }
           },
           success: function(res){

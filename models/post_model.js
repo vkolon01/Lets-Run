@@ -19,7 +19,11 @@ var PostSchema = new Schema({
     type: String,
     default: null
   },
-  comments: [String]
+  comments: [String],
+  likes: {
+    type: [String],
+    default: []
+  }
 });
 
 module.exports = PostSchema;

@@ -5,6 +5,7 @@ import UserActions from '../../actions/UserActions';
 import NewsActions from '../../actions/NewsActions';
 import UserDetails from './UserDetails';
 import UserActivity from './UserActivity';
+import CircularProgress from 'material-ui/CircularProgress';
 
 class ProfileContainer extends Component{
 
@@ -12,7 +13,9 @@ class ProfileContainer extends Component{
     super();
     this.state = {
       user : UserStore.user,
-      posts : FeedStore.posts
+      posts : FeedStore.posts,
+      userLoading : true,
+      postsLoading : true
     }
     this.getUserDetails = this.getUserDetails.bind(this);
     this.getPosts = this.getPosts.bind(this);
@@ -33,12 +36,14 @@ class ProfileContainer extends Component{
   }
   getUserDetails(){
     this.setState({
-      user: UserStore.user
+      user: UserStore.user,
+      userLoading: false
     })
   }
   getPosts(){
     this.setState({
-      posts: FeedStore.posts
+      posts: FeedStore.posts,
+      postsLoading: false
     })
   }
   reloadUserPosts(){
@@ -46,11 +51,20 @@ class ProfileContainer extends Component{
   }
 
   render(){
-    let user_id = this.props.match.params.user_id
     return(
       <div>
-        <UserDetails user = {this.state.user}/>
-        <UserActivity posts = {this.state.posts} user = {this.state.user} handleReload = {this.reloadUserPosts}/>
+        <div className="userDetails">
+          {this.state.userLoading ? <CircularProgress /> : ""}
+          {this.state.user ?
+            <UserDetails user = {this.state.user}/>
+          :
+            ""
+          }
+        </div>
+        <div className="userPosts">
+          {this.state.postsLoading ? <CircularProgress size={80}/> : ""}
+          <UserActivity posts = {this.state.posts} user = {this.state.user} handleReload = {this.reloadUserPosts}/>
+        </div>
       </div>
     )
   }

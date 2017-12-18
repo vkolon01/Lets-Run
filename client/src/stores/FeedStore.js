@@ -19,6 +19,9 @@ class FeedStore  extends BaseStore{
     FeedFetcher.postComment(comment);
     this.emitChange();
   }
+  likePost(post_id){
+    FeedFetcher.likePost(post_id);
+  }
   _registerToActions(action){
     switch(action.type){
       case "CREATE_POST":
@@ -29,6 +32,9 @@ class FeedStore  extends BaseStore{
         break;
       case "DELETE_POST":
         this.deletePost(action.id);
+        break;
+      case "LIKE_POST":
+        this.likePost(action.id);
         break;
       case "FETCH_POSTS":
         FeedFetcher.fetchPosts();

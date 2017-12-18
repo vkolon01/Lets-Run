@@ -3,6 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
 import {Link} from 'react-router-dom';
 import AuthStore from '../stores/AuthStore';
 import AuthService from '../services/AuthService';
@@ -68,6 +69,8 @@ class NavBar extends Component{
             >
               <Menu onClick={this.handleRequestClose}>
                 <MenuItem primaryText="My account" containerElement={<Link to={`/user/${user_id}`}/>}/>
+                <MenuItem primaryText="Settings" />
+                <Divider/>
                 <MenuItem primaryText="Log Out" onClick={AuthService.logout}/>
               </Menu>
             </Popover>

@@ -20,7 +20,7 @@ class RegistrationPage extends Component{
         email: '',
         username: '',
         password: '',
-        dob: new Date
+        dob: new Date()
       }
     };
     this.updateForm = this.updateForm.bind(this);
@@ -88,7 +88,7 @@ class RegistrationPage extends Component{
             <DatePicker
               hintText="Date of Birth"
               mode="landscape"
-              maxDate={new Date}
+              maxDate={new Date()}
               name="dob"
               errorText = {errors.dob}
               onChange={this.updateForm}

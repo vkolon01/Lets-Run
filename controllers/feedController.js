@@ -29,12 +29,14 @@ exports.list_latest_feed = function(req, res){
 
 exports.getPostsById = function(req,res){
   Users.findById(req.params.user_id,function(err,user){
-    if(err) res.status(500).json(constants.errors.badServer);
-    Post.find({
-      '_id': { $in: user.createdPosts}
-    },function(err, posts){
-      res.status(200).json(cleanArray(posts));
-    })
+    if(err) res.status(404).json({message: constants.errors.userNotFound});
+    if(user){
+      Post.find({'_id': { $in: user.createdPosts}
+      },function(err, posts){
+        res.status(200).json(cleanArray(posts));
+      })
+    }
+
   })
 }
 

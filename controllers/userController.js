@@ -52,8 +52,7 @@ exports.sign_in = function(req,res){
 exports.getUserProfile = function(req,res){
   exports.getUser(req.params.user_id).then(function(user){
     res.send(user);
-  },function(err){
-    res.send(constants.errors.badServer);
+    res.status(404).send(err);
   })
 }
 
@@ -63,8 +62,12 @@ exports.getUserProfile = function(req,res){
 exports.getUser = function(user_id){
   return new Promise(function(fulfill,reject){
     User.findById(user_id,"-hash",function(err,user){
-      if(err) reject (constants.errors.badServer);
-      fulfill(user);
+      if(err){
+        reject (constants.errors.userNotFound);
+      }
+      if(user){
+        fulfill(user);
+      }
     })
   })
 }

@@ -1,4 +1,3 @@
-import dispatcher from '../dispatcher';
 import BaseStore from './BaseStore';
 import jwt_decode from 'jwt-decode';
 import history from '../services/History';

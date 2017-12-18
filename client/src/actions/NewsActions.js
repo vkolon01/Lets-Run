@@ -21,6 +21,13 @@ export default{
     });
   },
 
+  likePost(id){
+    dispatcher.dispatch({
+      type: "LIKE_POST",
+      id
+    })
+  },
+
   fetchPosts(){
     dispatcher.dispatch({
       type: "FETCH_POSTS",

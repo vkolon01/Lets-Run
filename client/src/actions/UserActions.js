@@ -1,5 +1,4 @@
 import dispatcher from '../dispatcher';
-import constants from '../constants/constants';
 
 export default{
   fetchUser: (user_id) => {

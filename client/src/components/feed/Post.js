@@ -1,58 +1,60 @@
 import React,{Component} from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import NewComment from './NewComment';
 import AuthStore from '../../stores/AuthStore';
 import NewsActions  from '../../actions/NewsActions';
+import history from '../../services/History';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import CommentStore from '../../stores/CommentStore';
+import CommentList from './CommentList';
 import {Link} from 'react-router-dom';
+import IconButton from 'material-ui/IconButton';
+import Favorite from 'material-ui/svg-icons/action/favorite';
+import {red500} from 'material-ui/styles/colors';
+import Delete from 'material-ui/svg-icons/action/delete';
+import Comment from 'material-ui/svg-icons/communication/comment';
+import Paper from 'material-ui/Paper';
+import Badge from 'material-ui/Badge';
+import Divider from 'material-ui/Divider';
 
 class Post extends Component{
   constructor(){
     super(...arguments);
     this.state = {
-      showComments: false,
       showCommentInputContainer: false,
-      comments: CommentStore.comments
+      showDeleteConfirmatioin: false,
+      likes: this.props.post.likes ? this.props.post.likes.length : 0,
+      liked: this.props.post.likes ? this.props.post.likes.includes(this.props.author._id) : false
     };
-    this.updateComments = this.updateComments.bind(this);
   }
 
-  componentWillMount(){
-    CommentStore.on('change',this.updateComments);
-  }
-  componentWillUnmount(){
-    CommentStore.removeListener('change', this.updateComments);
-  }
-
-  /*
-    If comments are currently non-visible, fetches related comments from the server
-    and turns comments visible.
-  */
-  toggleComments(){
-    if(!this.state.showComments){
-      NewsActions.loadComments(this.props.post._id);
-    }else{
-      this.setState({
-        showComments: false
-      });
-    }
-  }
 
   loadComments(){
     NewsActions.loadComments(this.props.post._id);
   }
 
-  updateComments(){
-    if(CommentStore.comments[0] && this.props.post._id === CommentStore.comments[0].parent_id){
-      this.setState({
-        comments: CommentStore.comments,
-        showComments: true
-      });
+
+  likePost(){
+    NewsActions.likePost(this.props.post._id);
+    if(AuthStore.isLoggedIn()){
+      if(!this.state.liked){
+        this.setState({
+          likes: this.state.likes + 1,
+          liked: true
+        })
+      }else{
+        this.setState({
+          likes: this.state.likes - 1,
+          liked: false
+        })
+      }
+    }else{
+      history.replace('/sign_in')
     }
   }
-
   deletePost(){
     NewsActions.deletePost(this.props.post._id)
+    this.toggleDeleteConfirmation()
     this.props.handleReload();
   }
 
@@ -61,60 +63,86 @@ class Post extends Component{
       showCommentInputContainer: !this.state.showCommentInputContainer,
     })
   }
+
+  toggleDeleteConfirmation(){
+    this.setState({
+      showDeleteConfirmatioin: !this.state.showDeleteConfirmatioin
+    })
+  }
+
   render(){
     let author = this.props.author;
     let post = this.props.post;
     let post_id = post._id;
+    let deleteActions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.toggleDeleteConfirmation.bind(this)}
+      />,
+      <FlatButton
+        label="Delete"
+        primary={true}
+        onClick={this.deletePost.bind(this)}
+      />
+    ]
     let postComments;
 
-    if(this.state.showComments){
-      postComments = this.state.comments.map((comment) => {
-        return (
-          <div key={comment._id} className = "comment">
-            <h3 className="comment_author"> <Link to={`/user/${comment.author_id}`}>{comment.author.username}</Link> </h3>
-            <p className="comment_message"> {comment.message} </p>
-          </div>
-        )
-      })
-    };
 
     return(
-      <div className="post">
+      <Paper className="post">
         <div className="post_body">
-          {author && AuthStore.username === author.username ?
-            <div className="remove_post"> <button onClick={this.deletePost.bind(this)}> x </button></div>
-          :
-            ""
-          }
-          {this.props.author ?
-            <div className="post_username"> <Link to={`/user/${author._id}`}>{author.username}</Link> : </div>
-          :
-            ""
-          }
 
+          {/* ---Main post body--- */}
+          <div className="post_username"> <Link to={`/user/${author._id}`}>{author.username}</Link> : </div>
           <div className="post_message"> {post.message} </div>
-          {this.state.showCommentInputContainer ?
-            <NewComment
-              cancel = {this.toggleCommentInputContainer.bind(this)}
-              showComments = {this.loadComments.bind(this)}
-              post_id = {post_id}
-            />
-          :
-            <div className="leave_comment" onClick={this.toggleCommentInputContainer.bind(this)}> Leave comment</div>
-          }
 
-          <div className={this.state.showDetails? "post_comments post_comments--are-open": "post_comments"} onClick={this.toggleComments.bind(this)}>
-            {post.comments && post.comments.length ? post.comments.length + (post.comments.length > 1 ? " comments" : " comment") : ""}
+          <Divider/>
+          {/*--- Icon post menu ---*/}
+
+          {/* Post delete icon */}
+          {author && AuthStore.username === author.username ?
+            <IconButton tooltip="Delete post" onClick={this.toggleDeleteConfirmation.bind(this)}>
+              <Delete/>
+            </IconButton>
+            :
+            ""
+          }
+          <Dialog
+            actions = {deleteActions}
+            model={false}
+            open={this.state.showDeleteConfirmatioin}
+            onRequestClose={this.toggleDeleteConfirmation.bind(this)}
+          >
+          Delete Post?
+          </Dialog>
+
+          <Badge badgeContent={this.state.likes} primary={true} badgeStyle={{top: 15,right: 15}}>
+            <IconButton tooltip="Like post" onClick={this.likePost.bind(this)}>
+              <Favorite color={this.state.liked ? red500  : ""} hoverColor={red500}/>
+            </IconButton>
+          </Badge>
+
+          <IconButton tooltip="Add comment" onClick={this.toggleCommentInputContainer.bind(this)}>
+            <Comment/>
+          </IconButton>
+          <div className="postOptions">
+            {this.state.showCommentInputContainer ?
+              <NewComment
+                showComments = {this.loadComments.bind(this)}
+                post_id = {post_id}
+              />
+            :
+              ""
+            }
           </div>
+
+          <Divider/>
+
         </div>
-        <div className="post_comments_section">
-          <ReactCSSTransitionGroup transitionName="toggle"
-                                  transitionEnterTimeout={250}
-                                  transitionLeaveTimeout={50}>
-                                  {postComments}
-          </ReactCSSTransitionGroup>
-        </div>
-      </div>
+
+        <CommentList post = {post}/>
+      </Paper>
     )
   }
 }

@@ -47,6 +47,10 @@ var UserSchema = new Schema({
   createdPosts: {
     type: [String],
     default: []
+  },
+  likedPosts:{
+    type: [String],
+    default: []
   }
 })
 

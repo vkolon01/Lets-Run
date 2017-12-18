@@ -36,7 +36,6 @@ class NewComment extends Component{
                 placeholder="Leave a comment"
                 name="body"/>
           <button type="submit" onClick={this.props.showComments.bind(this)}>Post comment</button>
-          <button onClick={this.props.cancel.bind(this)}> Cancel </button>
         </form>
       </div>
     )

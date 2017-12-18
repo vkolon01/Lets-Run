@@ -4,7 +4,7 @@ import FeedFetcher from '../api/feedFetcher';
 class UserStore  extends BaseStore{
   constructor(){
     super();
-    this._user = {};
+    this._user = "";
     this.subscribe(() => this._registerToActions.bind(this))
 }
   _registerToActions(action){
@@ -15,6 +15,7 @@ class UserStore  extends BaseStore{
       case "RECEIVE_USER":
         this._user = action.user;
         this.emitChange();
+        break;
       default:
         break;
     }

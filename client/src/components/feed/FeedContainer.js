@@ -4,12 +4,14 @@ import FeedStore from '../../stores/FeedStore';
 import Post from './Post';
 import NewPost from './NewPost';
 import NewsActions from '../../actions/NewsActions';
+import CircularProgress from 'material-ui/CircularProgress';
 
 class FeedContainer extends Component{
   constructor(){
     super();
     this.state = {
-      news: FeedStore.posts
+      news: FeedStore.posts,
+      loading: true
     };
     this.getAllPosts = this.getAllPosts.bind(this);
     this.reloadPosts = this.reloadPosts.bind(this);
@@ -25,7 +27,8 @@ class FeedContainer extends Component{
   }
   getAllPosts(){
     this.setState({
-      news: FeedStore.posts
+      news: FeedStore.posts,
+      loading: false
     });
   }
   reloadPosts(){
@@ -42,6 +45,8 @@ class FeedContainer extends Component{
           post = {post.post}
           handleReload = {this.reloadPosts}
         />
+      }else{
+        return ""
       }
     })
     return(
@@ -50,11 +55,8 @@ class FeedContainer extends Component{
           <NewPost/>
         </div>
         <div className="newsfeed">
-
-          <button onClick={NewsActions.reloadPosts}> Refresh Posts </button>
-
-            {NewsComponents}
-
+          {this.state.loading ? <CircularProgress /> : ""}
+          {NewsComponents}
         </div>
       </div>
 

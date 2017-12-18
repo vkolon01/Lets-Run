@@ -1,2 +1,10 @@
 import createHistory from 'history/createHashHistory';
-export default createHistory();
+import MessageActions from '../actions/MessageActions'
+
+const history = createHistory();
+
+history.listen((location,action) => {
+  console.log(action);
+})
+
+export default history;
