@@ -44,7 +44,6 @@ export default{
   loadComments(post_id){
     dispatcher.dispatch({
       type: "FETCH_COMMENTS",
-      message: "loading...",
       post_id
     });
   },

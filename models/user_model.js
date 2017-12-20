@@ -36,7 +36,7 @@ var UserSchema = new Schema({
     type: Date,
     required: true
   },
-  connections: {
+  friendList: {
     type: [String],
     default: []
   },

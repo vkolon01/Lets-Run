@@ -16,8 +16,8 @@ var async = require('async');
   */
 exports.createPost = function(req,res){
   var newPost = req.body.post;
-  newPost.author_id = req.user._id; //validate first
   var attachment = req.body.event;
+  newPost.author_id = req.user._id; //validate first
   new Post(req.body.post)
     .save(function(err,post){
     if(err){
@@ -27,7 +27,7 @@ exports.createPost = function(req,res){
       userController.pushToUser(req.user._id,fieldName,post._id); //saves the created post's id in the authors record
       if(attachment){
         createEvent(attachment).then(function(newEvent){
-          post.set({AttachedEvent: newEvent._id});
+          post.set({attachedEvent: newEvent._id});
           post.save(function(err,post){
             if(err) res.send(err);
             res.send(post);
@@ -95,8 +95,9 @@ exports.likePost = function(req,res){
   var post_id = req.params.post_id;
   var user_id = req.user._id;
   Post.findById(post_id,function(err,post){
-    if(err) res.status(500).send(constants.errors.genericError);
-    if(post && post.likes){
+    if(err){
+      res.status(500).send(constants.errors.genericError)
+    }else if(post && post.likes){
       if(!post.likes.includes(user_id)){
         post.likes.push(user_id);
         post.save(function(err){
@@ -125,6 +126,15 @@ exports.deletePost = function(req,res){
   })
 }
 
+exports.getEvent = function(event_id){
+  return new Promise(function(fulfill,reject){
+    AttachedEvent.findById(event_id,function(err,event){
+      if(err) reject(err)
+      fulfill(event);
+    })
+  })
+}
+
 /*
   Removes a post document with the given id.
   Once the post is deleted, all the associate comments
@@ -132,11 +142,16 @@ exports.deletePost = function(req,res){
 */
 function deletePost(post_id){
   return new Promise(function(fulfill, reject){
-    Post.findById(post_id).remove(function(err,deletedPost){
+    Post.findById(post_id,function(err,post){
       if(err){
         reject(err)
-      }else{
+      }else if(post){
         PostComment.remove({parent_id: post_id},function(err){});
+        console.log(post.attachedEvent)
+        if(post.attachedEvent){
+          AttachedEvent.remove({_id: post.attachedEvent},function(err){});
+        }
+        post.remove()
         fulfill(constants.success.postDeleted)
       }
     })
@@ -154,6 +169,7 @@ function deleteComment(comment_id){
 
 function createEvent(attachment){
   return new Promise(function(fulfill,reject){
+    console.log(attachment)
     something = new AttachedEvent(attachment)
     something.save(function(err,newEvent){
         if(err) reject(err);

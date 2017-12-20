@@ -6,6 +6,8 @@ import NewsActions from '../../actions/NewsActions';
 import UserDetails from './UserDetails';
 import UserActivity from './UserActivity';
 import CircularProgress from 'material-ui/CircularProgress';
+import Paper from 'material-ui/Paper'
+import Divider from 'material-ui/Divider'
 
 class ProfileContainer extends Component{
 
@@ -19,7 +21,6 @@ class ProfileContainer extends Component{
     }
     this.getUserDetails = this.getUserDetails.bind(this);
     this.getPosts = this.getPosts.bind(this);
-    this.reloadUserPosts = this.reloadUserPosts.bind(this);
   }
 
   componentWillMount(){
@@ -32,7 +33,7 @@ class ProfileContainer extends Component{
   }
   componentDidMount(){
     UserActions.fetchUser(this.props.match.params.user_id);
-    this.reloadUserPosts()
+    NewsActions.fetchPostsByUserId(this.props.match.params.user_id);
   }
   getUserDetails(){
     this.setState({
@@ -46,25 +47,29 @@ class ProfileContainer extends Component{
       postsLoading: false
     })
   }
-  reloadUserPosts(){
-    NewsActions.fetchPostsByUserId(this.props.match.params.user_id);
-  }
 
   render(){
     return(
       <div>
-        <div className="userDetails">
-          {this.state.userLoading ? <CircularProgress /> : ""}
-          {this.state.user ?
-            <UserDetails user = {this.state.user}/>
-          :
-            ""
-          }
-        </div>
-        <div className="userPosts">
-          {this.state.postsLoading ? <CircularProgress size={80}/> : ""}
-          <UserActivity posts = {this.state.posts} user = {this.state.user} handleReload = {this.reloadUserPosts}/>
-        </div>
+        <Paper>
+          <div className="userDetails">
+            {this.state.userLoading ? <CircularProgress /> : ""}
+            {this.state.user ?
+              <UserDetails user = {this.state.user}/>
+            :
+              ""
+            }
+          </div>
+          <Divider/>
+          <div className="userPosts">
+            {this.state.postsLoading ? <CircularProgress size={80}/> : ""}
+            {this.state.posts ?
+              <UserActivity posts = {this.state.posts}/>
+            :
+              ""
+            }
+          </div>
+        </Paper>
       </div>
     )
   }

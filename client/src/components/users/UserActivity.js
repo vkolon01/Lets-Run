@@ -3,25 +3,22 @@ import Post from '../feed/Post';
 
 class UserActivity extends Component{
 
-
-
   render(){
     let posts = this.props.posts;
-    let user = this.props.user;
+    let user = this.props.posts.user;
+    var UserActivities
     if(posts.length > 0){
-      var UserPosts = posts.map((post) => {
+      UserActivities = posts.map((post) => {
           return <Post
             key={post._id}
-            author={user}
             post = {post}
-            handleReload = {this.props.handleReload.bind(this)}
           />
       })
     }
 
     return (
       <div>
-        {UserPosts}
+        {UserActivities}
       </div>
     )
   }

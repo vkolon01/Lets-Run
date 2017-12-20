@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 
 class UserDetails extends Component{
 
   render(){
     const user = this.props.user;
-    const age = "18";
+    const age =  moment().diff(user.dob, 'years')
     const fullName = user.firstName + ' ' + user.lastName;
     return (
       <div>

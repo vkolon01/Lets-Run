@@ -35,7 +35,7 @@ class NewComment extends Component{
                 onChange={this.handleChange.bind(this)}
                 placeholder="Leave a comment"
                 name="body"/>
-          <button type="submit" onClick={this.props.showComments.bind(this)}>Post comment</button>
+          <button type="submit">Post comment</button>
         </form>
       </div>
     )

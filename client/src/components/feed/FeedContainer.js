@@ -41,8 +41,7 @@ class FeedContainer extends Component{
       if(post.user){
         return <Post
           key={post.post._id}
-          author = {post.user}
-          post = {post.post}
+          post = {post}
           handleReload = {this.reloadPosts}
         />
       }else{

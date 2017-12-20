@@ -3,13 +3,13 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import CommentStore from '../../stores/CommentStore';
 import {Link} from 'react-router-dom';
 import NewsActions from '../../actions/NewsActions';
-//import Comment from './Comment';
 
 class CommentList extends Component{
   constructor(){
     super();
     this.state = {
       comments: CommentStore.comments,
+      numberOfComments: 0,
       showComments: false
     }
     this.updateComments = this.updateComments.bind(this);
@@ -20,6 +20,11 @@ class CommentList extends Component{
   }
   componentWillUnmount(){
     CommentStore.removeListener('change', this.updateComments);
+  }
+  componentDidMount(){
+    this.setState({
+      numberOfComments: this.props.post.comments.length
+    })
   }
 
   toggleComments(){
@@ -35,12 +40,14 @@ class CommentList extends Component{
       if(CommentStore.comments[0] && this.props.post._id === CommentStore.comments[0].parent_id){
         this.setState({
           comments: CommentStore.comments,
+          numberOfComments: CommentStore.comments.length,
           showComments: true
         });
       }
     }
   render(){
     let post = this.props.post;
+    let numberOfComments = this.state.numberOfComments;
     let postComments;
     if(this.state.showComments){
       postComments = this.state.comments.map((comment) => {
@@ -56,7 +63,7 @@ class CommentList extends Component{
       return(
         <div>
             <div className={this.state.showDetails? "post_comments post_comments--are-open": "post_comments"} onClick={this.toggleComments.bind(this)}>
-              {post.comments && post.comments.length ? post.comments.length + (post.comments.length > 1 ? " comments" : " comment") : ""}
+              {numberOfComments ? numberOfComments + (numberOfComments > 1 ? " comments" : " comment") : ""}
             </div>
 
             <ReactCSSTransitionGroup transitionName="toggle"

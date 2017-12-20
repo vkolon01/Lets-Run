@@ -88,18 +88,19 @@ class FeedFetcher{
               MessageActions.displayErrors(JSON.parse(err.response));
           },
           success: function(res){
+            NewsActions.fetchPosts();
             MessageActions.displayMessage(res);
           }
         }));
       }
 
-      postComment(comment){
+      postComment(data){
         return when(request({
           url: API_URL + '/newcomment',
           method: 'POST',
           crossOrigin: true,
           contentType: "application/json",
-          data: comment,
+          data: data,
           headers:{
             'Content-Type': 'application/x-www-form-urlencoded',
             'authorization': 'JWT ' + AuthStore.jwt
@@ -114,6 +115,7 @@ class FeedFetcher{
             }
           },
           success: function(res){
+            NewsActions.loadComments(data.post_id)
             MessageActions.displayMessage(res);
           }
         }));

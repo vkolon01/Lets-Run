@@ -11,7 +11,10 @@ var AttachedEvent = new Schema({
   eventDate: Date,
   location: String,
   distance: String,
-  runners: []
+  runners: {
+    type: [String],
+    default: []
+  }
 });
 
 module.exports = AttachedEvent;

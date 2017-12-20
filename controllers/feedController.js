@@ -5,24 +5,20 @@ var Post = mongoose.model('Posts',require('../models/post_model'));
 var Users = mongoose.model('users',require('../models/user_model'));
 var constants = require('../constants/messages');
 var UserController = require('./userController');
+var PostController = require('./postController');
+var async = require('async');
 
 /*
   Returns a collection of posts.
   Each post is injected with information about its author and authors of each comment.
 */
 exports.list_latest_feed = function(req, res){
-  var response = [];
-  var limit = 100;  var postCounter = 0;
+  var limit = 100;
   Post.find().limit(limit).sort('postDate.getTime()').exec(function(err, posts){
-    posts.forEach(function(post,postIndex){
-      UserController.getUser(post.author_id).then(function(user){
-          response[postIndex] = {post:post,user:user};
-          if(++postCounter == posts.length){
-            res.status(200).json(cleanArray(response));
-          }
-      },function(error){
-        return res.status(500).json(constants.errors.badServer);
-      })
+    assemblePosts(posts).then(function(result){
+      res.send(result)
+    },function(err){
+      res.status(500).json(constants.errors.badServer)
     })
   });
 };
@@ -33,10 +29,13 @@ exports.getPostsById = function(req,res){
     if(user){
       Post.find({'_id': { $in: user.createdPosts}
       },function(err, posts){
-        res.status(200).json(cleanArray(posts));
+        assemblePosts(posts).then(function(result){
+          res.send(result)
+        },function(err){
+          res.status(500).json(constants.errors.badServer)
+        })
       })
     }
-
   })
 }
 
@@ -52,4 +51,38 @@ function cleanArray(actual) {
     }
   }
   return newArray;
+}
+
+function assemblePosts(posts){
+  return new Promise(function(fulfill,reject){
+    var response = [];
+    async.forEach(posts,function(post,callback){
+      async.parallel({
+        user: function(nestedCallback){
+          UserController.getUser(post.author_id).then(function(user){
+            nestedCallback(null,user)
+          }),
+          function(err){
+            nestedCallback(err)
+          }
+        },
+        attachment: function(nestedCallback){
+          if(post.attachedEvent){
+            PostController.getEvent(post.attachedEvent).then(function(event){
+              nestedCallback(null,event)
+            },function(err){nestedCallback(err)})
+          }else{
+            nestedCallback();
+          }
+        }
+      },function(err,result){
+        if(err) callback(err) //handle errors
+        response.push({post:post,user:result.user,event:result.attachment});
+        callback()
+      })
+    },function(err){
+      if(err) reject(err)
+      fulfill(response);
+    })
+  })
 }

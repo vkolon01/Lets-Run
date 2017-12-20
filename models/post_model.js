@@ -15,7 +15,7 @@ var PostSchema = new Schema({
     type: Date,
     default: Date.now()
   },
-  AttachedEvent:{
+  attachedEvent:{
     type: String,
     default: null
   },

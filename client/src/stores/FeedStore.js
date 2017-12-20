@@ -9,11 +9,9 @@ class FeedStore  extends BaseStore{
 }
   createPost(post){
     FeedFetcher.createPost(post);
-    this.emitChange();
   }
   deletePost(post_id){
     FeedFetcher.deletePost(post_id);
-    this.emitChange();
   }
   postComment(comment){
     FeedFetcher.postComment(comment);
