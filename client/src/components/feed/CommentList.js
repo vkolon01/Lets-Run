@@ -36,6 +36,7 @@ class CommentList extends Component{
       });
     }
   }
+
     updateComments(){
       if(CommentStore.comments[0] && this.props.post._id === CommentStore.comments[0].parent_id){
         this.setState({

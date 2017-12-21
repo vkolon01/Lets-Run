@@ -5,13 +5,18 @@ import NewsActions  from '../../actions/NewsActions';
 import history from '../../services/History';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Popover from 'material-ui/Popover';
 import CommentStore from '../../stores/CommentStore';
 import CommentList from './CommentList';
+import RunnersList from './RunnersList';
 import {Link} from 'react-router-dom';
 import IconButton from 'material-ui/IconButton';
 import Favorite from 'material-ui/svg-icons/action/favorite';
-import {red500, grey800, grey900} from 'material-ui/styles/colors';
+import {red500, grey800, grey900, lightGreen600} from 'material-ui/styles/colors';
 import Delete from 'material-ui/svg-icons/action/delete';
+import DirectionWalk from 'material-ui/svg-icons/maps/directions-run';
 import Comment from 'material-ui/svg-icons/communication/comment';
 import Paper from 'material-ui/Paper';
 import Badge from 'material-ui/Badge';
@@ -25,7 +30,9 @@ class Post extends Component{
       showCommentInputContainer: false,
       showDeleteConfirmatioin: false,
       likes: this.props.post.post.likes ? this.props.post.post.likes.length : 0,
-      liked: this.props.post.post.likes ? this.props.post.post.likes.includes(AuthStore.user_id) : false
+      liked: this.props.post.post.likes ? this.props.post.post.likes.includes(AuthStore.user_id) : false,
+      numberOfRunners: this.props.post.event ? this.props.post.event.runners.length : 0,
+      attending: this.props.post.event  ? this.props.post.event.runners.includes(AuthStore.user_id) : false
     };
   }
 
@@ -34,6 +41,11 @@ class Post extends Component{
     NewsActions.loadComments(this.props.post._id);
   }
 
+  updateNumberOfRunners(runners){
+    this.setState({
+      numberOfRunners: runners
+    })
+  }
 
   likePost(){
     NewsActions.likePost(this.props.post.post._id);
@@ -47,6 +59,23 @@ class Post extends Component{
         this.setState({
           likes: this.state.likes - 1,
           liked: false
+        })
+      }
+    }else{
+      history.replace('/sign_in')
+    }
+  }
+
+  attendEvent(){
+    NewsActions.attendEvent(this.props.post.event._id);
+    if(AuthStore.isLoggedIn()){
+      if(!this.state.attending){
+        this.setState({
+          attending: true
+        })
+      }else{
+        this.setState({
+          attending: false
         })
       }
     }else{
@@ -76,7 +105,6 @@ class Post extends Component{
     let post = this.props.post.post;
     let event = this.props.post.event;
     let post_id = post._id;
-    console.log(this.props.post)
     let deleteActions = [
       <FlatButton
         label="Cancel"
@@ -97,7 +125,6 @@ class Post extends Component{
         <div className="post_body">
           <div className="post_username"> <Link to={`/user/${author._id}`}>{author.username}</Link> : </div>
           {/* --- Post body --- */}
-          <Paper>
             <div className="post_message"> {post.message} </div>
 
           <Divider/>
@@ -113,7 +140,6 @@ class Post extends Component{
           :
             ""
           }
-          </Paper>
 
           {/* --- Icon post menu --- */}
           {/* Post delete icon */}
@@ -137,11 +163,21 @@ class Post extends Component{
           {/* Like icon */}
 
           <Badge badgeContent={this.state.likes} primary={true} badgeStyle={{top: 15,right: 15}}>
-            <IconButton tooltip="Like post" onClick={this.likePost.bind(this)}>
+            <IconButton tooltip={this.state.liked ? "Dislike post" : "Like post" } onClick={this.likePost.bind(this)}>
               <Favorite color={this.state.liked ? red500  : grey800} hoverColor={red500}/>
             </IconButton>
           </Badge>
 
+          {/* Join event icon */}
+          {event ?
+          <Badge badgeContent={this.state.numberOfRunners}  primary={true} badgeStyle={{top: 15,right: 15}}>
+            <IconButton tooltip={this.state.attending ? "Cancel attendance" : "Attend event" } onClick={this.attendEvent.bind(this)}>
+              <DirectionWalk color={this.state.attending ? lightGreen600 : grey800} hoverColor={lightGreen600}/>
+            </IconButton>
+          </Badge>
+          :
+            ""
+          }
 
 
           {/* Leave a Comment icon */}
@@ -164,6 +200,7 @@ class Post extends Component{
         </div>
 
         <CommentList post = {post}/>
+        <RunnersList post = {post} getRunners={this.updateNumberOfRunners.bind(this)} event = {event ? event : null}/>
       </Paper>
     )
   }

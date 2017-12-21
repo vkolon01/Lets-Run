@@ -154,6 +154,29 @@ class FeedFetcher{
           }
         }));
       }
+
+      attendEvent(event_id){
+        return when(request({
+          url: API_URL + '/events/' + event_id,
+          method: 'PUT',
+          crossOrigin: true,
+          headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'authorization': 'JWT ' + AuthStore.jwt
+          },
+          contentType: "application/json",
+          error: function(err){
+            if(err.status === 401){
+              MessageActions.displayErrors(JSON.parse(err.response));
+            }
+          },
+          success: function(res){
+            NewsActions.fetchRunners(event_id);
+            MessageActions.displayMessage(res);
+          }
+        }));
+      }
+
       fetchUser(user_id){
         return when(request({
           url: API_URL + '/users/' + user_id,
@@ -167,6 +190,22 @@ class FeedFetcher{
           },
           success: function(res){
             UserActions.receiveUser(res);
+          }
+        }));
+      }
+      fetchRunners(event_id){
+        return when(request({
+          url: API_URL + '/events/' + event_id,
+          method: 'GET',
+          crossOrigin: true,
+          contentType: "application/json",
+          error: function(err){
+            if(err.status === 404){
+              MessageActions.displayErrors(err.response);
+            }
+          },
+          success: function(res){
+            NewsActions.receiveRunners(res,event_id);
           }
         }));
       }

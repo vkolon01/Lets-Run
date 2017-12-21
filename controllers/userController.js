@@ -32,6 +32,10 @@ exports.register = function(req,res){
   })
 }
 
+exports.uploadAvatar = function(req,res){
+  res.send('tbc')
+}
+
 exports.sign_in = function(req,res){
   User.findOne({
     email: req.body.email

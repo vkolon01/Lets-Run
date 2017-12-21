@@ -12,6 +12,8 @@ exports.success = {
   postDeleted: "Post have been successfully deleted",
   postLiked: "Post is liked",
   postDisliked: "Post is disliked",
+  eventAttended: "You are now registered for the event",
+  attendanceCancelled: "You successfully canceled your attendance ",
   commentPosted: "Comment have been posted",
   commentDeleted: "Comment has been deleted"
 };

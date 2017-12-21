@@ -28,9 +28,23 @@ export default{
     })
   },
 
+  attendEvent(event_id){
+    dispatcher.dispatch({
+      type: "ATTEND_EVENT",
+      event_id
+    })
+  },
+
   fetchPosts(){
     dispatcher.dispatch({
       type: "FETCH_POSTS",
+    });
+  },
+
+  fetchRunners(event_id){
+    dispatcher.dispatch({
+      type: "FETCH_RUNNERS",
+      event_id
     });
   },
 
@@ -58,5 +72,13 @@ export default{
       type: "RECEIVE_COMMENTS",
       comments
     });
+  },
+
+  receiveRunners(runners,event_id){
+    dispatcher.dispatch({
+      type: "RECEIVE_RUNNERS",
+      runners,
+      event_id
+    })
   }
 }

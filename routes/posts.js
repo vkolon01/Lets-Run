@@ -8,5 +8,4 @@ router.route('/:post_id')
   .delete(AuthController.checkOwnership,PostController.deletePost)
   .put(AuthController.loginRequired,PostController.likePost);
 
-
   module.exports = router;
