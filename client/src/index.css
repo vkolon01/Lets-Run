@@ -1,3 +1,10 @@
+.outBounds{
+  background-color: #d8d7de
+}
+.main{
+  margin: 0px auto;
+  width:1000px;
+}
 body {
   margin: 0;
   padding: 0;
@@ -65,9 +72,8 @@ body {
 }
 .post{
   position: relative;
-  z-index: 1;
   background: #fff;
-  width:20em;
+  width:50%;
   padding: 10px 10px 10px 15px;
   margin: 0 0 10px 0;
   overflow: auto;
@@ -92,11 +98,6 @@ body {
 .post_comments:before{
   display: inline-block;
   width: 1em;
-}
-.post_comments_section{
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: dashed 1px #ddd;
 }
 .leave_comment{
   color: #384394;
@@ -138,4 +139,14 @@ body {
 }
 .showRunners:hover{
   color: #72aaff;
+}
+.username_link a{
+    text-decoration: none;
+    color: #000000;
+}
+.username_link a:hover{
+  color: #5D70F8;
+}
+.event_distance{
+  font-weight: bold
 }

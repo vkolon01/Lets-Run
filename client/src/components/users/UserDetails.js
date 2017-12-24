@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import moment from 'moment';
+import {Link} from 'react-router-dom';
+import {ListItem} from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
 
 class UserDetails extends Component{
 
@@ -9,7 +12,9 @@ class UserDetails extends Component{
     const fullName = user.firstName + ' ' + user.lastName;
     return (
       <div>
-        <h1> {user.username} </h1>
+        <ListItem leftAvatar={<Avatar size={50}>{user.username.charAt(0)}</Avatar>} containerElement={<Link to={`/user/${user._id}`}/>}>
+          {user.username}
+        </ListItem>
         <ul className="userDetails">
           <li>Age: {age} </li>
           <li>Name: {fullName}</li>

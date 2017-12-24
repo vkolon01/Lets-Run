@@ -8,9 +8,13 @@ var AttachedEvent = new Schema({
     type: String,
     default: null
   },
-  eventDate: Date,
+  eventDate: {
+    type: String,
+    default: "Flexible"
+  },
   location: String,
   distance: String,
+  pace: String,
   runners: {
     type: [String],
     default: []

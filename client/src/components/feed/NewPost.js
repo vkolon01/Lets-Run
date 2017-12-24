@@ -14,7 +14,8 @@ class NewPost extends Component{
       },
       event: null,
       showEventAttachment: false,
-      maxNumOfCharacters: 100
+      maxNumOfCharacters: 100,
+      submitDisabled: true
     };
   }
 
@@ -60,7 +61,7 @@ class NewPost extends Component{
               {!this.state.showEventAttachment ?
               <div>
                 <FlatButton label="Attach Event" onClick={this.toggleEventAttachment.bind(this)}/>
-                <FlatButton label="Submit Post" primary={true} onClick={this.handleSubmit.bind(this)}/>
+                <FlatButton label="Submit Post" disabled={this.state.submitDisabled} primary={true} onClick={this.handleSubmit.bind(this)}/>
               </div> : ""}
         </div>
       </div>

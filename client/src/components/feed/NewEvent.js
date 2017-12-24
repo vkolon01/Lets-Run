@@ -8,8 +8,27 @@ import TimePicker from 'material-ui/TimePicker';
 import moment from 'moment';
 
 const distanceOptions = [];
+const paceOptions = [];
+const minuteSlots = 10;
+const minMinutesPerKm = 2;
 for (let i = 0; i < 100; i++ ) {
   distanceOptions.push(<MenuItem value={i} key={i} primaryText={`${i} Km`} />);
+}
+for(let i = minMinutesPerKm; i < 10; i++){
+  for(let y = 0; y < 60; y = y + minuteSlots){
+    if(i === minMinutesPerKm && y === 0){
+      paceOptions.push(<MenuItem
+        value={"Flexible"}
+        key={paceOptions.length}
+        primaryText={"Flexible"}
+        />)
+    }else{
+      var minutes = i ;
+      var seconds = y < 6 ? "0" + y : y;
+      var pace = minutes + ':' + seconds;
+      paceOptions.push(<MenuItem value={pace} key={pace} primaryText={`${pace}/Km`} />)
+    }
+  }
 }
 
 
@@ -18,7 +37,8 @@ class NewEvent extends Component{
     super();
     this.state={
       distance : 1,
-      eventDate: moment()
+      eventDate: moment(),
+      pace : "Flexible"
     }
   }
 
@@ -45,6 +65,12 @@ class NewEvent extends Component{
     })
   }
 
+  changePace = (event,index, pace) => {
+    this.setState({
+      pace
+    })
+  }
+
   handleSubmit(){
     NewsActions.createPost({
       post:this.props.post,
@@ -66,6 +92,14 @@ class NewEvent extends Component{
             onChange={this.changeDistance}
           >
             {distanceOptions}
+          </SelectField>
+          {/* Pace selection */}
+          <SelectField
+            floatingLabelText="Target Pace"
+            value={this.state.pace}
+            onChange={this.changePace}
+          >
+            {paceOptions}
           </SelectField>
 
           {/* Date and Time selection */}

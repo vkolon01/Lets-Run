@@ -3,6 +3,9 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import CommentStore from '../../stores/CommentStore';
 import {Link} from 'react-router-dom';
 import NewsActions from '../../actions/NewsActions';
+import {List, ListItem} from 'material-ui/List';
+import CircularProgress from 'material-ui/CircularProgress';
+import Avatar from 'material-ui/Avatar';
 
 class CommentList extends Component{
   constructor(){
@@ -10,7 +13,8 @@ class CommentList extends Component{
     this.state = {
       comments: CommentStore.comments,
       numberOfComments: 0,
-      showComments: false
+      showComments: false,
+      loading: false
     }
     this.updateComments = this.updateComments.bind(this);
   }
@@ -30,9 +34,13 @@ class CommentList extends Component{
   toggleComments(){
     if(!this.state.showComments){
       NewsActions.loadComments(this.props.post._id);
+      this.setState({
+        loading: true
+      })
     }else{
       this.setState({
-        showComments: false
+        showComments: false,
+        loading: false
       });
     }
   }
@@ -42,20 +50,25 @@ class CommentList extends Component{
         this.setState({
           comments: CommentStore.comments,
           numberOfComments: CommentStore.comments.length,
-          showComments: true
+          showComments: true,
+          loading: false
         });
       }
     }
   render(){
-    let post = this.props.post;
     let numberOfComments = this.state.numberOfComments;
     let postComments;
     if(this.state.showComments){
       postComments = this.state.comments.map((comment) => {
         return (
           <div key={comment._id} className = "comment">
-              <h3 className="comment_author"> <Link to={`/user/${comment.author_id}`}>{comment.author.username}</Link> </h3>
-              <p className="comment_message"> {comment.message} </p>            </div>
+            <ListItem leftAvatar={
+              <Avatar size={30}>{comment.author.username.charAt(0)}</Avatar>}
+              primaryText={<div className="username_link"><Link to={`/user/${comment.author._id}`}>{comment.author.username}</Link></div>}
+              secondaryText={comment.message}
+              secondaryTextLines={1}
+            />
+          </div>
         )
       })
     };
@@ -70,7 +83,10 @@ class CommentList extends Component{
             <ReactCSSTransitionGroup transitionName="toggle"
                                     transitionEnterTimeout={250}
                                     transitionLeaveTimeout={50}>
-                                    {postComments}
+                                    <List open={true}>
+                                      {postComments}
+                                    </List>
+                                    {this.state.loading ? <CircularProgress /> : ""}
             </ReactCSSTransitionGroup>
 
         </div>

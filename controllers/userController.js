@@ -56,7 +56,6 @@ exports.sign_in = function(req,res){
 exports.getUserProfile = function(req,res){
   exports.getUser(req.params.user_id).then(function(user){
     res.send(user);
-    res.status(404).send(err);
   })
 }
 

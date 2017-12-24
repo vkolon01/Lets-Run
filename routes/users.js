@@ -19,6 +19,11 @@ router.route('/sign_in')
 
 router.route('/:user_id')
   .get(userHandler.getUserProfile);
+
 router.route('/:user_id/posts')
   .get(feedController.getPostsById);
+
+router.route('/:user_id/avatar')
+  .post()
+  
 module.exports = router;

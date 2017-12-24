@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import {PropTypes} from 'prop-types';
 import NewsActions from '../../actions/NewsActions';
+import TextField from 'material-ui/TextField';
 
 class NewComment extends Component{
   componentWillMount(){
@@ -30,10 +31,10 @@ class NewComment extends Component{
     return (
       <div className = "comment_container">
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <textarea
-                value={this.state.body}
+          <TextField
+                multiLine={true}
                 onChange={this.handleChange.bind(this)}
-                placeholder="Leave a comment"
+                hintText="Leave a comment"
                 name="body"/>
           <button type="submit">Post comment</button>
         </form>

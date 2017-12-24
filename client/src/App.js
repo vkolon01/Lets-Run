@@ -13,15 +13,17 @@ class App extends Component {
 
   render(){
     return(
-      <div>
-        <div className="header">
-          <NavBar/>
-          <Messages/>
+      <div className='outBounds'>
+        <div className='main'>
+          <div className="header">
+            <NavBar/>
+            <Messages/>
+          </div>
+          <Route exact path='/' component={FeedContainer}/>
+          <Route path="/sign_in" component={LoginPage}/>
+          <Route path="/register" component={RegistrationPage}/>
+          <Route path="/user/:user_id" component={ProfileContainer}/>
         </div>
-        <Route exact path='/' component={FeedContainer}/>
-        <Route path="/sign_in" component={LoginPage}/>
-        <Route path="/register" component={RegistrationPage}/>
-        <Route path="/user/:user_id" component={ProfileContainer}/>
       </div>
     )
   }

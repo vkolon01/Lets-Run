@@ -5,10 +5,8 @@ import NewsActions  from '../../actions/NewsActions';
 import history from '../../services/History';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-import Popover from 'material-ui/Popover';
-import CommentStore from '../../stores/CommentStore';
+import {ListItem} from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
 import CommentList from './CommentList';
 import RunnersList from './RunnersList';
 import {Link} from 'react-router-dom';
@@ -117,29 +115,34 @@ class Post extends Component{
         onClick={this.deletePost.bind(this)}
       />
     ]
-    let postComments;
-
-
     return(
       <Paper className="post">
         <div className="post_body">
-          <div className="post_username"> <Link to={`/user/${author._id}`}>{author.username}</Link> : </div>
-          {/* --- Post body --- */}
-            <div className="post_message"> {post.message} </div>
 
-          <Divider/>
+          {/* --- Avatar and username ---*/}
+          <div className="user_details">
+            <ListItem leftAvatar={<Avatar>{author.username.charAt(0)}</Avatar>} containerElement={<Link to={`/user/${author._id}`}/>}>
+              {author.username}
+            </ListItem>
+
+          </div>
+
           {/* --- Event body */}
           {event ?
 
             <div className="event_body">
-              Event Details:
-              <div className="event_distance"> Distance: {event.distance} Km </div>
-              <div className="event_date"> {moment(event.eventDate).format("dddd, DD-MM-YY")} </div>
-              <div className="event_time"> At {moment(event.eventDate).format("hh:mm")} </div>
+              <div className="event_distance">{event.distance}K Run || Pace: {event.pace && event.pace !== "Flexible" ? `${event.pace}/Km` : "Flexible"}</div>
+              <div className="event_date">{moment(event.eventDate).format("dddd, DD-MM-YY")}</div>
+              <div className="event_time">{moment(event.eventDate).format("hh:mm")}</div>
             </div>
           :
             ""
           }
+          <Divider/>
+          {/* --- Post body --- */}
+            <div className="post_message"> {post.message} </div>
+
+
 
           {/* --- Icon post menu --- */}
           {/* Post delete icon */}

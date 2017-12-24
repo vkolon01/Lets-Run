@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import RunnersStore from '../../stores/RunnersStore';
 import NewsActions from '../../actions/NewsActions';
-import Divider from 'material-ui/Divider';
+import CircularProgress from 'material-ui/CircularProgress';
+import {Link} from 'react-router-dom';
+import {ListItem} from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
 
 class RunnersList extends Component{
 
@@ -10,7 +13,8 @@ class RunnersList extends Component{
     this.state ={
       runners: RunnersStore.runners,
       showRunners: false,
-      numberOfRunners: 0
+      numberOfRunners: 0,
+      loading: false
     }
     this.updateRunners = this.updateRunners.bind(this)
   }
@@ -33,11 +37,13 @@ class RunnersList extends Component{
     if(!this.state.showRunners){
       NewsActions.fetchRunners(this.props.post.attachedEvent);
       this.setState({
-        showRunners:true
+        showRunners:true,
+        loading: true
       })
     }else{
       this.setState({
-        showRunners: false
+        showRunners: false,
+        loading: false
       });
     }
   }
@@ -45,7 +51,8 @@ class RunnersList extends Component{
     if(RunnersStore.event_id === this.props.post.attachedEvent){
       this.setState({
         runners: RunnersStore.runners,
-        numberOfRunners: RunnersStore.runners.length
+        numberOfRunners: RunnersStore.runners.length,
+        loading: false
       })
       this.props.getRunners(RunnersStore.runners.length)
     }
@@ -57,8 +64,10 @@ class RunnersList extends Component{
       var runners = this.state.runners.map((user) => {
         return (
           <div key={user._id}>
-            {user.firstName + " " + user.lastName}
-            <Divider/>
+            <ListItem leftAvatar={<Avatar size={30}>{user.username.charAt(0)}</Avatar>}
+            containerElement={<Link to={`/user/${user._id}`}/>}
+            primaryText={user.firstName + " " + user.lastName}
+            />
           </div>
         )
       })
@@ -70,6 +79,7 @@ class RunnersList extends Component{
         {numberOfRunners ? numberOfRunners + (numberOfRunners > 1 ? " runners" : " runner") : ""}
       </div>
         {runners}
+        {this.state.loading ? <CircularProgress /> : ""}
       </div>
     )
   }
