@@ -8,6 +8,7 @@
     "jwt-decode": "^2.2.0",
     "material-ui": "^0.19.4",
     "moment": "^2.20.1",
+    "moment-precise-range-plugin": "^1.2.4",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-addons-css-transition-group": "^15.6.2",

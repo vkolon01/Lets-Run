@@ -94,7 +94,7 @@ exports.pushToUser = function(user_id,field,value){
       let validatedForm = '';
       let emailValidation = new Promise((fulfill, reject) => {
       if(!payload || typeof payload.email !== 'string' || !validator.isEmail(payload.email.trim())){
-        isFormValid = false;
+        isFormValid = false;z
         errors.email = 'The email provided is not valid.';
         fulfill();
       }else{

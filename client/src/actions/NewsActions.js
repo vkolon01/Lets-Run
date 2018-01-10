@@ -21,6 +21,13 @@ export default{
     });
   },
 
+  deleteComment(id){
+    dispatcher.dispatch({
+      type: "DELETE_COMMENT",
+      id
+    });
+  },
+
   likePost(id){
     dispatcher.dispatch({
       type: "LIKE_POST",

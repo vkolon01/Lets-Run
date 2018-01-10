@@ -13,7 +13,7 @@ class Comment extends Component{
     postComments = post.comments.map((comment) => {
       return (
         <div key={comment._id} className = "comment">
-          <h3 className="comment_author"> {comment.author_id} </h3>
+          <h3 className="comment_heading"> {comment.author_id}</h3>
           <p className="comment_body"> {comment.body} </p>
         </div>
       )

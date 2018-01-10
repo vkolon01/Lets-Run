@@ -25,6 +25,7 @@ class NewPost extends Component{
     post[field] = event.target.value.length <= this.state.maxNumOfCharacters ? event.target.value : this.state.post.message;
     this.setState({
       post,
+      submitDisabled: post[field].length > 0 ? false : true,
       charactersRemaining: this.state.charactersRemaining - post[field].length
     });
   }
