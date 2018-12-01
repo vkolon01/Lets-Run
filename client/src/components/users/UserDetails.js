@@ -7,7 +7,10 @@ import Avatar from 'material-ui/Avatar';
 class UserDetails extends Component{
 
   render(){
-    const user = this.props.user;
+    
+    const user = this.props.user.username;
+    console.log('USER IN REACT: ' + user);
+
     const age =  moment().diff(user.dob, 'years')
     const fullName = user.firstName + ' ' + user.lastName;
     return (

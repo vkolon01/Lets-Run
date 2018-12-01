@@ -2,28 +2,19 @@ var express = require('express');
 var router = express.Router();
 var userHandler = require('../controllers/userController');
 var feedController = require('../controllers/feedController');
+const authCheck = require('../middleware/check-auth');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+// router.get('/', );
 
-router.route('/register')
-  .all(function(req,res,next){
-    next();
-  })
-  .post(userHandler.register);
+router.post('/register', userHandler.register);
 
-router.route('/sign_in')
-  .post(userHandler.sign_in);
+router.post('/sign_in', userHandler.sign_in);
 
-router.route('/:user_id')
-  .get(userHandler.getUserProfile);
+router.get('/:user_id',authCheck,  userHandler.getUserProfile);
 
-router.route('/:user_id/posts')
-  .get(feedController.getPostsById);
+router.get('/:user_id/posts', feedController.getPostsById);
 
-router.route('/:user_id/avatar')
-  .post()
+router.post('/:user_id/avatar');
   
 module.exports = router;

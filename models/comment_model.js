@@ -6,17 +6,11 @@ var AttachedEvent = require('./event_model');
 
 var CommentSchema = new Schema({
   message: String,
-  parent_id: String,
-  author_id: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  author: Object,
-  postDate: {
-    type: Date,
-    default: Date.now()
-  },
+  author: { type: Schema.Types.ObjectId, ref: 'User' },
+},
+{
+  timestamps: true //auto generation time of creation and last update
 });
 
 module.exports = CommentSchema;
+// module.exports = mongoose.model('Comment', commentSchema);

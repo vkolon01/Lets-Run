@@ -6,14 +6,10 @@ var AttachedEvent = require('./event_model');
 
 var PostSchema = new Schema({
   message: String,
-  author_id: {
+  author: {
     type: String,
     required: true,
     trim: true
-  },
-  postDate: {
-    type: Date,
-    default: Date.now()
   },
   attachedEvent:{
     type: String,
@@ -24,6 +20,11 @@ var PostSchema = new Schema({
     type: [String],
     default: []
   }
+},
+{
+  timestamps: true //auto generation time of creation and last update
 });
 
 module.exports = PostSchema;
+// module.exports = mongoose.model('Post', postSchema);
+

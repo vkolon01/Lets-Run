@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var Post = mongoose.model('Posts',require('../models/post_model'));
 var PostComment = mongoose.model('Comments',require('../models/comment_model'));
-var AttachedEvent = mongoose.model("Events",require('../models/event_model'));
+// var AttachedEvent = mongoose.model("Events",require('../models/event_model'));
 var userController = require('./userController');
 var constants = require('../constants/messages');
 var async = require('async');

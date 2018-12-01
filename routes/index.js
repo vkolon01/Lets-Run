@@ -5,10 +5,8 @@ var postController = require('../controllers/postController');
 var authController = require('../controllers/authController');
 
 /* returns an array of all posts. */
-router.route('/')
-  .get(feedController.list_latest_feed)
-router.route('/newpost')
-  .post(authController.loginRequired, postController.createPost);
-router.route('/newcomment')
-  .post(authController.loginRequired, postController.addComment);
+router.get('/', feedController.list_latest_feed);
+router.post('/newpost',authController.loginRequired, postController.createPost);
+router.post('/newcomment', authController.loginRequired, postController.addComment);
+
 module.exports = router;

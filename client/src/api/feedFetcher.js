@@ -22,6 +22,9 @@ class FeedFetcher{
           url: API_URL,
           method: 'GET',
           crossOrigin: true,
+          // headers: {
+            
+          // },
           contentType: "application/json",
           error: function(err){
             if(err.status === 404){
