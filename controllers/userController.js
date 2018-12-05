@@ -1,12 +1,12 @@
 const { validationResult } = require('express-validator/check');
 
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var User = require('../models/user_model');
 var constants = require('../constants/messages');
 var jwt = require('jsonwebtoken');
-var validator = require('validator');
-var Promise = require('promise');
+var Comment = require('../models/comment_model');
+var Event = require('../models/event_model');
+
 
 exports.register = function(req,res){
 
@@ -94,135 +94,62 @@ exports.getUserProfile = function(req,res){
 
 }
 
+exports.deleteUser = function(req, res) {
+  const userId = req.params.user_id;
+console.log(userId);
 
-// exports.getUser = function(user_id){
+  User.findById(userId)
+  .then(user => {
+    if(!user) {
+      return res.status(404).json({message: constants.errors.userNotFound })
+    }
+    if (user._id.toString() !== req.userData.userId) {
+      res.status(403).json({
+        message: 'You are not authorized to do so.'
+      })
+    }
+
+    console.log('inside *****************');
+    // console.log(user);
+
+    
+
+    Comment.find({ author: user._id })
+           .then(comment => {
+            console.log('inside error');
+
+            if(!comment){
+            console.log('inside error');
+            }
+
+            for (var i = 0; i < comment.length; i++) {
+            console.log('inside commentloop');
+            console.log(comment[i]);
+
+              comment[i].remove()
+            }
+              });
+
+              console.log('inside after comment*****************');
+
+    Event.find({author: userId})
+         .then(event => {
+          for (var i = 0; i < event.length; i++) {
+            event[i].remove()
+          }
+         })
+
+         console.log('inside end*****************');
 
 
-//   return new Promise(function(fulfill,reject){
-//     User.findById(user_id,"-hash",function(err,user){
-//       if(err){
-//         reject (constants.errors.userNotFound);
-//       }
-//       if(user){
-//         fulfill(user);
-//       }
-//     })
-//   })
-// }
+    user.remove();
 
-/*
-  Push element into the record
-*/
-exports.pushToUser = function(user_id,field,value){
-  return new Promise(function(fulfill,reject){
-    User.findByIdAndUpdate(user_id,{$push:{[field]:value}},function(err,user){
-      if(err) reject (constants.errors.badServer);
-      fulfill(user);
-    })
   })
+  .then(result => {
+    res.status(200).json({message: 'User deleted' });
+  })
+  .catch( err => {
+    res.status(500).json({message: constants.errors.badAuth});        
+  });
+
 }
-
-//   function validateRegistrationForm(payload){
-//     return new Promise(function(fulfill,reject){
-//       const errors = {};
-//       let isFormValid = true;
-//       let validatedForm = '';
-//       let emailValidation = new Promise((fulfill, reject) => {
-//       if(!payload || typeof payload.email !== 'string' || !validator.isEmail(payload.email.trim())){
-//         isFormValid = false;z
-//         errors.email = 'The email provided is not valid.';
-//         fulfill();
-//       }else{
-//         User.findOne({'email': payload.email.trim()},function(err,person){
-//           if(person){
-//             isFormValid = false;
-//             errors.email = "The email is already taken";
-//             fulfill();
-//           }else{
-//             fulfill();
-//           }
-//         })
-//       }
-//     })
-
-//     let usernameValidation = new Promise((fulfill,reject) => {
-//       if(!payload || typeof payload.username !== 'string' || payload.username.trim().length < 8){
-//         isFormValid = false;
-//         errors.username = "The username must be over 8 characters long";
-//         fulfill();
-//       }else{
-//         User.findOne({'username': payload.username.trim()},function(err,person){
-//           if(person){
-//             isFormValid = false;
-//             errors.username = "The username is already taken";
-//             fulfill();
-//           }else{
-//             fulfill();
-//           }
-//         })
-//       }
-//     })
-
-//     if(!payload ||  typeof payload.password !== 'string' || payload.password.trim().length < 8){
-//       isFormValid = false;
-//       errors.password = 'The password must have at least 8 characters.';
-//     }
-
-//     //Date validation. Needs further validation in order to check if the user is old enough
-//     if(!payload || !payload.dob){
-//       isFormValid = false;
-//       errors.dob = "Please provide date of birth.";
-//     }
-//     if(!payload || typeof payload.firstName !== 'string' || payload.firstName.trim().length === 0){
-//       isFormValid = false;
-//       errors.firstName = "Please provide your first name.";
-//     }
-
-//     if(!payload || typeof payload.lastName !== 'string' || payload.lastName.trim().length === 0){
-//       isFormValid = false;
-//       errors.lastName = "Please provide your last name.";
-//     }
-
-//     Promise.all([emailValidation,usernameValidation]).then(function(){
-//         if(isFormValid){
-//           validatedForm = {
-//             firstName: payload.firstName.trim(),
-//             lastName: payload.lastName.trim(),
-//             username: payload.username.trim(),
-//             email: payload.email.trim(),
-//             dob: payload.dob,
-//             password: payload.password.trim()
-//           };
-//           fulfill({validatedForm});
-//         }else{
-//           reject(errors);
-//         }
-//     })
-//   })
-// }
-
-// function validateLoginForm(payload){
-//   const errors = {};
-//   let isFormValid = true;
-//   let message = '';
-
-//   if(!payload || typeof payload.email !== 'string' || !validator.isEmail(payload.email)){
-//     isFormValid = false;
-//     errors.email = 'The email provided is not valid.';
-//   }
-
-//   if(!payload ||  typeof payload.password !== 'string' || payload.password.trim().length < 8){
-//     isFormValid = false;
-//     errors.password = 'The password must have at least 8 characters.';
-//   }
-
-//   if(!isFormValid){
-//     message = 'Check the form for errors.';
-//   }
-
-//   return {
-//     success: isFormValid,
-//     message,
-//     errors
-//   }
-// }
