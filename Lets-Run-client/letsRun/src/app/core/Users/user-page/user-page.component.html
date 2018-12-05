@@ -1,0 +1,19 @@
+
+<div>
+  <h1>  Full Name: {{ user?.firstName }} {{ user?.lastName }}  </h1>
+  <div>
+      username: {{ user?.username }}
+  </div>
+  <div>
+      email:  {{ user?.email }}
+  </div>
+  registration Date: {{ user?.createdAt }}
+  <div>
+      dob:  {{ user?.dob }}
+  </div>
+<div>
+    <button (click)="deleteUser()" >Delete User</button>
+</div>
+  
+</div>
+<!-- <button (click)="UserProfile()">User Profile</button> -->

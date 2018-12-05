@@ -1,0 +1,93 @@
+<div class="event_detail">
+
+  <div *ngIf="!edit">
+    <p>
+      Event location: {{event?.location}}
+    </p>
+
+    <p>
+      Event distance: {{event?.distance}}
+    </p>
+    <p>
+      Event date: {{event?.eventDate}}
+    </p>
+    <p>
+      Event Pace: {{event?.pace}}
+    </p>
+
+    <p>
+      Creator of the event: {{eventCreatorName}}
+    </p>
+    <div>
+      <button (click)="update()">Edit</button>
+      <button routerLink="/events">Back</button>
+      <button (click)="deleteEvent()">Delete</button>
+    </div>
+  </div>
+
+  <div class="events_add_modul" *ngIf="edit">
+    <form [formGroup]="eventForm" (ngSubmit)="updateEvent()">
+
+      <label for="location">Location</label>
+      <input type="text" placeholder="location" [(ngModel)]="event.location" formControlName="location" id="location">
+
+      <label for="distance">Distance</label>
+      <input type="number" placeholder="Distance" [(ngModel)]="event.distance" formControlName="distance" id="distance">
+
+      <label for="pace">Pace</label>
+      <input type="text" placeholder="Pace" [(ngModel)]="event.pace" formControlName="pace" id="pace">
+
+      <label for="picture">Picture</label>
+      <br>
+      <!-- <input type="text" placeholder="picture" formControlName="picture" id="picture"> -->
+
+      <label for="eventDate">Date of Event</label>
+      <input type="date" placeholder="eventDate" [(ngModel)]="event.eventDate" formControlName="eventDate" id="eventDate">
+
+      <div>
+        <button type="submit">Update event</button>
+        <button (click)="update()">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+
+  <hr>
+
+  <div>
+    <h1>comments</h1>
+
+    <div *ngIf="commentInputArea">
+      <form [formGroup]="commentForm" (ngSubmit)="add_Comment()">
+
+        <label for="content">Comment:</label>
+        <textarea formControlName="content" id="content" cols="30" rows="10"></textarea>
+
+        <div>
+          <button type="submit">Post</button>
+          <button (click)="showCommentInputArea()">Cancel</button>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="event_detail--comments" *ngIf="!commentInputArea">
+      <button (click)="showCommentInputArea()">Add comment</button>
+        <div *ngIf="comments.length >= 1">
+          
+          <app-comment
+          *ngFor="let comment of comments; let index = 'index'" [comment]="comment" [eventId]="eventId"
+          ></app-comment>
+
+        </div>
+
+      <div *ngIf="comments.length === 0">
+        <h2>No comments posted... Be the first one!</h2>
+      </div>
+
+
+    </div>
+  </div>
+
+
+</div>

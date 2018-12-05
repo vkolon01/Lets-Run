@@ -1,0 +1,24 @@
+
+<form  [formGroup]="signInFrom" (ngSubmit)="onSignin()">
+
+  <label for="email">Email</label>
+  <input type="email"    placeholder="e-mail" formControlName="email" id="email">
+
+  <label for="password">Password</label>
+  <input type="password" placeholder="Пароль" formControlName="password" id="password">
+
+  <label for="firstName">First Name</label>
+  <input type="text" placeholder="firstName" formControlName="firstName" id="firstName">
+
+  <label for="lastName">Last Name</label>
+  <input type="text" placeholder="lastName" formControlName="lastName" id="lastName">
+
+  <label for="username">Username</label>
+  <input type="text" placeholder="username" formControlName="username" id="username">
+
+  <label for="dob">Date of bearth</label>
+  <input type="date" placeholder="Date Of bearth" formControlName="dob" id="dob">
+
+  <button type="submit">Register</button>
+
+</form>

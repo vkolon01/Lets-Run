@@ -1,0 +1,12 @@
+<header class="header">
+  <div>
+      <a routerLink="/">Main</a>
+      <a routerLink="/events">Events</a>
+  </div>
+  <div class="header-auth">
+    <a *ngIf="!userIsAuthenticated" routerLink="/auth/login">Login</a>
+    <a *ngIf="userIsAuthenticated" (click)="onLogOut()">Logout</a>
+    <a *ngIf="!userIsAuthenticated" routerLink="/auth/signup">Register</a>
+    <a *ngIf="userIsAuthenticated" [routerLink]="['/userpage', userId]">User Info</a>
+  </div>
+</header>
