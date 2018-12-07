@@ -10,7 +10,16 @@ var Event = require('../models/event_model');
 var Comment = require('../models/comment_model');
 
 
-exports.getEvents = function (req, res) {
+exports.getEvents = function (req, res, next) {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
 
   Event.find()
     .then(events => {
@@ -20,13 +29,14 @@ exports.getEvents = function (req, res) {
       })
     })
     .catch(error => {
-      res.status(500).json({
-        message: "Fetching posts failed!"
-      });
-    })
+      if (!error.statusCode) {
+       error.statusCode = 500;
+   }
+   next(error);
+   });
 }
 
-exports.addEvent = function (req, res) {
+exports.addEvent = function (req, res, next) {
 
   const errors = validationResult(req);
 
@@ -66,23 +76,34 @@ exports.addEvent = function (req, res) {
         }
       });
     })
-    .catch(err => {
-      res.status(500).json({
-        message: 'Creating Event Failed!'
-      });
-    });
+    .catch(error => {
+      if (!error.statusCode) {
+       error.statusCode = 500;
+   }
+   next(error);
+   });
 }
 
 
 
-exports.getEvent = function (req, res) {
+exports.getEvent = function (req, res, next) {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
   var event_id = req.params.event_id;
   Event.findById(event_id)
     .then(foundEvent => {
       if (!foundEvent) {
-        res.status(404).json({
-          message: "Can't find event by id"
-        });
+        const error = new Error("Can't find event by id");
+        error.statusCode = 404;
+        throw error;
       }
 
       const creator = foundEvent.author;
@@ -95,7 +116,8 @@ exports.getEvent = function (req, res) {
           res.status(200).json({
             message: "Found event by id",
             eventById: foundEvent,
-            creatorName: foundUser.firstName + " " + foundUser.lastName
+            creatorName: foundUser.firstName + " " + foundUser.lastName,
+            creatorId: foundUser._id
           })
         })
         .catch(err => {
@@ -105,14 +127,25 @@ exports.getEvent = function (req, res) {
         });
 
     })
-    .catch(err => {
-      res.status(500).json({
-        message: 'Creating Event Failed!'
-      });
-    });
+    .catch(error => {
+      if (!error.statusCode) {
+       error.statusCode = 500;
+   }
+   next(error);
+   });
 }
 
-exports.updateEvent = function (req, res) {
+exports.updateEvent = function (req, res, next) {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
   const event = new Event({
     _id: req.body.id,
     location: req.body.location,
@@ -128,44 +161,55 @@ exports.updateEvent = function (req, res) {
     }, event)
     .then(result => {
       if (result.n > 0) {
-        res.status(200).json({
-          message: "Update successful!"
-        });
+        const error = new Error('Update successful!');
+        error.statusCode = 201;
+        throw error;
       } else {
-        res.status(401).json({
-          message: "Not authorized!"
-        });
+        const error = new Error('Not authorized!');
+        error.statusCode = 401;
+        throw error;
       }
     })
     .catch(error => {
-      res.status(500).json({
-        message: "Couldn't udpate event!"
-      });
-    });
+      if (!error.statusCode) {
+       error.statusCode = 500;
+   }
+   next(error);
+   });
 }
 
-exports.deleteEvent = function (req, res) {
+exports.deleteEvent = function (req, res, next) {
+
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect.');
+    error.statusCode = 422;
+    throw error;
+  }
 
   const eventId = req.params.event_id;
 
-  // const fetchedEvent = Event;
+  let fetchedEvent;
 
-  Event.findById(eventId)
+  return Event.findById(eventId)
     .then(event => {
 
       if (!event) {
-        res.status(404).json({
-          message: 'Could not find event.'
-        })
+        const error = new Error('Could not find event.');
+        error.statusCode = 404;
+        throw error;
       }
       if (event.author.toString() !== req.userData.userId) {
-        res.status(403).json({
-          message: 'You are not authorized to do so.'
-        })
-      }
+        const error = new Error('You are not authorized to do so.');
+        error.statusCode = 401;
+        throw error;
+      } 
 
-      // fetchedEvent = event;
+      fetchedEvent = event;
 
+    })
+    .then(nextstep => {
       Comment.find({ event: eventId })
             .then(comment => {
               console.log(comment);
@@ -175,19 +219,19 @@ exports.deleteEvent = function (req, res) {
               }
                 });
 
-            event.remove();
-
+            fetchedEvent.remove();
     })
     .then(delEvent => {
-      res.status(200).json({
+     res.status(200).json({
         message: "Deleted Event"
       });
 
     })
     .catch(error => {
-      res.status(500).json({
-        message: "Deleting event failed!"
-      });
+       if (!error.statusCode) {
+        error.statusCode = 500;
+    }
+    next(error);
     });
 }
 

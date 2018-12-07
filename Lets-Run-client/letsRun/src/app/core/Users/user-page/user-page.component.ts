@@ -26,9 +26,13 @@ export class UserPageComponent implements OnInit {
 
       this.user_id = paramMap.get('user_id');
 
+
+      console.log(this.user_id);
+      
         this.userService.getUserInfo(this.user_id)
         .subscribe(userData => {
           this.user = {
+                id: userData.user._id,
                 email: userData.user.email,
                 username: userData.user.username,
                 avatar: userData.user.imagePath,

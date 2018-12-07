@@ -5,6 +5,7 @@ exports.loginRequired = function(req, res, next){
     next();
   }else{
     return res.status(401).json({ message: "Please Log in to continue"});
+    
   }
 }
 

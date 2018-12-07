@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventModule } from '../event.model';
 import { EventService } from '../event.service';
 import { CommentService } from '../comment.service';
@@ -12,10 +12,11 @@ import { Subscription } from 'rxjs';
   templateUrl: './event-detail.component.html',
   styleUrls: ['./event-detail.component.scss']
 })
-export class EventDetailComponent implements OnInit {
+export class EventDetailComponent implements OnInit, OnDestroy {
 
   event: EventModule;
   eventCreatorName: string;
+  creatorId: string;
   comments: CommentModule[] = [];
   eventId: string;
 
@@ -60,6 +61,7 @@ export class EventDetailComponent implements OnInit {
           eventDate: eventDate.eventById.eventDate
         },
         this.eventCreatorName = eventDate.creatorName;
+        this.creatorId = eventDate.creatorId
       })
     })
 
@@ -71,6 +73,10 @@ export class EventDetailComponent implements OnInit {
         })
     
   } 
+
+  ngOnDestroy() {
+    
+  }
 
   // getEventId() {
 

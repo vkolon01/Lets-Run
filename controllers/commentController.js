@@ -8,7 +8,8 @@ var Event = require('../models/event_model');
 var Comment = require('../models/comment_model');
 
 
-exports.addCommentToEvent = function (req, res) {
+exports.addCommentToEvent = function (req, res, next) {
+
 
     const errors = validationResult(req);
 
@@ -61,13 +62,23 @@ exports.addCommentToEvent = function (req, res) {
 
         })
         .catch(error => {
-            res.status(500).json({
-                message: "Commenting on event failed!"
-            });
-        });
+            if (!error.statusCode) {
+             error.statusCode = 500;
+         }
+         next(error);
+         });
 }
 
-exports.getCommnentsForEvent = function (req, res) {
+exports.getCommnentsForEvent = function (req, res, next) {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed.');
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
 
     Comment.find({
             event: req.params.event_id
@@ -80,14 +91,25 @@ exports.getCommnentsForEvent = function (req, res) {
             })
         })
         .catch(error => {
-            res.status(500).json({
-                message: "Fetching comments failed!"
-            });
-        })
+            if (!error.statusCode) {
+             error.statusCode = 500;
+         }
+         next(error);
+         });
 
 }
 
-exports.editComment = function (req, res) {
+exports.editComment = function (req, res, next) {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed.');
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
+
     const eventId= req.params.event_id;
     const commentId = req.params.comment_id;
     const userId = req.userData.userId;
@@ -115,20 +137,30 @@ exports.editComment = function (req, res) {
                     message: "Update successful!"
                 });
             } else {
-                res.status(401).json({
-                    message: "Not authorized!"
-                });
+                const error = new Error("Not authorized!");
+                error.statusCode = 401;
+                throw error;
             }
         })
         .catch(error => {
-            res.status(500).json({
-                message: "Couldn't udpate event!"
-            });
-        });
+            if (!error.statusCode) {
+             error.statusCode = 500;
+         }
+         next(error);
+         });
 }
 
 
-exports.DeleteEventComment = function (req, res) {
+exports.DeleteEventComment = function (req, res, next) {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed.');
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
     
     const eventId = req.params.event_id;
     const commentId = req.params.comment_id;
@@ -136,10 +168,14 @@ exports.DeleteEventComment = function (req, res) {
     Comment.findById(commentId)
          .then(comment => {    
            if(!comment) {
-            res.status(404).json({message: 'Could not find comment.'})
+            const error = new Error("Could not find comment.");
+            error.statusCode = 404;
+            throw error;
            }
            if(comment.author.toString() !== req.userData.userId) {
-            res.status(403).json({message: 'You are not authorized to do so.'})
+            const error = new Error("You are not authorized to do so.");
+            error.statusCode = 403;
+            throw error;
            }
 
              comment.remove();
@@ -149,8 +185,9 @@ exports.DeleteEventComment = function (req, res) {
             res.status(200).json({message: "Deleted comment"});
          })
          .catch(error => {
-            res.status(500).json({
-              message: "Deleting comment failed!"
-            });
-          });
+            if (!error.statusCode) {
+             error.statusCode = 500;
+         }
+         next(error);
+         });
 }

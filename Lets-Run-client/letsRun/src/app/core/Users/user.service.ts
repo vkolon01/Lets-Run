@@ -26,7 +26,7 @@ export class UserService {
       getUserInfo(user_id: string){
         const userId = user_id;
       return  this.http
-        .get<{user: {email: string, username: string, imagePath: string, firstName: string, lastName: string, createdAt: Date, dob: Date }}>(BACKEND_URL + '/users/' + userId);
+        .get<{user: {_id:string, email: string, username: string, imagePath: string, firstName: string, lastName: string, createdAt: Date, dob: Date }}>(BACKEND_URL + '/users/' + userId);
 
     }
 

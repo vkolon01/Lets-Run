@@ -16,7 +16,7 @@
     </p>
 
     <p>
-      Creator of the event: {{eventCreatorName}}
+      Creator of the event: <a [routerLink]="['/userpage', creatorId]">{{eventCreatorName}}</a> 
     </p>
     <div>
       <button (click)="update()">Edit</button>

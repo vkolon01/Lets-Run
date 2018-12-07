@@ -10,7 +10,7 @@ router.get('/', EventController.getEvents);
 
 router.post('/add-event' ,authCheck, EventController.addEvent);
 
-router.get('/:event_id', EventController.getEvent);
+router.get('/:event_id', authCheck, EventController.getEvent);
 
 router.delete('/:event_id', authCheck, EventController.deleteEvent);
 

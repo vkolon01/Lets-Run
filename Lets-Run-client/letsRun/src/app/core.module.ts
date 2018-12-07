@@ -8,6 +8,7 @@ import { UserPageComponent } from "./core/users/user-page/user-page.component";
 import { EventDetailComponent } from "./event/event-detail/event-detail.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { CommentComponent } from "./event/comment/comment.component";
+import { ErrorComponent } from "./core/error/error.component";
 
 @NgModule({
     declarations: [FooterComponent, HeaderComponent, HomeComponent, UserPageComponent, EventDetailComponent, CommentComponent],

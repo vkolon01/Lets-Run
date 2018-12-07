@@ -16,6 +16,7 @@ export class AuthService {
     private tokenTimer: any;
     private userId: string;
     private authStatusListener = new Subject<boolean>();
+    private userIdListener = new Subject<string>();
   
     constructor(private http: HttpClient, private router: Router) {}
 
@@ -29,10 +30,15 @@ export class AuthService {
     
       getUserId() {
         return this.userId;
+        
       }
     
       getAuthStatusListener() {
         return this.authStatusListener.asObservable();
+      }
+
+      getUserIdListener() {
+        return this.userIdListener.asObservable();
       }
 
       createUser(email: string, password: string, username: string, firstName: string, lastName: string, dob: Date) {
@@ -59,11 +65,12 @@ export class AuthService {
                   this.isAuthenticated = true;
                   this.userId = response.userId;
                   this.authStatusListener.next(true);
+                  this.userIdListener.next(response.userId);
                   const now = new Date();
                   const expirationDate = new Date(
                     now.getTime() + expiresInDuration * 1000
                   );
-                  console.log(expirationDate);
+                  // console.log(expirationDate);
                   this.saveAuthData(token, expirationDate, this.userId);
                   this.router.navigate(["/"]);
                 }
@@ -94,6 +101,7 @@ export class AuthService {
           this.userId = authInformation.userId;
           this.setAuthTimer(expiresIn / 1000);
           this.authStatusListener.next(true);
+          this.userIdListener.next(authInformation.userId);
         }
       }
     
@@ -101,6 +109,7 @@ export class AuthService {
         this.token = null;
         this.isAuthenticated = false;
         this.authStatusListener.next(false);
+        this.userIdListener.next(null);        
         this.userId = null;
         clearTimeout(this.tokenTimer);
         this.clearAuthData();

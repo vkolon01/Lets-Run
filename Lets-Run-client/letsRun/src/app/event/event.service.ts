@@ -73,7 +73,8 @@ export class EventService {
             pace: string;
             eventDate: Date;
             author: string;},
-            creatorName: string
+            creatorName: string,
+            creatorId: string
         }>(BACKEND_URL + '/events/' + id);
     }
 
