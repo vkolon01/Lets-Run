@@ -5,6 +5,7 @@ export class EventModule {
     pace: string;
     eventDate: Date;
     author: string;
-    // comments: [];
-    // runners: [];
+    picture?: string;
+    likes?: [string];
+    runners?: [string];
 }

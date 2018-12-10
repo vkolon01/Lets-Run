@@ -17,6 +17,7 @@ export class AuthService {
     private userId: string;
     private authStatusListener = new Subject<boolean>();
     private userIdListener = new Subject<string>();
+    private username: string;
   
     constructor(private http: HttpClient, private router: Router) {}
 
@@ -41,6 +42,10 @@ export class AuthService {
         return this.userIdListener.asObservable();
       }
 
+      getUsername() {
+        return this.username;
+      }
+
       createUser(email: string, password: string, username: string, firstName: string, lastName: string, dob: Date) {
         const authData: AuthData = { email: email, password: password, username: username, firstName: firstName, lastName: lastName, dob: dob };
         this.http.post(BACKEND_URL + "/users/register", authData).subscribe(
@@ -55,7 +60,7 @@ export class AuthService {
 
       login(email: string, password: string) {
         const authData = { email: email, password: password };
-        this.http.post<{ token: string; expiresIn: number; userId: string }>(BACKEND_URL + "/users/sign_in", authData)
+        this.http.post<{ token: string; expiresIn: number; username: string; userId: string }>(BACKEND_URL + "/users/sign_in", authData)
             .subscribe(response => {
                 const token = response.token;
                 this.token = token;
@@ -65,6 +70,7 @@ export class AuthService {
                   this.isAuthenticated = true;
                   this.userId = response.userId;
                   this.authStatusListener.next(true);
+                  this.username = response.username;
                   this.userIdListener.next(response.userId);
                   const now = new Date();
                   const expirationDate = new Date(
@@ -80,13 +86,7 @@ export class AuthService {
               });
       }
 
-      deleteUser() {
-        return this.http.delete(BACKEND_URL + '/users/' + this.userId + '/delete_user')
-              .subscribe(result => {
-                this.logout();
-                this.router.navigate(["/events"]);
-              })
-      }
+
 
       autoAuthUser() {
         const authInformation = this.getAuthData();

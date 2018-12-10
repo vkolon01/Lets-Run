@@ -71,6 +71,13 @@ exports.addCommentToEvent = function (req, res, next) {
 
 exports.getCommnentsForEvent = function (req, res, next) {
 
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+  
+    if (pageSize && currentPage) {
+        commentQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+      }
+
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -80,10 +87,14 @@ exports.getCommnentsForEvent = function (req, res, next) {
       throw error;
     }
 
+
+
+    
+
     Comment.find({
             event: req.params.event_id
         })
-        .populate('author', 'username')
+        .populate('author')
         .then(comments => {
             res.status(200).json({
                 message: 'Fetched comments',

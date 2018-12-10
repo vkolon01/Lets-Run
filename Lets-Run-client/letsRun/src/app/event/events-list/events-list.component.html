@@ -11,9 +11,13 @@
                 <label for="pace">Pace</label>
                 <input type="text" placeholder="Pace" formControlName="pace" id="pace">
               
-                <label for="picture">Picture</label>
-                <br>
-                <!-- <input type="text" placeholder="picture" formControlName="picture" id="picture"> -->
+                
+                <button  type="button" (click)="filePicker.click()">Add event photo</button>
+                <input type="file" #filePicker (change)="onImagePicked($event)">
+
+                <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+                    <img [src]="imagePreview" alt="avatar">
+                </div>
 
                 <label for="eventDate">Date of Event</label>
                 <input type="date" placeholder="eventDate" formControlName="eventDate" id="eventDate">
@@ -35,6 +39,9 @@
         <h1 [routerLink]="['/events/' + event?.id]" >{{ event?.location }}</h1>
       </div>
     </div>
+
+    <mat-paginator [length]="totalEvents"  [pageSize]="eventsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+    *ngIf="events.length > 0"></mat-paginator>
 
 
 </div>

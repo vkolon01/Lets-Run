@@ -1,5 +1,4 @@
-container {
+.container {
 display: grid;
-height: 100%;
-grid-template-rows: (10%, auto, 10%);
+grid-template-rows: fit-content(10%) minmax(100vh, auto) fit-content(10%);
 }

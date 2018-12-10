@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;  
+    height: 100%;
 }
 
 .events_add_module {
@@ -17,6 +18,19 @@ form {
     background:  linear-gradient(to bottom, rgba(181,238,227,1) 0%, rgba(42,229,182,0.94) 48%, rgba(190,239,229,0.88) 100%);
     border-radius: 5%;
 }
+
+input[type="file"] {
+    visibility: hidden;
+    margin: 0;
+  }
+
+  .image-preview {
+    width: 100%;
+  
+    img {
+      width: 100%;
+    }
+  }
 
 input {
     width: 50%;

@@ -21,8 +21,18 @@ var events = require('./routes/events');
 mongoose
   .connect(
 
-    "mongodb://Maksim:" + process.env.MONGO_ATLAS_PW + "@maksimdb-shard-00-00-7j1q5.mongodb.net:27017,maksimdb-shard-00-01-7j1q5.mongodb.net:27017,maksimdb-shard-00-02-7j1q5.mongodb.net:27017/test?ssl=true&replicaSet=MaksimDB-shard-0&authSource=admin&retryWrites=true"
-  )
+    "mongodb://Maksim:" + process.env.MONGO_ATLAS_PW + "@maksimdb-shard-00-00-7j1q5.mongodb.net:27017,maksimdb-shard-00-01-7j1q5.mongodb.net:27017,maksimdb-shard-00-02-7j1q5.mongodb.net:27017/test?ssl=true&replicaSet=MaksimDB-shard-0&authSource=admin&retryWrites=true",
+  
+    // "mongodb://Maksim:" +
+    // process.env.MONGO_ATLAS_PW +
+    // "@maksimdb-7j1q5.mongodb.net/test",
+    {
+      "user": "Maksim",
+      "pass": "11021102a",
+       useNewUrlParser: true
+  }
+    // { useNewUrlParser: true }
+    )
 
   .then(() => {
     console.log("Connected to database!");
@@ -30,8 +40,9 @@ mongoose
   .catch(err =>
     console.log("Connection failed! " + " error - " + err)
   );
+  mongoose.set('debug', true);
 
-app.use(favicon(path.join(__dirname, 'public','images', 'favicon.png')));
+// app.use(favicon(path.join(__dirname, 'public','images', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -39,7 +50,10 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(cookieParser());
 app.use(methodOverride());
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
+
+app.use("/images", express.static(path.join("images")));
+
 
 app.use((req, res, next) => {
   

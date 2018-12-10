@@ -36,13 +36,17 @@ var userSchema = new Schema({
     type: Date,
     required: true
   },
-  friendList: [{
+  following: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  blackList: [{
+  followers: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
+  }],
+  eventWillAttempt: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Event'
   }],
   createdEvent: [{
     type: Schema.Types.ObjectId,

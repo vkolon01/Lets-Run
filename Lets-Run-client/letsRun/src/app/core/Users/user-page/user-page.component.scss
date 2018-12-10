@@ -1,0 +1,38 @@
+.userpage-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-container{
+  width: 100%;
+  img {
+    width: 100%;
+  }
+}
+
+.add_avatar-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+input[type="file"] {
+  visibility: hidden;
+}
+
+
+
+.image-preview {
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+}

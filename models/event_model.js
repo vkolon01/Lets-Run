@@ -9,7 +9,7 @@
   var eventSchema = new Schema({
     picture: {
       type: String,
-      default: null
+      default: 'https://images.unsplash.com/photo-1511536830243-d4cf5a1ebfca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1689&q=80'
     },
     eventDate: {
       type: Date
@@ -32,7 +32,8 @@
     },
     likes: [{
       type: Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User', 
+      require: true
     }],
     runners: [{
       type: Schema.Types.ObjectId,
@@ -54,6 +55,7 @@
     try {
 
       var event = this;
+
           await mongoose.model('User').update({
             createdEvent: event._id
           }, {
@@ -63,6 +65,28 @@
           }, {
             multi: true
           });
+
+          await mongoose.model('User').update({
+            likedEvent: event._id
+          }, {
+            $pull: {
+              likedEvent: event._id
+            }
+          }, {
+            multi: true
+          });
+
+          await mongoose.model('User').update({
+            eventWillAttempt: event._id
+          }, {
+            $pull: {
+              eventWillAttempt: event._id
+            }
+          }, {
+            multi: true
+          });
+
+          
 
       next();
     } catch (err) {

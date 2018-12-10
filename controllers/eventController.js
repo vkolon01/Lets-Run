@@ -12,47 +12,53 @@ var Comment = require('../models/comment_model');
 
 exports.getEvents = function (req, res, next) {
 
-  const errors = validationResult(req);
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.page;
 
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
+  const eventQuery = Event.find(); 
+  let fetchedEvent;
+
+  if (pageSize && currentPage) {
+    eventQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
 
-  Event.find()
+  eventQuery
     .then(events => {
+      fetchedEvent = events;
+      return Event.count();
+    })
+    .then(count => {
       res.status(200).json({
         message: 'Fetched Posts',
-        events: events
-      })
+        events: fetchedEvent,
+        maxEvents: count
+      });
     })
     .catch(error => {
       if (!error.statusCode) {
-       error.statusCode = 500;
-   }
-   next(error);
-   });
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 }
 
 exports.addEvent = function (req, res, next) {
 
-  const errors = validationResult(req);
+  let imagePath = req.body.imagePath;
 
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    imagePath = url + "/images/" + req.file.filename;
+  } 
+
 
   const event = new Event({
     location: req.body.location,
     distance: req.body.distance,
     pace: req.body.pace,
     eventDate: req.body.eventDate,
-    author: req.userData.userId
+    author: req.userData.userId,
+    picture : imagePath
   });
 
   event.save()
@@ -75,13 +81,14 @@ exports.addEvent = function (req, res, next) {
           id: createdEvent._id
         }
       });
+
     })
     .catch(error => {
       if (!error.statusCode) {
-       error.statusCode = 500;
-   }
-   next(error);
-   });
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 }
 
 
@@ -108,8 +115,6 @@ exports.getEvent = function (req, res, next) {
 
       const creator = foundEvent.author;
 
-
-
       const user = User.findById(foundEvent.author)
         .then(foundUser => {
 
@@ -122,20 +127,30 @@ exports.getEvent = function (req, res, next) {
         })
         .catch(err => {
           res.status(500).json({
-            message: 'Creating Event Failed!'
+            message: 'Fetching Event Failed!'
           });
         });
 
     })
     .catch(error => {
       if (!error.statusCode) {
-       error.statusCode = 500;
-   }
-   next(error);
-   });
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 }
 
 exports.updateEvent = function (req, res, next) {
+
+  let imagePath = req.body.imagePath;
+
+  console.log('req.body');
+  console.log(req.body);
+
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    imagePath = url + "/images/" + req.file.filename;
+  } 
 
   const errors = validationResult(req);
 
@@ -152,14 +167,35 @@ exports.updateEvent = function (req, res, next) {
     distance: req.body.distance,
     pace: req.body.pace,
     eventDate: req.body.eventDate,
-    author: req.body.author
+    picture : imagePath
   })
+
+  // console.log('result');
+
+  // console.log(event);
 
   Event.updateOne({
       _id: req.body.id,
       author: req.userData.userId
-    }, event)
+    },  {
+      $set: {
+        _id: event.id,
+        location: event.location,
+        distance: event.distance,
+        pace: event.pace,
+        eventDate: event.eventDate,
+        picture: event.picture
+      }
+
+    } 
+
+    )
+
     .then(result => {
+      // console.log('result');
+
+      // console.log(result);
+      
       if (result.n > 0) {
         const error = new Error('Update successful!');
         error.statusCode = 201;
@@ -172,14 +208,16 @@ exports.updateEvent = function (req, res, next) {
     })
     .catch(error => {
       if (!error.statusCode) {
-       error.statusCode = 500;
-   }
-   next(error);
-   });
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 }
 
 exports.deleteEvent = function (req, res, next) {
 
+  console.log('Delete API');
+  
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -204,65 +242,154 @@ exports.deleteEvent = function (req, res, next) {
         const error = new Error('You are not authorized to do so.');
         error.statusCode = 401;
         throw error;
-      } 
+      }
 
       fetchedEvent = event;
 
     })
     .then(nextstep => {
-      Comment.find({ event: eventId })
-            .then(comment => {
-              console.log(comment);
+      Comment.find({
+          event: eventId
+        })
+        .then(comment => {
+          console.log(comment);
 
-              for (var i = 0; i < comment.length; i++) {
-                comment[i].remove()
-              }
-                });
+          for (var i = 0; i < comment.length; i++) {
+            comment[i].remove()
+          }
+        });
 
-            fetchedEvent.remove();
+      fetchedEvent.remove();
     })
     .then(delEvent => {
-     res.status(200).json({
+      res.status(200).json({
         message: "Deleted Event"
       });
 
     })
     .catch(error => {
-       if (!error.statusCode) {
+      if (!error.statusCode) {
         error.statusCode = 500;
-    }
-    next(error);
+      }
+      next(error);
+    });
+}
+
+exports.eventLikeSwitcher = function (req, res, next) {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect.');
+    error.statusCode = 422;
+    throw error;
+  }
+
+  const eventId = req.params.event_id;
+
+  Event.findById(eventId)
+    .then(
+      event => {
+        if (!event) {
+          const error = new Error('Could not find user');
+          error.statusCode = 404;
+          throw error;
+        }
+
+        let contains = false;
+
+        if (event.likes.length < 1) {
+          contains = false;
+        } else {
+
+          for (let i = 0; i < event.likes.length; i++) {
+            if (event.likes[i].toString() === req.userData.userId.toString()) {
+              contains = true;
+              break;
+            }
+
+          }
+        }
+
+        if (!contains) {
+          event.likes.push(req.userData.userId);
+          User.findByIdAndUpdate(req.userData.userId, { $push: { "likedEvent" : eventId } }).then(user => { user.save() });
+        } else {
+
+          event.likes.pull(req.userData.userId)
+          User.findByIdAndUpdate(req.userData.userId, { $pull: { "likedEvent" : eventId } }).then(user => { user.save() });
+        }
+
+        event.save();
+
+        res.status(201).json({
+          // message: "Like added",
+          likes: event.likes
+        });
+      })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     });
 }
 
 
+exports.participateAtEvent = function (req, res, next) {
 
+  const errors = validationResult(req);
 
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect.');
+    error.statusCode = 422;
+    throw error;
+  }
 
-// .then( result2 => {
-//   Comment.find({event: event_id})
-//   .then(commentsToBeRemoved => {
+  const eventId = req.params.event_id;
 
-//     // console.log('commentsToBeRemoved');
-//     // console.log(commentsToBeRemoved);
+  Event.findById(eventId)
+    .then(
+      event => {
+        if (!event) {
+          const error = new Error('Could not find user');
+          error.statusCode = 404;
+          throw error;
+        }
 
-//     for(let i = 0; i < commentsToBeRemoved.length; i++ ) {
-//           // console.log('commentToBeRemoved');
-//           // console.log(commentsToBeRemoved[i]._id);
-//       User.find({comment : commentsToBeRemoved[i]._id})
-//       .then(userWithCommentId => {
+        let contains = false;
 
-//         // console.log('userWithCommentId');
-//         // console.log(userWithCommentId[0]._id);
+        if (event.runners.length < 1) {
+          contains = false;
+        } else {
 
-//         userWithCommentId[0].comment.pull(commentsToBeRemoved[i]._id)
+          for (let i = 0; i < event.runners.length; i++) {
+            if (event.runners[i].toString() === req.userData.userId.toString()) {
+              contains = true;
+              break;
+            }
 
-//         userWithCommentId[0].save();
-//       })
-//     }
+          }
+        }
 
-//     commentsToBeRemoved.save();
-//   })
-// }
+        if (!contains) {
+          event.runners.push(req.userData.userId);
+          User.findByIdAndUpdate(req.userData.userId, { $push: { "eventWillAttempt" : eventId } }).then(user => { user.save() });
+        } else {
+          event.runners.pull(req.userData.userId);
+          User.findByIdAndUpdate(req.userData.userId, { $pull: { "eventWillAttempt" : eventId } }).then(user => { user.save() });
+        }
 
-// )
+        event.save();
+
+        res.status(201).json({
+          message: "Participate Event planned",
+        });
+      })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+}

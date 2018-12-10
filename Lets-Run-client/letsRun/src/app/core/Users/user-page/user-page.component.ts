@@ -4,6 +4,8 @@ import { UserModel } from 'src/app/models/user.model';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { mimeType } from 'src/app/validators/mime-type.validator';
 
 @Component({
   selector: 'app-user-page',
@@ -12,9 +14,11 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class UserPageComponent implements OnInit {
 
+  form: FormGroup;
+  imagePreview: string;
+  user_id: string;
 
   user: UserModel;
-  user_id: string;
   private userSubscription: Subscription;
 
 
@@ -22,30 +26,35 @@ export class UserPageComponent implements OnInit {
 
   ngOnInit() {
 
+    this.form = new FormGroup({
+      image: new FormControl(null, { validators: [Validators.required], asyncValidators: [ mimeType ] })
+    })
+
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
 
       this.user_id = paramMap.get('user_id');
 
-
-      console.log(this.user_id);
       
-        this.userService.getUserInfo(this.user_id)
-        .subscribe(userData => {
-          this.user = {
-                id: userData.user._id,
-                email: userData.user.email,
-                username: userData.user.username,
-                avatar: userData.user.imagePath,
-                firstName: userData.user.firstName,
-                lastName: userData.user.lastName,
-                createdAt: userData.user.createdAt,
-                dob: userData.user.dob
-          }
-          console.log(userData)
-    })
+        this.userService.getUserInfo(this.user_id);
+
+        this.userSubscription = this.userService.getUserListener()
+            .subscribe((value: {user: UserModel}) => {
+              this.user = value.user
+            })
 
   })
 
+}
+
+onImagePicked(event: Event){
+  const file = (event.target as HTMLInputElement).files[0];
+  this.form.patchValue({image: file});
+  this.form.get('image').updateValueAndValidity();
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.imagePreview = reader.result as string;
+  };
+  reader.readAsDataURL(file);
 }
 
   calculateAge(birthday) { // birthday is a date
@@ -54,11 +63,21 @@ export class UserPageComponent implements OnInit {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
-  UserProfile() {
+  deleteUser() {
+    this.userService.deleteUser(this.user_id);
   }
 
-  deleteUser() {
-    this.authService.deleteUser();
+  freindManipulation() {
+    this.userService.freindManipulating(this.user_id);
+  }
+
+  uploadAvatar() {
+    if(this.form.invalid){
+      return;
+    }
+
+    this.userService.uploadAvatar(this.user_id,  this.form.value.image);
+    this.form.reset();
   }
 
 

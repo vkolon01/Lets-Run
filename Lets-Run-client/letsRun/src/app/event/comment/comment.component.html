@@ -1,20 +1,27 @@
-<div *ngIf="!showEditCommentForm">
-    <h2>author: {{ comment.author }}</h2>
-    <p>content: {{ comment.content }}</p>
-    <div> <button (click)="showEditCommentInputArea()">Edit comment</button> <button (click)="deleteComment()">Delete comment</button> </div>
-</div> 
+<div *ngIf="!commentDeleted">
 
-<div *ngIf="showEditCommentForm">
-    <form [formGroup]="editCommentForm" (ngSubmit)="edit_Comment()">
-
-        <label for="content">Comment:</label>
-        <br>
-        <textarea formControlName="content" [(ngModel)]="comment.content" id="content" cols="30" rows="10"></textarea>
-
-        <div>
-          <button>Update</button>
-          <button (click)="showEditCommentInputArea()">Cancel</button>
+    <div *ngIf="!showEditCommentForm">
+        <h2>author: {{ comment.author }}</h2>
+        <p>content: {{ comment.content }}</p>
+        <div *ngIf="comment.authorId === userId ">  
+            <button (click)="showEditCommentInputArea()">Edit comment</button> 
+            <button (click)="deleteComment()">Delete comment  </button> 
         </div>
+    </div> 
+    
+    <div *ngIf="showEditCommentForm">
+        <form [formGroup]="editCommentForm" (ngSubmit)="edit_Comment()">
+    
+            <label for="content">Comment:</label>
+            <br>
+            <textarea formControlName="content" [(ngModel)]="comment.content" id="content" cols="30" rows="10"></textarea>
+    
+            <div>
+              <button>Update</button>
+              <button (click)="showEditCommentInputArea()">Cancel</button>
+            </div>
+    
+          </form>
+    </div>
 
-      </form>
 </div>

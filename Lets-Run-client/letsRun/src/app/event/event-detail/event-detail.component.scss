@@ -2,9 +2,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+
 }
 
     form {
         display: flex;
         flex-direction: column;
     }
+
+    .event_detail--image-container {
+        width: 100%;
+        img {
+            width: 100%;
+        }
+    }
+
+
+    input[type="file"] {
+        visibility: hidden;
+        margin: 0;
+      }
+    
+      .image-preview {
+        width: 100%;
+      
+        img {
+          width: 100%;
+        }
+      }

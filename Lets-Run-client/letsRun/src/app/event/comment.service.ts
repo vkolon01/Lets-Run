@@ -25,22 +25,24 @@ export class CommentService {
             .subscribe(result => {
                 this.commentUpdated.next({
                     comments: [...this.comments]
-                })
-                this.router.navigate(["/events"]);
+                }), 
+            this.getCommentsList(eventId);
             })
     }
 
     getCommentsList(eventId: string) {
-        this.http.get<{ message: string, comments: any }>(BACKEND_URL + '/events/' + eventId + '/get_comments')
+        this.http.get<{ message: string, comments: any, authorId: string }>(BACKEND_URL + '/events/' + eventId + '/get_comments')
             .pipe(map(commentDate => {
                 return {
                     comments: commentDate.comments.map(comment => {
                         return {
                             id: comment._id,
                             content: comment.content,
-                            author: comment.author.username
+                            author: comment.author.username,
+                            authorId: comment.author._id
                         }
-                    })
+                    }), 
+
                 }
             })
             )
@@ -62,13 +64,14 @@ export class CommentService {
 
         this.http.put(BACKEND_URL + '/events/' + eventId + '/' + comment_id, newComment)
             .subscribe(response => {
-                this.router.navigate(["/events"]);
+            this.getCommentsList(eventId);
             });
     }
 
     deleteComent(eventId: string, commentId: string) {
         return this.http.delete(BACKEND_URL + '/events/' + eventId + '/' + commentId).subscribe(result => {
-            this.router.navigate(["/events"]);
+
+            // this.getCommentsList(eventId);
         })
     }
 

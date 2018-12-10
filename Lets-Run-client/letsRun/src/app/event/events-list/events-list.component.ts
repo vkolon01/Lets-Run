@@ -2,8 +2,11 @@ import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { EventService } from '../event.service';
 import { EventsModule } from '../events.module';
+import { PageEvent } from "@angular/material";
 import { EventModule } from '../event.model';
 import { Subscription } from 'rxjs';
+import { mimeType } from 'src/app/validators/mime-type.validator';
+
 
 @Component({
   selector: 'app-events-list',
@@ -14,6 +17,14 @@ export class EventsListComponent implements OnInit, OnDestroy {
 
   addEventModule = false;
   eventForm: FormGroup;
+
+  imagePreview: string;
+
+  totalEvents = 0;
+  eventsPerPage = 2;
+  currentPage = 1;
+  pageSizeOptions = [1, 2, 5, 10]
+  
   events: EventModule[] = [];
   private eventSub: Subscription;
 
@@ -24,25 +35,38 @@ export class EventsListComponent implements OnInit, OnDestroy {
       'location': new FormControl(null, {validators: [Validators.required]}),
       'distance': new FormControl(null, {validators: [Validators.required]}),
       'pace': new FormControl(null, {validators: [Validators.required]}),
-      'picture': new FormControl(null),
+      'image': new FormControl(null, {  asyncValidators: [ mimeType ] }),
       'eventDate': new FormControl(null, {validators: [Validators.required]}),
-    });
-    this.eventService.getEventList();
+    }); 
+    this.eventService.getEventList(this.eventsPerPage, this.currentPage);
 
     this.eventSub = this.eventService.getEventUpdateListener()
-        .subscribe((value: {events: EventModule[]}) => {
+        .subscribe((value: {events: EventModule[], eventCount: number}) => {
           this.events = value.events;
+          this.totalEvents = value.eventCount;
         });
-    console.log(this.events[0]);
     
   }
 
-  // ngOnChanges() {
-  //   this.eventSub = this.eventService.getEventUpdateListener()
-  //   .subscribe((value: {events: EventModule[]}) => {
-  //     this.events = value.events;
-  //   });
-  // }
+  onChangedPage(pageData: PageEvent) {
+    this.currentPage = pageData.pageIndex + 1;
+    this.eventsPerPage = pageData.pageSize;
+    this.eventService.getEventList(this.eventsPerPage, this.currentPage);
+  }
+
+  onImagePicked(event: Event){
+    const file = (event.target as HTMLInputElement).files[0];
+    this.eventForm.patchValue({image: file});
+    this.eventForm.get('image').updateValueAndValidity();
+    console.log('event.target');
+    console.log(event);
+    
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
 
   addEventMenu() {
     this.addEventModule = !this.addEventModule;
@@ -58,7 +82,12 @@ export class EventsListComponent implements OnInit, OnDestroy {
       this.eventForm.value.distance,
       this.eventForm.value.pace,
       this.eventForm.value.eventDate,
+      this.eventForm.value.image
     )
+
+    this.eventForm.reset();
+
+    this.addEventMenu();
 
   }
 

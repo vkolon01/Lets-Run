@@ -15,7 +15,18 @@ const BACKEND_URL = environment.apiUrl;
 export class EventService {
 
     private events: EventModule[] = [];
-    private eventUpdated = new Subject<{ events: EventModule[] }>();
+    maxEvents: number;
+    private eventUpdated = new Subject<{ events: EventModule[], eventCount: number }>();
+
+    creatorName: string;
+    creatorId: string;
+    private creatorNameAndId = new Subject<{ creatorName: string, creatorId: string }>();
+
+    private event: EventModule;
+    private eventUpdate = new Subject<{ event: EventModule }>();
+
+    private likes: string[] =[];
+    private eventLikeUpdated = new Subject<{ likes: string[] }>();
 
     constructor(private http: HttpClient, private router: Router) { }
 
@@ -23,20 +34,29 @@ export class EventService {
         return this.events;
     }
 
-    createEvent(location: string, distance: number, pace: string, eventDate: Date) {
-        const newEvent = { location: location, distance: distance, pace: pace, eventDate: eventDate };
+    createEvent(location: string, distance, pace: string, eventDate, image: File) {
+
+        const newEvent = new FormData();
+        newEvent.append("location", location);
+        newEvent.append("pace", pace);
+        newEvent.append("eventDate", eventDate);
+        newEvent.append("distance", distance);
+        newEvent.append("image", image, location);
+
          this.http.post(BACKEND_URL + '/events/add-event', newEvent).subscribe(
             result => {
                 this.eventUpdated.next({
-                    events: [...this.events]
+                    events: [...this.events],
+                    eventCount: this.maxEvents
                 })
-                this.router.navigate(["/events"]);
+                this.getEventList(5, 1);
             }
         )
     }
 
-    getEventList() {
-        this.http.get<{ message: string, events: any }>(BACKEND_URL + '/events/')
+    getEventList(eventsPerPage: number, currentPage: number) {
+        const queryParams = `?pagesize=${eventsPerPage}&page=${currentPage}`;
+        this.http.get<{ message: string; events: any; maxEvents: number }>(BACKEND_URL + '/events/' + queryParams)
             .pipe(map(eventData => {
                 return {
                     events: eventData.events.map(event => {
@@ -48,15 +68,17 @@ export class EventService {
                             eventDate: event.eventDate,
                             author: event.author
                         };
-                    })
+                    }),
+                    maxEvents: eventData.maxEvents
                 };
             })
             )
             .subscribe(events => {
-                console.log(events.events);
                 this.events = events.events;
+                this.maxEvents = events.maxEvents;
                 this.eventUpdated.next({
-                    events: [...this.events]
+                    events: [...this.events],
+                    eventCount: events.maxEvents
                 })
             });
     }
@@ -65,41 +87,101 @@ export class EventService {
         return this.eventUpdated.asObservable();
     }
 
-    getEventById(id: string) {
-        return this.http.get<{eventById: {
-            _id: string;
-            location: string;
-            distance: number;
-            pace: string;
-            eventDate: Date;
-            author: string;},
-            creatorName: string,
-            creatorId: string
-        }>(BACKEND_URL + '/events/' + id);
+    getLikesUpdate() {
+        return this.eventLikeUpdated.asObservable()
+        ;
     }
 
-    updateEvent(id: string,location: string,distance: number,pace: string,eventDate: Date,author: string){
-        let eventInfo : EventModule;
-        eventInfo = {
-            id: id,
-            location: location,
-            distance: distance,
-            pace: pace,
-            eventDate: eventDate,
-            author: author
-        }
+    getCreatorName() {
+        return this.creatorName;
+    }
 
-        this.http.put(BACKEND_URL + '/events/' + id, eventInfo)
+    getCreatorId() {
+        console.log(this.creatorId);
+        
+        return this.creatorId;
+    }
+
+    getEventUpdate() {
+        return this.eventUpdate.asObservable();
+    }
+
+    getCreatorNameAndId(){
+        return this.creatorNameAndId.asObservable();
+    }
+
+    getEventById(id: string) {
+        return this.http.get<{
+        eventById: any,
+        creatorName: string,
+        creatorId: string,
+
+        }>(BACKEND_URL + '/events/' + id)
+            .subscribe(event => {
+                console.log('event.eventById');
+                
+                this.event = event.eventById;
+                this.creatorName = event.creatorName;
+                this.creatorId = event.creatorId;
+
+                console.log(event.eventById.likes);
+
+                this.creatorNameAndId.next({
+                    creatorName: this.creatorName,
+                    creatorId: this.creatorId
+                });
+
+                this.eventUpdate.next({
+                    event: this.event
+                });
+
+            });
+    }
+
+    updateEvent(id: string,location: string,distance ,pace: string,eventDate ,author: string, image: File){
+        
+        console.log('update event id');
+        console.log(id);
+        
+
+        const updatedEvent = new FormData();
+        updatedEvent.append("id", id);
+        updatedEvent.append("location", location);
+        updatedEvent.append("pace", pace);
+        updatedEvent.append("eventDate", eventDate);
+        updatedEvent.append("distance", distance);
+        updatedEvent.append("image", image, location);
+
+        this.http.put(BACKEND_URL + '/events/' + id, updatedEvent)
             .subscribe(response => {
-                this.router.navigate(["/events"]);
+                this.eventUpdate.next({
+                    event: this.event
+                })
+                this.getEventById(id);
             });
     }
 
     deleteEvent(id: string) {
-        return this.http.delete(BACKEND_URL + '/events/' + id).subscribe(result => {
-            this.router.navigate(["/events"]);
-        });
+        console.log('delete ' + id);
+        return this.http.delete(BACKEND_URL + '/events/' + id)
+                    .subscribe(result => {
+                        this.getEventList(5, 1)
+                        this.router.navigate(["/events"]);
+                    });
     }
 
+    eventLikeSwitcher(id: string) {
+        return this.http.get(BACKEND_URL + '/events/' + id + '/like_event_switcher')
+            .subscribe(result => {
+                this.getEventById(id);
+            });
+    }
+
+    participateAtEvent(id: string) {
+        return this.http.get(BACKEND_URL + '/events/' + id + '/participate_at_event')
+                   .subscribe(result => {
+                    this.getEventById(id);
+                   });
+    }
 
 }
