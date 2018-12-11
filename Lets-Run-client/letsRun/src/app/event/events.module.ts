@@ -5,6 +5,7 @@ import { RouterModule } from "@angular/router";
 import { EventsRouterModule } from "./events-router.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AngularMaterialModule } from "../angular-material.module";
+import { UiScrollModule } from 'ngx-ui-scroll';
 
 @NgModule({
     declarations: [EventsListComponent],
@@ -12,7 +13,8 @@ import { AngularMaterialModule } from "../angular-material.module";
         CommonModule,
         EventsRouterModule,
         ReactiveFormsModule,
-        AngularMaterialModule
+        AngularMaterialModule,
+        
     ],
     exports: [EventsListComponent]
 })

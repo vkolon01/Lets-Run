@@ -9,13 +9,15 @@ import { EventDetailComponent } from "./event/event-detail/event-detail.componen
 import { ReactiveFormsModule } from "@angular/forms";
 import { CommentComponent } from "./event/comment/comment.component";
 import { ErrorComponent } from "./core/error/error.component";
+import { UiScrollModule } from 'ngx-ui-scroll';
 
 @NgModule({
     declarations: [FooterComponent, HeaderComponent, HomeComponent, UserPageComponent, EventDetailComponent, CommentComponent],
     imports: [
         CommonModule,
         RouterModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        UiScrollModule
     ],
     exports: [FooterComponent, HeaderComponent, HomeComponent, UserPageComponent, EventDetailComponent, CommentComponent]
 })

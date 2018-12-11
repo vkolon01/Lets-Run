@@ -40,7 +40,8 @@ export class CommentComponent implements OnInit {
 
     this.commentService.editComment(this.eventId, this.editCommentForm.value.content, this.comment.id);
     this.editCommentForm.reset();
-    this.commentService.getCommentsList(this.eventId);
+    this.showEditCommentForm = !this.showEditCommentForm;
+
   }
 
   showEditCommentInputArea() {

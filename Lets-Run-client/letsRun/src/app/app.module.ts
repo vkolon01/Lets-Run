@@ -14,6 +14,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ErrorInterceptor } from './error-interceptor';
 import { ErrorComponent } from './core/error/error.component';
 
+import { UiScrollModule } from 'ngx-ui-scroll';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +25,7 @@ import { ErrorComponent } from './core/error/error.component';
     BrowserModule,
     AppRoutingModule,
     CoreModule,
+    UiScrollModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,

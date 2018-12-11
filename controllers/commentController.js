@@ -63,50 +63,90 @@ exports.addCommentToEvent = function (req, res, next) {
         })
         .catch(error => {
             if (!error.statusCode) {
-             error.statusCode = 500;
-         }
-         next(error);
-         });
+                error.statusCode = 500;
+            }
+            next(error);
+        });
 }
 
 exports.getCommnentsForEvent = function (req, res, next) {
 
-    const pageSize = +req.query.pagesize;
-    const currentPage = +req.query.page;
-  
-    if (pageSize && currentPage) {
-        commentQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-      }
+
+
+    const MIN = 1;
+    let MAX = 300;
+
+    const commentCount = Comment.find({
+        event: req.params.event_id
+    }).count(count => {
+        MAX = count;
+    });
+
+    const index = parseInt(req.query.index, 10);
+    const count = parseInt(req.query.count, 10);
+
+    if (isNaN(index) || isNaN(count)) {
+        return res.status(200).json({
+            message: 'NAN in index or count',
+            comments: [],
+            maxComments: count
+        })
+    }
+
+    const start = Math.max(MIN, index);
+    const end = Math.min(index + count - 1, MAX);
+    if (start > end) {
+        return res.status(200).json({
+            message: 'START > END',
+            comments: [],
+            maxComments: count
+        })
+    }
+
+    const commentQuery = Comment.find({
+        event: req.params.event_id
+    }).populate('author');
+    let fetchedComments;
+
+    if (index && count) {
+        commentQuery.skip(index - 1).limit(count);
+    }
 
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      const error = new Error('Validation failed.');
-      error.statusCode = 422;
-      error.data = errors.array();
-      throw error;
+        const error = new Error('Validation failed.');
+        error.statusCode = 422;
+        error.data = errors.array();
+        throw error;
     }
 
-
-
-    
-
-    Comment.find({
-            event: req.params.event_id
-        })
-        .populate('author')
+    commentQuery
         .then(comments => {
+            fetchedComments = comments;
+            return Comment.count();
+        })
+        .then(count => {
+            console.log('count');
+
+            console.log(count);
+            console.log('fetchedComments');
+
+            // console.log(fetchedComments[0].id);
+
+
             res.status(200).json({
                 message: 'Fetched comments',
-                comments: comments
+                comments: fetchedComments,
+                maxComments: count
             })
         })
         .catch(error => {
             if (!error.statusCode) {
-             error.statusCode = 500;
-         }
-         next(error);
-         });
+                error.statusCode = 500;
+            }
+            next(error);
+        });
 
 }
 
@@ -115,13 +155,13 @@ exports.editComment = function (req, res, next) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      const error = new Error('Validation failed.');
-      error.statusCode = 422;
-      error.data = errors.array();
-      throw error;
+        const error = new Error('Validation failed.');
+        error.statusCode = 422;
+        error.data = errors.array();
+        throw error;
     }
 
-    const eventId= req.params.event_id;
+    const eventId = req.params.event_id;
     const commentId = req.params.comment_id;
     const userId = req.userData.userId;
 
@@ -129,7 +169,7 @@ exports.editComment = function (req, res, next) {
     console.log(commentId);
     console.log(userId);
 
-    
+
 
     const updatedComment = {
         _id: commentId,
@@ -155,10 +195,10 @@ exports.editComment = function (req, res, next) {
         })
         .catch(error => {
             if (!error.statusCode) {
-             error.statusCode = 500;
-         }
-         next(error);
-         });
+                error.statusCode = 500;
+            }
+            next(error);
+        });
 }
 
 
@@ -167,38 +207,40 @@ exports.DeleteEventComment = function (req, res, next) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      const error = new Error('Validation failed.');
-      error.statusCode = 422;
-      error.data = errors.array();
-      throw error;
+        const error = new Error('Validation failed.');
+        error.statusCode = 422;
+        error.data = errors.array();
+        throw error;
     }
-    
+
     const eventId = req.params.event_id;
     const commentId = req.params.comment_id;
 
     Comment.findById(commentId)
-         .then(comment => {    
-           if(!comment) {
-            const error = new Error("Could not find comment.");
-            error.statusCode = 404;
-            throw error;
-           }
-           if(comment.author.toString() !== req.userData.userId) {
-            const error = new Error("You are not authorized to do so.");
-            error.statusCode = 403;
-            throw error;
-           }
+        .then(comment => {
+            if (!comment) {
+                const error = new Error("Could not find comment.");
+                error.statusCode = 404;
+                throw error;
+            }
+            if (comment.author.toString() !== req.userData.userId) {
+                const error = new Error("You are not authorized to do so.");
+                error.statusCode = 403;
+                throw error;
+            }
 
-             comment.remove();
+            comment.remove();
 
-         })
-         .then(result => {
-            res.status(200).json({message: "Deleted comment"});
-         })
-         .catch(error => {
+        })
+        .then(result => {
+            res.status(200).json({
+                message: "Deleted comment"
+            });
+        })
+        .catch(error => {
             if (!error.statusCode) {
-             error.statusCode = 500;
-         }
-         next(error);
-         });
+                error.statusCode = 500;
+            }
+            next(error);
+        });
 }

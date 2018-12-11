@@ -25,13 +25,40 @@ export class CommentService {
             .subscribe(result => {
                 this.commentUpdated.next({
                     comments: [...this.comments]
-                }), 
-            this.getCommentsList(eventId);
+                })
+                // , 
+                // this.getCommentsList(eventId);
             })
     }
 
-    getCommentsList(eventId: string) {
-        this.http.get<{ message: string, comments: any, authorId: string }>(BACKEND_URL + '/events/' + eventId + '/get_comments')
+    // getCommentsList(eventId: string) {
+    //     this.http.get<{ message: string, comments: any, authorId: string,  }>(BACKEND_URL + '/events/' + eventId + '/get_comments')
+    //         .pipe(map(commentDate => {
+    //             return {
+    //                 comments: commentDate.comments.map(comment => {
+    //                     return {
+    //                         id: comment._id,
+    //                         content: comment.content,
+    //                         author: comment.author.username,
+    //                         authorId: comment.author._id
+    //                     }
+    //                 }), 
+
+    //             }
+    //         })
+    //         )
+    //         .subscribe(comments => {
+    //             this.comments = comments.comments,
+    //                 this.commentUpdated.next({
+    //                     comments: [...this.comments]
+    //                 })   
+    //         })
+    // }
+
+
+    getCommentListFormNgxUiScroll(eventId: string, index: number, count: number) {
+        const queryParams = `?index=${index}&count=${count}`;
+       return this.http.get<{ message: string, comments: any, authorId: string, }>(BACKEND_URL + '/events/' + eventId + '/get_comments' + queryParams)
             .pipe(map(commentDate => {
                 return {
                     comments: commentDate.comments.map(comment => {
@@ -41,18 +68,26 @@ export class CommentService {
                             author: comment.author.username,
                             authorId: comment.author._id
                         }
-                    }), 
+                    }),
 
                 }
             })
             )
-            .subscribe(comments => {
-                this.comments = comments.comments,
-                    this.commentUpdated.next({
-                        comments: [...this.comments]
-                    })
-            })
+            // .subscribe(comments => {
+            //     console.log('comments');
+
+            //     console.log(comments);
+                
+            //     this.comments = comments.comments,
+            //         this.commentUpdated.next({
+            //             comments: [...this.comments]
+            //         })
+            // })
+
     }
+
+
+
 
     getUpdateCommentsListener() {
         return this.commentUpdated.asObservable();
@@ -64,7 +99,7 @@ export class CommentService {
 
         this.http.put(BACKEND_URL + '/events/' + eventId + '/' + comment_id, newComment)
             .subscribe(response => {
-            this.getCommentsList(eventId);
+                // this.getCommentsList(eventId);
             });
     }
 

@@ -105,9 +105,28 @@
       </form>
     </div>
 
+
+
+    <div>
+      <button (click)="datasource.adapter.showLog()">Console Log</button>
+    </div>
+
     <div class="event_detail--comments" *ngIf="!commentInputArea">
       <button (click)="showCommentInputArea()">Add comment</button>
-        <div *ngIf="comments.length >= 1">
+
+      <div class="viewport" ui-scroll-viewport>
+        <div *uiScroll="let comment of datasource; let index = index">
+          <p>{{ index }}</p>
+          <app-comment
+          *ngIf="!commentDeleted"
+          [comment]="comment" 
+          [eventId]="eventId"
+          ></app-comment>
+
+        </div>
+      </div>
+
+        <!-- <div *ngIf="comments.length >= 1">
           
           <div  *ngFor="let comment of comments; let index = 'index'">
             <app-comment
@@ -116,7 +135,19 @@
             [eventId]="eventId"
             ></app-comment>
           </div>
-        </div>
+        </div> -->
+
+        <!-- <div class="viewport"> 
+            <div *uiScroll="let comment of datasource"> 
+                <app-comment 
+                *ngIf="!commentDeleted"  
+                [comment]="comment" 
+                [eventId]="eventId" 
+                ></app-comment> 
+            </div>
+          </div> -->
+
+
 
       <div *ngIf="comments.length === 0">
         <h2>No comments posted... Be the first one!</h2>

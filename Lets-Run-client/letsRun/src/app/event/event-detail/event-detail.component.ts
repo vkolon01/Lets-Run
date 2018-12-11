@@ -12,6 +12,7 @@ import { mimeType } from 'src/app/validators/mime-type.validator';
 import {DatePipe} from '@angular/common'
 import { registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
+import { Datasource } from 'ngx-ui-scroll';
 
 registerLocaleData(localeRu);
 
@@ -49,12 +50,50 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   userId: string;
 
+  MIN = 1;
+  MAX = 1;
+
   private commentsSub: Subscription;
 
   constructor(private eventService: EventService, private activeRoute: ActivatedRoute, private commentService: CommentService, private authService: AuthService) { }
 
+  datasource = new Datasource({
+    get: (index, count, success) => {
+
+      const data =[];
+
+
+      console.log('index ' + index);
+
+      console.log('count ' + count);
+
+      const start = Math.max(this.MIN, index);
+      const end = Math.min(index + count - 1, this.MAX);
+
+       return this.commentService.getCommentListFormNgxUiScroll(this.eventId ,index, count)
+        .subscribe(result => {
+
+          // this.MAX = result.comments.lenght();
+          
+         success(result.comments);
+
+        });
+    },
+    devSettings: {
+      debug: true,
+      immediateLog: false
+    }
+  });
 
   ngOnInit() {
+
+  //  let datasource: IDatasource = {
+  //     get:(index: number, count: number) => {
+  //       return this.commentService.getCommentListFormNgxUiScroll(this.eventId ,index, count);
+  //     }
+  // }
+
+
 
     this.eventForm = new FormGroup({
       'location': new FormControl(null, {validators: [Validators.required]}),
@@ -67,6 +106,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.commentForm = new FormGroup({
       'content': new FormControl(null, {validators: [Validators.required]}),
     });
+
+
+
 
     this.userId = this.authService.getUserId();
     
@@ -99,13 +141,19 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.creatorId = this.eventService.getCreatorId();
     this.eventCreatorName = this.eventService.getCreatorName();
 
-    this.commentService.getCommentsList(this.eventId);
+    // this.commentService.getCommentsList(this.eventId);
 
     this.commentsSub =this.commentService.getUpdateCommentsListener()
         .subscribe((value: {comments: CommentModule[]}) => {
           this.comments = value.comments
         })
+
+
   }
+
+  //******************************* */
+  //       ON IMAGE SELECTED                          
+  //********************************* */
   
   onImagePicked(event: Event){
     const file = (event.target as HTMLInputElement).files[0];
@@ -121,9 +169,15 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(file);
   }
 
+
+
   ngOnDestroy() {
     this.commentsSub.unsubscribe();
   }
+
+  //******************************* */
+  //       OPENS MENU FOR UPDATE                          
+  //********************************* */
 
   update(){
     this.edit = !this.edit;
@@ -141,7 +195,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     })
   }
 
+  //******************************* */
+  //       UPDATING EVENT                          
+  //********************************* */
+
   updateEvent() {
+
+    
 
     if(this.eventForm.invalid){
       return;
@@ -170,9 +230,14 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   showCommentInputArea() {
     this.commentInputArea = !this.commentInputArea;
+    console.log('update click comments');
+    console.log(this.comments);
+    
   }
 
   add_Comment() {
+    
+
     if(this.commentForm.invalid){
       return;
     }
