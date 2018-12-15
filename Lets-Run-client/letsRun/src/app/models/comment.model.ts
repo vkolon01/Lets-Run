@@ -3,4 +3,5 @@ export interface CommentModule {
     content: string;
     author: string;
     authorId?: string;
+    authorImage?: string;
 } 

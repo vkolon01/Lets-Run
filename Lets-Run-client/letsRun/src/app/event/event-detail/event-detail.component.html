@@ -7,42 +7,57 @@
 
     <div class="event_detail--image-container" *ngIf="!edit">
         <img src="{{ event?.picture }}" alt="">
+
+
+
+        <mat-icon routerLink="/events" class="back_icon" > settings_backup_restore </mat-icon> 
+
+         <div class="event-detail--likes-and-attempts" > 
+            <mat-icon [class.contains]="containsLike" class="event_detail--mat-icon" matBadge="{{ event?.likes.length }}" (click)="likeEvent()" matBadgeColor="warn"> thumb_up </mat-icon> 
+            <mat-icon [class.contains]="containsEvent"  class="event_detail--mat-icon"  matBadge="{{ event?.runners.length }}" (click)="takePart()" matBadgeColor="warn"> directions_run </mat-icon> 
+          </div> 
+
+          <div *ngIf="creatorId === userId" class="event-detail--setings">
+              <mat-icon class="event_detail--mat-icon-setings" (click)="update()"> settings </mat-icon>  
+              <mat-icon class="event_detail--mat-icon-delete" (click)="deleteEvent()"> delete_sweep </mat-icon>  
+          </div>
+
+
+           
       </div>
 
-  <div *ngIf="!edit">
-    <p>
-      Event location: {{event?.location}}
-    </p>
 
-    <p>
-      Event distance: {{event?.distance}} km
-    </p>
-    <p>
-      Event date: {{event?.eventDate}}
-    </p>
-    <p>
-      Event Pace: {{event?.pace}}
-    </p>
-    <p>
-      Likes: {{ event?.likes.length }}
-    </p>
-    <p>
-      Runners: {{ event?.runners.length }}
-    </p>
 
-    <p>
-      Creator of the event: <a [routerLink]="['/userpage', creatorId]">{{ eventCreatorName }}</a> 
-    </p>
-    <div *ngIf="creatorId === userId">
-      <button (click)="update()">Edit</button>
-      <button (click)="deleteEvent()">Delete</button>
+  <div class="event-description" *ngIf="!edit">
+
+    <div class="event-description--content">
+      <h3>Event location:</h3> 
+      <p>{{event?.location}}</p>
     </div>
 
-    <div>
-      <button routerLink="/events">Back</button>
-      <button (click)="likeEvent()">Like</button>
-      <button (click)="takePart()">Take part</button>
-    </div>
+    <div class="event-description--content">
+        <h3>Event distance:</h3> 
+        <p>{{event?.distance}} km</p>
+      </div>
+
+      <div class="event-description--content">
+          <h3>Event date:</h3> 
+          <p>{{event?.eventDate}}</p>
+        </div>
+
+        <div class="event-description--content">
+            <h3>Event Pace:</h3> 
+            <p> {{event?.pace}}</p>
+          </div>
+
+          <div class="event-description--content">
+              <p>Creator of the event: </p> <a [routerLink]="['/userpage', creatorId]">{{ eventCreatorName }}</a>
+            </div>
+
+
+
+
+
   </div>
 
     <!-- ///////////////////////////////////////
@@ -50,31 +65,53 @@
    ///////////////////////////////////////////-->
 
 
+
+
   <div class="events_add_modul" *ngIf="edit">
     <form [formGroup]="eventForm" (ngSubmit)="updateEvent()">
+
 
         <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview"> 
             <img [src]="imagePreview" alt="avatar">
         </div>
+
+
+
+        <div class="inputContainer">
+            <input [class.active]="eventForm.get('location').value?.length" type="text" formControlName="location" id="location">
+            <label for="location" class="label-name">
+            <span class="content-name">Location</span>
+            <span class="error-name">Please enter location!</span>
+            </label>
+        </div>
+
+        <div class="inputContainer">
+            <input [class.active]="eventForm.get('distance').value?.length" type="number" formControlName="distance" id="distance">
+            <label for="distance" class="label-name">
+            <span class="content-name">distance in km</span>
+            <span class="error-name">Please enter distance!</span>
+            </label>
+        </div>
+
+        <div class="inputContainer">
+            <input [class.active]="eventForm.get('pace').value?.length" type="text" formControlName="pace" id="pace">
+            <label for="pace" class="label-name">
+            <span class="content-name">Pace</span>
+            <span class="error-name">Please enter pace!</span>
+            </label>
+        </div>
+
+
+        <button  type="button" (click)="filePicker.click()">Change photo</button>
+        <input type="file" #filePicker (change)="onImagePicked($event)">
+
+
+        <div class="eventDate">
+            <label for="eventDate">Date of Event</label>
+            <input type="date" placeholder="eventDate" formControlName="eventDate" id="eventDate">
+        </div>
   
-
-      <label for="location">Location</label>
-      <input type="text" placeholder="location"  formControlName="location" id="location">
-
-      <label for="distance">Distance</label>
-      <input type="number" placeholder="Distance" [(ngModel)]="event.distance" formControlName="distance" id="distance">
-
-      <label for="pace">Pace</label>
-      <input type="text" placeholder="Pace" [(ngModel)]="event.pace" formControlName="pace" id="pace">
-
-      <button  type="button" (click)="filePicker.click()">Change event photo</button>
-      <input type="file" #filePicker (change)="onImagePicked($event)"> 
-
-
-      <label for="eventDate">Date of Event</label>
-      <input type="date" placeholder="eventDate" [(ngModel)]="event.eventDate" formControlName="eventDate" id="eventDate">
-
-      <div>
+      <div class="formButtons">
         <button type="submit">Update event</button>
         <button (click)="update()">Cancel</button>
       </div>
@@ -88,7 +125,7 @@
                    COMMENT SECTION   
    ///////////////////////////////////////////-->
 
-  <div>
+  <div class="comments_main">
     <h1>comments</h1>
 
     <div *ngIf="commentInputArea">
@@ -105,18 +142,12 @@
       </form>
     </div>
 
-
-
-    <div>
-      <button (click)="datasource.adapter.showLog()">Console Log</button>
-    </div>
-
     <div class="event_detail--comments" *ngIf="!commentInputArea">
       <button (click)="showCommentInputArea()">Add comment</button>
 
       <div class="viewport" ui-scroll-viewport>
-        <div *uiScroll="let comment of datasource; let index = index">
-          <p>{{ index }}</p>
+        <div  *uiScroll="let comment of datasource; let index = index">
+          
           <app-comment
           *ngIf="!commentDeleted"
           [comment]="comment" 
@@ -124,33 +155,6 @@
           ></app-comment>
 
         </div>
-      </div>
-
-        <!-- <div *ngIf="comments.length >= 1">
-          
-          <div  *ngFor="let comment of comments; let index = 'index'">
-            <app-comment
-            *ngIf="!commentDeleted"
-            [comment]="comment" 
-            [eventId]="eventId"
-            ></app-comment>
-          </div>
-        </div> -->
-
-        <!-- <div class="viewport"> 
-            <div *uiScroll="let comment of datasource"> 
-                <app-comment 
-                *ngIf="!commentDeleted"  
-                [comment]="comment" 
-                [eventId]="eventId" 
-                ></app-comment> 
-            </div>
-          </div> -->
-
-
-
-      <div *ngIf="comments.length === 0">
-        <h2>No comments posted... Be the first one!</h2>
       </div>
 
 

@@ -14,7 +14,6 @@ import { UiScrollModule } from 'ngx-ui-scroll';
         EventsRouterModule,
         ReactiveFormsModule,
         AngularMaterialModule,
-        
     ],
     exports: [EventsListComponent]
 })

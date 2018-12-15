@@ -6,6 +6,9 @@ import { PageEvent } from "@angular/material";
 import { EventModule } from '../event.model';
 import { Subscription } from 'rxjs';
 import { mimeType } from 'src/app/validators/mime-type.validator';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Route } from '@angular/compiler/src/core';
+import { Routes, Router } from '@angular/router';
 
 
 @Component({
@@ -19,6 +22,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   eventForm: FormGroup;
 
   imagePreview: string;
+  userIsAuthenticated = false;
 
   totalEvents = 0;
   eventsPerPage = 2;
@@ -28,9 +32,12 @@ export class EventsListComponent implements OnInit, OnDestroy {
   events: EventModule[] = [];
   private eventSub: Subscription;
 
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService, private authService: AuthService, private route: Router) { }
 
   ngOnInit() {
+
+    this.userIsAuthenticated = this.authService.getIsAuth();
+
     this.eventForm = new FormGroup({
       'location': new FormControl(null, {validators: [Validators.required]}),
       'distance': new FormControl(null, {validators: [Validators.required]}),
@@ -46,6 +53,13 @@ export class EventsListComponent implements OnInit, OnDestroy {
           this.totalEvents = value.eventCount;
         });
     
+  }
+
+  openEvent(id: string) {
+    if(!this.userIsAuthenticated) {
+      return;
+    }
+    this.route.navigate(['/events/' + id]);
   }
 
   onChangedPage(pageData: PageEvent) {
@@ -69,6 +83,11 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   addEventMenu() {
+
+    if(!this.userIsAuthenticated) {
+      return;
+    }
+
     this.addEventModule = !this.addEventModule;
   }
 

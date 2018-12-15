@@ -15,16 +15,18 @@ export class SigninComponent implements OnInit {
 
   ngOnInit() {
    this.signInFrom = new FormGroup({
-      'email': new FormControl(null, {validators: [Validators.required, Validators.email]}),
-      'password': new FormControl(null, {validators: [Validators.required, Validators.min(5)]}),
+      'email': new FormControl(null,  {validators: [Validators.required, Validators.email]}),
+      'password': new FormControl(null, {validators: [Validators.required, Validators.minLength(8)]}),
       'firstName': new FormControl(null, {validators: [Validators.required]}),
       'lastName': new FormControl(null, {validators: [Validators.required]}),
-      'username': new FormControl(null, {validators: [Validators.required, Validators.min(5)]}),
+      'username': new FormControl(null, {validators: [Validators.required]}),
       'dob': new FormControl(null, {validators: [Validators.required]}),
     });
   }
 
   onSignin() {
+    console.log(this.signInFrom);
+    
     if(this.signInFrom.invalid) {
       return;
     }

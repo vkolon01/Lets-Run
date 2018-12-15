@@ -34,6 +34,8 @@ export class CommentComponent implements OnInit {
   }
 
   edit_Comment() {
+
+    
     if(this.editCommentForm.invalid){
       return;
     }

@@ -15,11 +15,13 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.logInFrom = new FormGroup({
       'email': new FormControl(null, {validators: [Validators.required, Validators.email]}),
-      'password': new FormControl(null, {validators: [Validators.required, Validators.min(5)]})
+      'password': new FormControl(null, {validators: [Validators.required, Validators.minLength(8)]})
     });
   }
 
   onlognin(){
+    console.log(this.logInFrom.value.password);
+    
     if (this.logInFrom.invalid) {
       return;
     }

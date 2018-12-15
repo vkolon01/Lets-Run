@@ -2,41 +2,74 @@
     <div class="events_add_module" *ngIf="addEventModule"> 
             <form  [formGroup]="eventForm" (ngSubmit)="addEvent()">
 
-                <label for="location">Location</label>
-                <input type="text"   placeholder="location" formControlName="location" id="location">
- 
-                <label for="distance">Distance</label>
-                <input type="number"    placeholder="Distance" formControlName="distance" id="distance">
-              
-                <label for="pace">Pace</label>
-                <input type="text" placeholder="Pace" formControlName="pace" id="pace">
-              
-                
-                <button  type="button" (click)="filePicker.click()">Add event photo</button>
+                <div class="inputContainer">
+                    <input [class.active]="eventForm.get('location').value?.length" type="text" formControlName="location" id="location">
+                    <label for="location" class="label-name">
+                    <span class="content-name">Location</span>
+                    <span class="error-name">Please enter location!</span>
+                    </label>
+                </div>
+
+                <div class="inputContainer">
+                    <input [class.active]="eventForm.get('distance').value?.length" type="number" formControlName="distance" id="distance">
+                    <label for="distance" class="label-name">
+                    <span class="content-name">distance in km</span>
+                    <span class="error-name">Please enter distance!</span>
+                    </label>
+                </div>
+
+                <div class="inputContainer">
+                    <input [class.active]="eventForm.get('pace').value?.length" type="text" formControlName="pace" id="pace">
+                    <label for="pace" class="label-name">
+                    <span class="content-name">Pace</span>
+                    <span class="error-name">Please enter pace!</span>
+                    </label>
+                </div>
+
+                <button  type="button" (click)="filePicker.click()">Add photo</button>
                 <input type="file" #filePicker (change)="onImagePicked($event)">
 
                 <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
                     <img [src]="imagePreview" alt="avatar">
                 </div>
 
-                <label for="eventDate">Date of Event</label>
-                <input type="date" placeholder="eventDate" formControlName="eventDate" id="eventDate">
-              
-                <div>
+
+                <div class="eventDate">
+                    <label for="eventDate">Date of Event</label>
+                    <input type="date" placeholder="eventDate" formControlName="eventDate" id="eventDate">
+                </div>
+
+                
+                <div class="formButtons">
                   <button type="submit" >Add event</button>
-                  <button type="button" (click)="addEventMenu()">No Yeat</button>
+                  <button type="button" (click)="addEventMenu()">Wait</button>
                 </div>
                 
               </form>
     </div>
+      <div >
+        <button  (click)="addEventMenu()" *ngIf="!addEventModule">Add Event</button>
+      </div>
+    
+    <p class="words" id="run">RUN</p>
+    <p class="words"  id="live">LIVE</p>
+    <p class="words"  id="breath">BREATH</p>
+    <p class="wordsDown"  id="beStrong">BE STRONG</p>
+    <p class="words"  id="beHappy">BE HAPPY</p>
 
-    <div>
-      <button (click)="addEventMenu()" *ngIf="!addEventModule">Add Event</button>
-    </div>
+
 
     <div class="event-list" >
-      <div class="event-list__element" *ngFor="let event of events">
-        <h1 [routerLink]="['/events/' + event?.id]" >{{ event?.location }}</h1>
+      <div class="event-list__element" *ngFor="let event of events; let index = 'index'">
+      
+        <div class="event-list--grid">
+          <div class="event-list--image"><img src="{{ event?.picture }}" alt=""></div>
+          <div class="event-list--title" ><h1 (click)="openEvent(event?.id)">{{ event?.location }}</h1></div>
+          <div class="event-list--likes-and-attempts" > 
+            <mat-icon matBadge="{{ event?.likes.length }}" matBadgeColor="warn"> thumb_up </mat-icon> 
+            <mat-icon matBadge="{{ event?.runners.length }}" matBadgeColor="warn"> directions_run </mat-icon> </div> 
+           </div>
+        
       </div>
     </div>
 
@@ -44,4 +77,8 @@
     *ngIf="events.length > 0"></mat-paginator>
 
 
+
+
+
 </div>
+

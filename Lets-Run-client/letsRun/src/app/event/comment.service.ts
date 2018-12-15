@@ -26,63 +26,32 @@ export class CommentService {
                 this.commentUpdated.next({
                     comments: [...this.comments]
                 })
-                // , 
-                // this.getCommentsList(eventId);
             })
     }
-
-    // getCommentsList(eventId: string) {
-    //     this.http.get<{ message: string, comments: any, authorId: string,  }>(BACKEND_URL + '/events/' + eventId + '/get_comments')
-    //         .pipe(map(commentDate => {
-    //             return {
-    //                 comments: commentDate.comments.map(comment => {
-    //                     return {
-    //                         id: comment._id,
-    //                         content: comment.content,
-    //                         author: comment.author.username,
-    //                         authorId: comment.author._id
-    //                     }
-    //                 }), 
-
-    //             }
-    //         })
-    //         )
-    //         .subscribe(comments => {
-    //             this.comments = comments.comments,
-    //                 this.commentUpdated.next({
-    //                     comments: [...this.comments]
-    //                 })   
-    //         })
-    // }
-
 
     getCommentListFormNgxUiScroll(eventId: string, index: number, count: number) {
         const queryParams = `?index=${index}&count=${count}`;
        return this.http.get<{ message: string, comments: any, authorId: string, }>(BACKEND_URL + '/events/' + eventId + '/get_comments' + queryParams)
             .pipe(map(commentDate => {
+
+                // console.log('commentDate');
+                // console.log(commentDate);
+
+                
                 return {
                     comments: commentDate.comments.map(comment => {
                         return {
                             id: comment._id,
                             content: comment.content,
                             author: comment.author.username,
-                            authorId: comment.author._id
+                            authorId: comment.author._id,
+                            authorImage: comment.author.imagePath
                         }
                     }),
 
                 }
             })
             )
-            // .subscribe(comments => {
-            //     console.log('comments');
-
-            //     console.log(comments);
-                
-            //     this.comments = comments.comments,
-            //         this.commentUpdated.next({
-            //             comments: [...this.comments]
-            //         })
-            // })
 
     }
 

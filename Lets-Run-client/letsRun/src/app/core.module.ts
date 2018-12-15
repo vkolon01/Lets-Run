@@ -10,6 +10,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { CommentComponent } from "./event/comment/comment.component";
 import { ErrorComponent } from "./core/error/error.component";
 import { UiScrollModule } from 'ngx-ui-scroll';
+import { AngularMaterialModule } from "./angular-material.module";
+
 
 @NgModule({
     declarations: [FooterComponent, HeaderComponent, HomeComponent, UserPageComponent, EventDetailComponent, CommentComponent],
@@ -17,7 +19,8 @@ import { UiScrollModule } from 'ngx-ui-scroll';
         CommonModule,
         RouterModule,
         ReactiveFormsModule,
-        UiScrollModule
+        UiScrollModule,
+        AngularMaterialModule
     ],
     exports: [FooterComponent, HeaderComponent, HomeComponent, UserPageComponent, EventDetailComponent, CommentComponent]
 })

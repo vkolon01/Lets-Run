@@ -1,24 +1,58 @@
+<section class="main">
+  <form [formGroup]="signInFrom" (ngSubmit)="onSignin()">
 
-<form  [formGroup]="signInFrom" (ngSubmit)="onSignin()">
 
-  <label for="email">Email</label>
-  <input type="email"    placeholder="e-mail" formControlName="email" id="email">
+    <div class="inputContainer">
+      <input [class.active]="signInFrom.get('email').value?.length" type="text" formControlName="email" id="email">
+      <label for="email" class="label-name">
+        <span class="content-name">email</span>
+        <span class="error-name">Please enter email!</span>
+      </label>
+    </div>
 
-  <label for="password">Password</label>
-  <input type="password" placeholder="Пароль" formControlName="password" id="password">
+    <div class="inputContainer">
+      <input [class.active]="signInFrom.get('password').value?.length" type="text" formControlName="password" id="password">
+      <label for="password" class="label-name">
+        <span class="content-name">password</span>
+        <span class="error-name">Minimum password lenght 8!</span>
+      </label>
+    </div>
 
-  <label for="firstName">First Name</label>
-  <input type="text" placeholder="firstName" formControlName="firstName" id="firstName">
+    <div class="inputContainer">
+      <input [class.active]="signInFrom.get('firstName').value?.length" type="text" formControlName="firstName" id="firstName">
+      <label for="firstName" class="label-name">
+        <span class="content-name">firstName</span>
+        <span class="error-name">Please enter firstName! minimup lenght 8, choose password with numbers and letters</span>
+      </label>
+    </div>
 
-  <label for="lastName">Last Name</label>
-  <input type="text" placeholder="lastName" formControlName="lastName" id="lastName">
+    <div class="inputContainer">
+      <input [class.active]="signInFrom.get('lastName').value?.length" type="text" formControlName="lastName" id="lastName">
+      <label for="lastName" class="label-name">
+        <span class="content-name">lastName</span>
+        <span class="error-name">Please enter lastName!</span>
+      </label>
+    </div>
 
-  <label for="username">Username</label>
-  <input type="text" placeholder="username" formControlName="username" id="username">
+    <div class="inputContainer">
+        <input [class.active]="signInFrom.get('username').value?.length" type="text" formControlName="username" id="username">
+        <label for="username" class="label-name">
+          <span class="content-name">username</span>
+          <span class="error-name">Please enter username!</span>
+        </label>
+      </div>
 
-  <label for="dob">Date of bearth</label>
-  <input type="date" placeholder="Date Of bearth" formControlName="dob" id="dob">
+      <div class="dob">
+          <label for="dob">Date of Event</label>
+          <input type="date" placeholder="dob" formControlName="dob" id="dob">
+      </div>
 
-  <button type="submit">Register</button>
 
-</form>
+      <div class="formButtons">
+          <button type="submit" >Register</button>
+        </div>
+        <p *ngIf="signInFrom.invalid && signInFrom.touched" class="error">Please check the form for errors</p>
+
+
+  </form>
+</section>

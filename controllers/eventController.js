@@ -24,7 +24,17 @@ exports.getEvents = function (req, res, next) {
 
   eventQuery
     .then(events => {
-      fetchedEvent = events;
+      
+       fetchedEvent = events.map(event => {
+        return {
+          _id: event._id,
+          location: event.location,
+          picture: event.picture,
+          author: event.author,
+          likes: event.likes,
+          runners: event.runners
+        }
+      })
       return Event.count();
     })
     .then(count => {

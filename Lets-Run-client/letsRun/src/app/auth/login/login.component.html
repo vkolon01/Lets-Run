@@ -1,12 +1,45 @@
 
-<form  [formGroup]="logInFrom" (ngSubmit)="onlognin()">
+<div class="main">
 
-    <label for="email">Email</label>
-    <input type="email"    placeholder="e-mail" formControlName="email" id="email">
+  <form  [formGroup]="logInFrom" (ngSubmit)="onlognin()">
+
+      <div class="inputContainer">
+          <input [class.active]="logInFrom.get('email').value?.length" type="email" formControlName="email" id="email">
+          <label for="email" class="label-name">
+          <span class="content-name">Email</span>
+          <span class="error-name">Please check your email!</span>
+          </label>
+      </div>
+
+      <div class="inputContainer">
+          <input [class.active]="logInFrom.get('password').value?.length"  type="password" formControlName="password" id="password">
+          <label for="password" class="label-name">
+          <span class="content-name">password</span>
+          <span class="error-name">Please check your password!</span>
+          </label>
+      </div>
+      <!-- <p *ngIf="logInFrom.get('password').invalid && logInFrom.get('password').touched">Please check your password</p> -->
+
+    <!-- <label for="email">Email</label>
+    <p *ngIf="logInFrom.get('email').invalid && logInFrom.get('email').touched">Please check your email</p>
+    <input type="email" formControlName="email" id="email"> -->
+    
   
-    <label for="password">Password</label>
-    <input type="password" placeholder="Пароль" formControlName="password" id="password">
+    <!-- <label for="password">Password</label>
+    <p *ngIf="logInFrom.get('password').invalid && logInFrom.get('password').touched">Please check your password</p>
+    <input type="password" formControlName="password" id="password"> -->
   
     <button type="submit">LogIn</button>
-    
+    <p *ngIf="logInFrom.invalid && logInFrom.touched">Please check your form</p>
+
   </form>
+
+  <p class="words" id="run">RUN</p>
+  <p class="words"  id="live">LIVE</p>
+  <p class="words"  id="breath">BREATH</p>
+  <p class="wordsDown"  id="beStrong">BE STRONG</p>
+  <p class="words"  id="beHappy">BE HAPPY</p>
+
+
+</div>
+

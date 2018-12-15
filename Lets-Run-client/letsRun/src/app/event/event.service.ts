@@ -67,7 +67,10 @@ export class EventService {
                             pace: event.pace,
                             eventDate: event.eventDate,
                             author: event.author,
-                            comments: event.comments
+                            comments: event.comments,
+                            picture: event.picture,
+                            likes: event.likes,
+                            runners: event.runners
                         };
                     }),
                     maxEvents: eventData.maxEvents

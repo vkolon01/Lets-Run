@@ -105,7 +105,7 @@ exports.getCommnentsForEvent = function (req, res, next) {
 
     const commentQuery = Comment.find({
         event: req.params.event_id
-    }).populate('author');
+    }).populate('author', 'username imagePath' );
     let fetchedComments;
 
     if (index && count) {
