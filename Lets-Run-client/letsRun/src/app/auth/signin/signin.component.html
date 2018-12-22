@@ -1,52 +1,37 @@
 <section class="main">
   <form [formGroup]="signInFrom" (ngSubmit)="onSignin()">
 
+      <mat-form-field>           
+          <input matInput placeholder="Email"  formControlName="email">
+          <mat-error *ngIf="signInFrom.get('email').errors">Email is <strong>requied</strong>!</mat-error>
+      </mat-form-field> 
 
-    <div class="inputContainer">
-      <input [class.active]="signInFrom.get('email').value?.length" type="text" formControlName="email" id="email">
-      <label for="email" class="label-name">
-        <span class="content-name">email</span>
-        <span class="error-name">Please enter email!</span>
-      </label>
-    </div>
+    <mat-form-field>           
+        <input matInput placeholder="Password"  formControlName="password" [type]="hide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="signInFrom.get('password').errors">Password is <strong>requied</strong>!</mat-error>
+    </mat-form-field> 
 
-    <div class="inputContainer">
-      <input [class.active]="signInFrom.get('password').value?.length" type="text" formControlName="password" id="password">
-      <label for="password" class="label-name">
-        <span class="content-name">password</span>
-        <span class="error-name">Minimum password lenght 8!</span>
-      </label>
-    </div>
+    <mat-form-field>            
+        <input matInput placeholder="firstName"  formControlName="firstName">
+        <mat-error *ngIf="signInFrom.get('firstName').errors">firstName is <strong>requied</strong>!</mat-error>
+    </mat-form-field> 
 
-    <div class="inputContainer">
-      <input [class.active]="signInFrom.get('firstName').value?.length" type="text" formControlName="firstName" id="firstName">
-      <label for="firstName" class="label-name">
-        <span class="content-name">firstName</span>
-        <span class="error-name">Please enter firstName! minimup lenght 8, choose password with numbers and letters</span>
-      </label>
-    </div>
+    <mat-form-field>           
+        <input matInput placeholder="lastName"  formControlName="lastName">
+        <mat-error *ngIf="signInFrom.get('lastName').errors">lastName is <strong>requied</strong>!</mat-error>
+    </mat-form-field> 
 
-    <div class="inputContainer">
-      <input [class.active]="signInFrom.get('lastName').value?.length" type="text" formControlName="lastName" id="lastName">
-      <label for="lastName" class="label-name">
-        <span class="content-name">lastName</span>
-        <span class="error-name">Please enter lastName!</span>
-      </label>
-    </div>
+    <mat-form-field>           
+        <input matInput placeholder="username"  formControlName="username">
+        <mat-error *ngIf="signInFrom.get('username').errors">username is <strong>requied</strong>!</mat-error>
+    </mat-form-field> 
 
-    <div class="inputContainer">
-        <input [class.active]="signInFrom.get('username').value?.length" type="text" formControlName="username" id="username">
-        <label for="username" class="label-name">
-          <span class="content-name">username</span>
-          <span class="error-name">Please enter username!</span>
-        </label>
-      </div>
-
-      <div class="dob">
-          <label for="dob">Date of Event</label>
-          <input type="date" placeholder="dob" formControlName="dob" id="dob">
-      </div>
-
+      <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Choose a date of birth" formControlName="dob">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
       <div class="formButtons">
           <button type="submit" >Register</button>

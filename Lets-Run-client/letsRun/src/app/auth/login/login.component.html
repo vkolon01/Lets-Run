@@ -3,43 +3,38 @@
 
   <form  [formGroup]="logInFrom" (ngSubmit)="onlognin()">
 
-      <div class="inputContainer">
+      <!-- <div class="inputContainer">
           <input [class.active]="logInFrom.get('email').value?.length" type="email" formControlName="email" id="email">
           <label for="email" class="label-name">
           <span class="content-name">Email</span>
           <span class="error-name">Please check your email!</span>
           </label>
-      </div>
+      </div> -->
 
-      <div class="inputContainer">
+      <mat-form-field>           
+            <input matInput placeholder="Email"  formControlName="email">
+            <mat-error *ngIf="logInFrom.get('email').errors">Email is <strong>requied</strong>!</mat-error>
+        </mat-form-field> 
+
+        <mat-form-field>           
+                <input matInput placeholder="Password"  formControlName="password" [type]="hide ? 'password' : 'text'"> 
+                <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-hint>Password min lenght 8 and hard to guess</mat-hint>
+                <mat-error *ngIf="logInFrom.get('password').errors">Password is must be min lenght 8 symbols!</mat-error>
+            </mat-form-field>
+
+      <!-- <div class="inputContainer">
           <input [class.active]="logInFrom.get('password').value?.length"  type="password" formControlName="password" id="password">
           <label for="password" class="label-name">
           <span class="content-name">password</span>
           <span class="error-name">Please check your password!</span>
           </label>
-      </div>
-      <!-- <p *ngIf="logInFrom.get('password').invalid && logInFrom.get('password').touched">Please check your password</p> -->
+      </div> -->
 
-    <!-- <label for="email">Email</label>
-    <p *ngIf="logInFrom.get('email').invalid && logInFrom.get('email').touched">Please check your email</p>
-    <input type="email" formControlName="email" id="email"> -->
-    
-  
-    <!-- <label for="password">Password</label>
-    <p *ngIf="logInFrom.get('password').invalid && logInFrom.get('password').touched">Please check your password</p>
-    <input type="password" formControlName="password" id="password"> -->
-  
-    <button type="submit">LogIn</button>
+      <button type="submit">LogIn</button>
     <p *ngIf="logInFrom.invalid && logInFrom.touched">Please check your form</p>
 
   </form>
-
-  <p class="words" id="run">RUN</p>
-  <p class="words"  id="live">LIVE</p>
-  <p class="words"  id="breath">BREATH</p>
-  <p class="wordsDown"  id="beStrong">BE STRONG</p>
-  <p class="words"  id="beHappy">BE HAPPY</p>
-
 
 </div>
 

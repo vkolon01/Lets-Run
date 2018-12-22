@@ -13,29 +13,30 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { ErrorInterceptor } from './error-interceptor';
 import { ErrorComponent } from './core/error/error.component';
-
 import { UiScrollModule } from 'ngx-ui-scroll';
+import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ErrorComponent
+    ErrorComponent,
+    MatConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
+    AngularMaterialModule,
     AppRoutingModule,
     CoreModule,
     UiScrollModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AngularMaterialModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorComponent]
+  entryComponents: [ErrorComponent, MatConfirmDialogComponent]
 })
 export class AppModule { }

@@ -15,8 +15,6 @@ exports.register = function (req, res, next) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log('errors');
-    console.log(req.data);
     
     const error = new Error('Validation failed.');
     error.statusCode = 422;
@@ -74,6 +72,7 @@ exports.sign_in = function (req, res, next) {
       if (!user) {
         const error = new Error("user not found.");
         error.statusCode = 404;
+        // error.data = "User not found.";
         throw error;
       }
       const res = bcrypt.compare(req.body.password, user.password)
@@ -83,8 +82,9 @@ exports.sign_in = function (req, res, next) {
     })
     .then(result => {
       if (!result) {
-        const error = new Error("Auth failed.");
+        const error = new Error("Email or password is incorect..");
         error.statusCode = 401;
+        // error.data = "Email or password is incorect.";
         throw error;
       }
       const token = jwt.sign({
@@ -132,6 +132,7 @@ exports.getUserProfile = function (req, res, next) {
       if (!user) {
         const error = new Error("No user find.");
         error.statusCode = 404;
+        error.data = "No user find.";
         throw error;
       }
       res.status(200).json({
@@ -165,11 +166,13 @@ exports.deleteUser = function (req, res, next) {
       if (!user) {
         const error = new Error("No user find.");
         error.statusCode = 404;
+        error.data = "No user find.";
         throw error;
       }
       if (user._id.toString() !== req.userData.userId.toString()) {
         const error = new Error("You are not authorized to do so.");
         error.statusCode = 401;
+        error.data = "You are not authorized to do so.";
         throw error;
       }
 
@@ -181,6 +184,7 @@ exports.deleteUser = function (req, res, next) {
           if (!comment) {
             const error = new Error("Can't find comment by author id");
             error.statusCode = 404;
+            error.data = "Can't find comment by author id";
             throw error;
           }
 
@@ -229,6 +233,7 @@ exports.followPersonController = function (req, res, next) {
       if (!followerToAd) {
         const error = new Error('Could not find user');
         error.statusCode = 404;
+        error.data = "Could not find user";
         throw error;
       }
 
@@ -240,12 +245,13 @@ exports.followPersonController = function (req, res, next) {
       if (!user) {
         const error = new Error('Could not find user');
         error.statusCode = 404;
+        error.data = "Could not find user";
         throw error;
       }
 
       if (user._id.toString() === fetchedUser._id.toString()) {
         const error = new Error("You cannot follow your self, sorry! :)");
-        error.statusCode = 406;
+        error.statusCode = 501;
         throw error;
       }
 

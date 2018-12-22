@@ -1,20 +1,21 @@
-import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { EventService } from '../event.service';
-import { EventsModule } from '../events.module';
 import { PageEvent } from "@angular/material";
 import { EventModule } from '../event.model';
 import { Subscription } from 'rxjs';
 import { mimeType } from 'src/app/validators/mime-type.validator';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Route } from '@angular/compiler/src/core';
-import { Routes, Router } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-events-list',
   templateUrl: './events-list.component.html',
-  styleUrls: ['./events-list.component.scss']
+  styleUrls: ['./events-list.component.scss',
+              './event-list-event-grid.component.scss',
+              '../../global-css/global-input.scss'
+             ]
 })
 export class EventsListComponent implements OnInit, OnDestroy {
 
@@ -25,14 +26,16 @@ export class EventsListComponent implements OnInit, OnDestroy {
   userIsAuthenticated = false;
 
   totalEvents = 0;
-  eventsPerPage = 2;
+  eventsPerPage = 5;
   currentPage = 1;
-  pageSizeOptions = [1, 2, 5, 10]
+  pageSizeOptions = [5, 1, 20]
   
   events: EventModule[] = [];
   private eventSub: Subscription;
 
-  constructor(private eventService: EventService, private authService: AuthService, private route: Router) { }
+  distances = ['Couch to 5k', '5K', '10K', 'Half Marathon', 'Marathon', 'Mud Run & fun Run', 'Trail', 'Walking'];
+
+  constructor(private snackBarService: SnackBarService, private eventService: EventService, private authService: AuthService, private route: Router) { }
 
   ngOnInit() {
 
@@ -44,6 +47,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
       'pace': new FormControl(null, {validators: [Validators.required]}),
       'image': new FormControl(null, {  asyncValidators: [ mimeType ] }),
       'eventDate': new FormControl(null, {validators: [Validators.required]}),
+      'description': new FormControl(null, {validators: [Validators.required]}),
     }); 
     this.eventService.getEventList(this.eventsPerPage, this.currentPage);
 
@@ -57,6 +61,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
 
   openEvent(id: string) {
     if(!this.userIsAuthenticated) {
+      this.snackBarService.showMessage('Please login for entering in event!', 'OK');
       return;
     }
     this.route.navigate(['/events/' + id]);
@@ -83,8 +88,9 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   addEventMenu() {
-
     if(!this.userIsAuthenticated) {
+    // this.snackbar.open();
+    this.snackBarService.showMessage('Please login to add event!', 'OK');
       return;
     }
 
@@ -93,6 +99,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
 
   addEvent(){
     if(this.eventForm.invalid) {
+    this.snackBarService.showMessage('Please fill the required fields', 'OK');
       return;
     }
 
@@ -101,6 +108,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
       this.eventForm.value.distance,
       this.eventForm.value.pace,
       this.eventForm.value.eventDate,
+      this.eventForm.value.description,
       this.eventForm.value.image
     )
 

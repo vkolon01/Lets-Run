@@ -14,6 +14,11 @@
     eventDate: {
       type: Date
     },
+    description: {
+      type: String,
+      required: true,
+      default: 'No description yeat added'
+    },
     location: {
       type: String,
       required: true

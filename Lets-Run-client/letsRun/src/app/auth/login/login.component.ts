@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-login',
@@ -9,8 +10,9 @@ import { AuthService } from '../auth.service';
 })
 export class LoginComponent implements OnInit {
   logInFrom: FormGroup;
+  hide = true;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private snackBarService: SnackBarService) { }
 
   ngOnInit() {
     this.logInFrom = new FormGroup({
@@ -20,10 +22,12 @@ export class LoginComponent implements OnInit {
   }
 
   onlognin(){
-    console.log(this.logInFrom.value.password);
+    // console.log(this.logInFrom.value.password);
     
     if (this.logInFrom.invalid) {
+      this.snackBarService.showMessage('Please check your login information!', 'OK');
       return;
+
     }
 
     this.authService.login(this.logInFrom.value.email, this.logInFrom.value.password);

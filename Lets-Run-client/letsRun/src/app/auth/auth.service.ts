@@ -6,6 +6,7 @@ import { Subject } from "rxjs";
 import { environment } from "../../environments/environment"
 
 import { AuthData } from "./auth-data.model";
+import { SnackBarService } from "../services/snack-bar.service";
 
 const BACKEND_URL = environment.apiUrl; 
 
@@ -19,7 +20,7 @@ export class AuthService {
     private userIdListener = new Subject<string>();
     private username: string;
   
-    constructor(private http: HttpClient, private router: Router) {}
+    constructor(private http: HttpClient, private router: Router, private snackBarService: SnackBarService) {}
 
     getToken() {
         return this.token;
@@ -78,6 +79,7 @@ export class AuthService {
                   );
                   // console.log(expirationDate);
                   this.saveAuthData(token, expirationDate, this.userId);
+                  this.snackBarService.showMessageWithDuration('Welcome back ' + this.username + '!', 'OK', 3000);
                   this.router.navigate(["/"]);
                 }
               },
@@ -106,6 +108,7 @@ export class AuthService {
       }
     
       logout() {
+        this.snackBarService.showMessageWithDuration('Good by!', 'OK', 3000);
         this.token = null;
         this.isAuthenticated = false;
         this.authStatusListener.next(false);

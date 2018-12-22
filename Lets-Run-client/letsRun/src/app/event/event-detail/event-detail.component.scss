@@ -1,36 +1,49 @@
 @import url('https://fonts.googleapis.com/css?family=Arvo');
+@import "../../global-css/variables";
+
 
 .event_detail {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+    background: #e9ebee;
 
 }
 
 
+.event-back-edit-delete-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: white;
+    .event-back-photoChange {
+        display: flex;
+        flex-direction: row;
+    }
+}
 
-
-
-    .event-detail--setings {   
-        position: absolute;
-        height: 2rem;
-        width: 5rem;
-        top: 2%;
-        right: 2%;
+    .event-detail--setings {  
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-around;
     }
 
+    .back_icon {
+        color: $darkBlue;
+        top: 2%;
+        left: 2%;
+    }
+
     .event_detail--mat-icon-setings {
-        color: aqua;
+        color: $darkBlue ;
     }
 
     .event_detail--mat-icon-delete {
-        color:  rgb(231, 17, 17);
+        color:  rgb(236, 38, 38);
     }
 
     .event-detail--likes-and-attempts {
@@ -59,12 +72,7 @@
         font-family: 'Arvo', serif;
     }
 
-    .back_icon {
-        color: rgb(43, 43, 194);
-        position: absolute;
-        top: 2%;
-        left: 2%;
-    }
+
 
     .event_detail--mat-icon {
         color: rgb(241, 228, 228);
@@ -78,7 +86,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 80%;
+        width: 95%;
     }
 
     .event-description--content{
@@ -86,217 +94,83 @@
         flex-direction: row;
         align-items: center;
         width: 100%;
-        justify-content: space-between;
+        justify-content: center;
+
+        p {
+            font-family: 'Arvo', serif;
+            font-size: 2rem;
+        }
     }
 
-    
-    .formButtons{
+    .event-description--description {
+        white-space: pre-wrap;
+    }
+
+
+    .event-description-commentSection {
         display: flex;
         flex-direction: column;
         align-items: center;
-        z-index: 2;
-    }
-    
-    button {
-        font-family: 'Bungee Inline', cursive;
-        font-size: 1rem;
-        z-index: 1;
-        width: 150px;
-        height: 3rem;
-        margin-top: 0.5rem;
-        border-radius: 10%;
-        background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);
-        color: #0e2369;
-        border: 3px solid #0e2369;
-    
-        
-        &:active {
-            background: #0e2369;
-            color:  #D7FFFE;
-            border: 3px solid #0e2369;
-        }
-    
-        &:focus {
-            outline: none;
-    
-        }
-    
+        justify-content: space-between;
+        width: 95%;
+        background: white;
     }
 
-
-///////////////////////////////////////
-//////    UPDATE EVENT SECTION   
-///////////////////////////////////////
-
-//////////////// INPUT FIELDS
-
-
-
-.events_add_modul {
-    width: 60%;
-    height: 100vh;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.event_detail--image-container {
-    position: relative;
-    width: 100%;
-    img {
+    .event-ditail-list {
+        border-top: 3px solid $darkBlue;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
         width: 100%;
+        border-bottom: 3px solid $darkBlue;
+
+
+        div {
+            width: 33%;
+            text-align: center;
+            p {
+                color: $darkBlue;
+                margin: 0.2rem 0rem;
+            }
+        }
+
+        div:nth-child(1) {
+            border-right: 1px solid  $grey;
+        }
+
+        div:nth-child(3) {
+            border-left: 1px solid $grey;
+          }
     }
-}
 
 
-input[type="file"] {
-    visibility: hidden;
-    margin: 0;
-  }
 
-  .image-preview {
-    width: 100%;
-  
-    img {
-      width: 100%;
-    }
-  }
 
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 50px white inset;
-    /* Change the color to your own background color */
-    -webkit-text-fill-color: #333;
-  }
-  
-  input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 50px white inset;
-    -webkit-text-fill-color: #333;
-  }
-  
-  .inputContainer {
-    position: relative !important;
-    background: blue;
-    width: 100%;
-    height: 3rem;
-    overflow: hidden;
-    z-index: 1;
-    margin-bottom: 1rem;
-    -webkit-box-shadow: -2px 8px 46px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: -2px 8px 46px 0px rgba(0,0,0,0.75);
-  box-shadow: -2px 8px 46px 0px rgba(0,0,0,0.75);
-  
-    input {
-      width: 100%;
-      height: 100%;
-      padding-top: 1rem;
-      border: none;
-      font-size: 0.9rem;
-      outline: none;
-      font-family: 'Arvo', serif;
-    }
-  
-    label {
-      font-family: 'Arvo', serif;
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      border-bottom: 3px solid #0e2369;
-      color: #0e2369;
-  
-      &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -2px;
+    .event_detail--image-container {
+        position: relative;
         width: 100%;
-        height: 100%;
-        border-bottom: 3px solid rgb(62, 126, 209);
-        -webkit-transform: translateX(-100%);
-        -ms-transform: translateX(-100%);
-        transform: translateX(-100%);
-        -webkit-transition: -webkit-transform 0.3s ease;
-        transition: -webkit-transform 0.3s ease;
-        -o-transition: transform 0.3s ease;
-        transition: transform 0.3s ease;
-        transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-      }
-  
+        img {
+            width: 100%;
+        }
     }
-  
-  
-  }
-  
-  .content-name {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    -webkit-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-  }
-  
-  .error-name {
-      position: absolute;
-      bottom: 0px;
-      left: 0;
-      -webkit-transition: all 0.3s ease;
-      -o-transition: all 0.3s ease;
-      transition: all 0.3s ease;
-  }
-  
-  
-  .inputContainer input:focus+.label-name .content-name,
-  .inputContainer input.ng-valid+.label-name .content-name,
-  .inputContainer input.active+.label-name .content-name {
-    -webkit-transform: translateY(-80%);
-    -ms-transform: translateY(-80%);
-    transform: translateY(-80%);
-    color: #213988;
-  }
-  
-  .inputContainer input:focus+.label-name .error-name,
-  .inputContainer input.ng-invalid+.label-name .error-name,
-  .inputContainer input.active+.label-name .error-name {
-    -webkit-transform: translateY(-155%);
-    -ms-transform: translateY(-155%);
-    transform: translateY(-155%);
-    color: #c71818;
-  }
-  
-  .inputContainer input.ng-valid+.label-name .error-name,
-  .inputContainer input:not(.active)+.label-name .error-name,
-  
-   {
-    -webkit-transform: translateY(-100%);
-    -ms-transform: translateY(-100%);
-    transform: translateY(-140%);
-    color: #c71818;
-    opacity: 0;
-  }
-  
-  .inputContainer input:focus+.label-name::after,
-  .inputContainer input.ng-valid+.label-name::after {
-    -webkit-transform: translateX(0%);
-    -ms-transform: translateX(0%);
-    transform: translateX(0%);
-  }
-  
 
-  .eventDate{
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    .event-description--creator-when {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    form {
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    
+
 
 
   ////////////////////////////////////

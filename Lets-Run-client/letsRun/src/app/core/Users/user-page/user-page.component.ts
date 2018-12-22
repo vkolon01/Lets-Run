@@ -6,6 +6,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { mimeType } from 'src/app/validators/mime-type.validator';
+import { DialogService } from 'src/app/services/DialogService';
 
 @Component({
   selector: 'app-user-page',
@@ -22,7 +23,11 @@ export class UserPageComponent implements OnInit {
   private userSubscription: Subscription;
 
 
-  constructor(public userService: UserService, private activeRoute: ActivatedRoute, private authService: AuthService) { }
+  constructor(public userService: UserService,
+    private activeRoute: ActivatedRoute,
+     private authService: AuthService,
+     private confirm: DialogService
+     ) { }
 
   ngOnInit() {
 
@@ -64,7 +69,16 @@ onImagePicked(event: Event){
 }
 
   deleteUser() {
-    this.userService.deleteUser(this.user_id);
+
+
+    this.confirm.openConfirmDialog('Are you sure want to delete the User?')
+    .afterClosed().subscribe(result => {
+      if(result) {
+        this.userService.deleteUser(this.user_id);
+      }
+      
+    })
+
   }
 
   freindManipulation() {

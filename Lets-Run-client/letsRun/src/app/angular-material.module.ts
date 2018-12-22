@@ -7,11 +7,14 @@ import {
   MatExpansionModule,
   MatProgressSpinnerModule,
   MatPaginatorModule,
-  MatDialogModule
+  MatDialogModule,
+  MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from "@angular/material";
 import {MatIconModule} from '@angular/material/icon';
 import {MatBadgeModule} from '@angular/material/badge';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 @NgModule({
   exports: [
     MatInputModule,
@@ -23,7 +26,12 @@ import {MatBadgeModule} from '@angular/material/badge';
     MatPaginatorModule,
     MatDialogModule,
     MatIconModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatNativeDateModule,
+    MatDatepickerModule
   ]
 })
 export class AngularMaterialModule {}

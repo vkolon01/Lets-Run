@@ -15,7 +15,7 @@ exports.getEvents = function (req, res, next) {
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
 
-  const eventQuery = Event.find(); 
+  const eventQuery = Event.find();
   let fetchedEvent;
 
   if (pageSize && currentPage) {
@@ -24,15 +24,16 @@ exports.getEvents = function (req, res, next) {
 
   eventQuery
     .then(events => {
-      
-       fetchedEvent = events.map(event => {
+
+      fetchedEvent = events.map(event => {
         return {
           _id: event._id,
           location: event.location,
           picture: event.picture,
           author: event.author,
-          likes: event.likes,
-          runners: event.runners
+          eventDate: event.eventDate,
+          pace: event.pace,
+          distance: event.distance
         }
       })
       return Event.count();
@@ -59,7 +60,7 @@ exports.addEvent = function (req, res, next) {
   if (req.file) {
     const url = req.protocol + "://" + req.get("host");
     imagePath = url + "/images/" + req.file.filename;
-  } 
+  }
 
 
   const event = new Event({
@@ -68,7 +69,8 @@ exports.addEvent = function (req, res, next) {
     pace: req.body.pace,
     eventDate: req.body.eventDate,
     author: req.userData.userId,
-    picture : imagePath
+    picture: imagePath,
+    description: req.body.description
   });
 
   event.save()
@@ -152,15 +154,15 @@ exports.getEvent = function (req, res, next) {
 
 exports.updateEvent = function (req, res, next) {
 
-  let imagePath = req.body.imagePath;
+  // let imagePath = req.body.imagePath;
 
   console.log('req.body');
   console.log(req.body);
 
-  if (req.file) {
-    const url = req.protocol + "://" + req.get("host");
-    imagePath = url + "/images/" + req.file.filename;
-  } 
+  // if (req.file) {
+  //   const url = req.protocol + "://" + req.get("host");
+  //   imagePath = url + "/images/" + req.file.filename;
+  // } 
 
   const errors = validationResult(req);
 
@@ -177,7 +179,7 @@ exports.updateEvent = function (req, res, next) {
     distance: req.body.distance,
     pace: req.body.pace,
     eventDate: req.body.eventDate,
-    picture : imagePath
+    description: req.body.description
   })
 
   // console.log('result');
@@ -185,27 +187,25 @@ exports.updateEvent = function (req, res, next) {
   // console.log(event);
 
   Event.updateOne({
-      _id: req.body.id,
-      author: req.userData.userId
-    },  {
-      $set: {
-        _id: event.id,
-        location: event.location,
-        distance: event.distance,
-        pace: event.pace,
-        eventDate: event.eventDate,
-        picture: event.picture
-      }
-
-    } 
-
-    )
+        _id: req.body.id,
+        author: req.userData.userId
+      }, {
+        $set: {
+          _id: event.id,
+          location: event.location,
+          distance: event.distance,
+          description: event.description,
+          pace: event.pace,
+          eventDate: event.eventDate,
+          // picture: event.picture
+        }
+      })
 
     .then(result => {
       // console.log('result');
 
       // console.log(result);
-      
+
       if (result.n > 0) {
         const error = new Error('Update successful!');
         error.statusCode = 201;
@@ -224,10 +224,53 @@ exports.updateEvent = function (req, res, next) {
     });
 }
 
+exports.add_event_picture = function (req, res, next) {
+  let imagePath = req.body.imagePath;
+  let eventId = req.params.event_id;
+
+  console.log('req.body');
+
+  console.log(req.params.event_id);
+  
+
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    imagePath = url + "/images/" + req.file.filename;
+  }
+
+  Event.updateOne({
+    _id: eventId,
+    author: req.userData.userId
+  }, {
+    $set: {
+      'picture': imagePath
+    }
+  } )
+    .then(result => {
+
+      if (result.n > 0) {
+        const error = new Error('Updated picture successful!');
+        error.statusCode = 201;
+        throw error;
+      } else {
+        const error = new Error('Not authorized!');
+        error.statusCode = 401;
+        throw error;
+      }
+
+    }).catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+
+}
+
 exports.deleteEvent = function (req, res, next) {
 
   console.log('Delete API');
-  
+
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -323,11 +366,23 @@ exports.eventLikeSwitcher = function (req, res, next) {
 
         if (!contains) {
           event.likes.push(req.userData.userId);
-          User.findByIdAndUpdate(req.userData.userId, { $push: { "likedEvent" : eventId } }).then(user => { user.save() });
+          User.findByIdAndUpdate(req.userData.userId, {
+            $push: {
+              "likedEvent": eventId
+            }
+          }).then(user => {
+            user.save()
+          });
         } else {
 
           event.likes.pull(req.userData.userId)
-          User.findByIdAndUpdate(req.userData.userId, { $pull: { "likedEvent" : eventId } }).then(user => { user.save() });
+          User.findByIdAndUpdate(req.userData.userId, {
+            $pull: {
+              "likedEvent": eventId
+            }
+          }).then(user => {
+            user.save()
+          });
         }
 
         event.save();
@@ -384,10 +439,22 @@ exports.participateAtEvent = function (req, res, next) {
 
         if (!contains) {
           event.runners.push(req.userData.userId);
-          User.findByIdAndUpdate(req.userData.userId, { $push: { "eventWillAttempt" : eventId } }).then(user => { user.save() });
+          User.findByIdAndUpdate(req.userData.userId, {
+            $push: {
+              "eventWillAttempt": eventId
+            }
+          }).then(user => {
+            user.save()
+          });
         } else {
           event.runners.pull(req.userData.userId);
-          User.findByIdAndUpdate(req.userData.userId, { $pull: { "eventWillAttempt" : eventId } }).then(user => { user.save() });
+          User.findByIdAndUpdate(req.userData.userId, {
+            $pull: {
+              "eventWillAttempt": eventId
+            }
+          }).then(user => {
+            user.save()
+          });
         }
 
         event.save();

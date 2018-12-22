@@ -1,84 +1,96 @@
 <div class="main">
-    <div class="events_add_module" *ngIf="addEventModule"> 
-            <form  [formGroup]="eventForm" (ngSubmit)="addEvent()">
+  <div class="events_add_module" *ngIf="addEventModule">
+    <form [formGroup]="eventForm" (ngSubmit)="addEvent()">
 
-                <div class="inputContainer">
-                    <input [class.active]="eventForm.get('location').value?.length" type="text" formControlName="location" id="location">
-                    <label for="location" class="label-name">
-                    <span class="content-name">Location</span>
-                    <span class="error-name">Please enter location!</span>
-                    </label>
-                </div>
-
-                <div class="inputContainer">
-                    <input [class.active]="eventForm.get('distance').value?.length" type="number" formControlName="distance" id="distance">
-                    <label for="distance" class="label-name">
-                    <span class="content-name">distance in km</span>
-                    <span class="error-name">Please enter distance!</span>
-                    </label>
-                </div>
-
-                <div class="inputContainer">
-                    <input [class.active]="eventForm.get('pace').value?.length" type="text" formControlName="pace" id="pace">
-                    <label for="pace" class="label-name">
-                    <span class="content-name">Pace</span>
-                    <span class="error-name">Please enter pace!</span>
-                    </label>
-                </div>
-
-                <button  type="button" (click)="filePicker.click()">Add photo</button>
-                <input type="file" #filePicker (change)="onImagePicked($event)">
-
-                <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
-                    <img [src]="imagePreview" alt="avatar">
-                </div>
+      <mat-form-field>
+        <input matInput placeholder="Location" formControlName="location">
+        <mat-hint>The location of the event!</mat-hint>
+        <mat-error *ngIf="eventForm.get('location').errors">Location is requied</mat-error>
+      </mat-form-field>
 
 
-                <div class="eventDate">
-                    <label for="eventDate">Date of Event</label>
-                    <input type="date" placeholder="eventDate" formControlName="eventDate" id="eventDate">
-                </div>
+      <mat-form-field>
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+        <mat-hint>Location description!</mat-hint>
+        <mat-error *ngIf="eventForm.get('description').errors">Description is requied</mat-error>
+      </mat-form-field>
 
-                
-                <div class="formButtons">
-                  <button type="submit" >Add event</button>
-                  <button type="button" (click)="addEventMenu()">Wait</button>
-                </div>
-                
-              </form>
-    </div>
-      <div >
-        <button  (click)="addEventMenu()" *ngIf="!addEventModule">Add Event</button>
+      <mat-form-field>
+        <mat-select placeholder="Select the Distance" formControlName="distance">
+          <mat-option *ngFor="let distanceValue of distances" [value]="distanceValue">
+            {{ distanceValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Pace" formControlName="pace">
+        <mat-hint></mat-hint>
+        <mat-error *ngIf="eventForm.get('pace').errors">Pace is requied</mat-error>
+      </mat-form-field>
+
+      <button type="button" (click)="filePicker.click()">Add photo</button>
+      <input type="file" #filePicker (change)="onImagePicked($event)">
+
+      <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+        <img [src]="imagePreview" alt="avatar">
       </div>
-    
-    <p class="words" id="run">RUN</p>
-    <p class="words"  id="live">LIVE</p>
-    <p class="words"  id="breath">BREATH</p>
-    <p class="wordsDown"  id="beStrong">BE STRONG</p>
-    <p class="words"  id="beHappy">BE HAPPY</p>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date of Event" formControlName="eventDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+
+      <div class="formButtons">
+        <button type="submit">Add event</button>
+        <button type="button" (click)="addEventMenu()">Wait</button>
+      </div>
+
+    </form>
+  </div>
+  <div>
+    <button (click)="addEventMenu()" *ngIf="!addEventModule">Add Event</button>
+  </div>
 
 
 
-    <div class="event-list" >
-      <div class="event-list__element" *ngFor="let event of events; let index = 'index'">
-      
-        <div class="event-list--grid">
-          <div class="event-list--image"><img src="{{ event?.picture }}" alt=""></div>
-          <div class="event-list--title" ><h1 (click)="openEvent(event?.id)">{{ event?.location }}</h1></div>
-          <div class="event-list--likes-and-attempts" > 
+  <div class="event-list">
+    <div class="event-list__element" *ngFor="let event of events; let index = 'index'">
+
+      <div class="event-list--grid ">
+        <div class="event-list--image"><img src="{{ event?.picture }}" alt=""></div>
+        <div class="event-list--title">
+          <h1 (click)="openEvent(event?.id)"> <span class="spanInfo">Where </span> {{ event?.location }}</h1>
+        </div>
+        <!-- <div class="event-list--likes-and-attempts" > 
             <mat-icon matBadge="{{ event?.likes.length }}" matBadgeColor="warn"> thumb_up </mat-icon> 
             <mat-icon matBadge="{{ event?.runners.length }}" matBadgeColor="warn"> directions_run </mat-icon> </div> 
-           </div>
-        
+           </div> -->
+
+        <div class="event_list--detail">
+          <div> <span class="spanInfo">When</span>
+            <p>{{ event?.eventDate | date : 'EEEE' }} </p>
+            <p>{{ event?.eventDate | date: 'dd' }} </p>
+            <p>{{ event?.eventDate | date: 'yyyy' }} </p>
+          </div>
+          <div> <span class="spanInfo">Dist</span>
+            <p>{{ event?.distance }}</p>
+          </div>
+          <div> <span class="spanInfo">Pace</span>
+            <p>{{ event?.pace }}</p>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <mat-paginator [length]="totalEvents"  [pageSize]="eventsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
-    *ngIf="events.length > 0"></mat-paginator>
+    <mat-paginator [length]="totalEvents" [pageSize]="eventsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+      *ngIf="events.length > 0"></mat-paginator>
 
 
 
 
 
-</div>
-
+  </div>

@@ -1,8 +1,30 @@
+@import '../../global-css/variables';
+
 .comment_main {
-    width: 100%;
+    // width: 100%;
+    // flex-direction: column;
+    // align-items: center;
+    border-bottom: 1px solid $darkBlue;
+}
+
+.mat-card-header{ 
+    
+    
+    
+    .mat-card-title {
+    margin-bottom: 12px;
+    color: $grey;
+    }
+}
+
+//Space between nickname and time of creation
+
+.mat-card-header .mat-card-subtitle:not(:first-child) {
+    margin-top: -8px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .comment_main--showcase {
@@ -13,22 +35,6 @@
     grid-template-columns:  1fr 2fr 2fr 2fr;
     grid-template-rows: 1fr 1fr;
 }                        
-
-.comment_main--showcase_avatar {
-    grid-area: avatar;
-
-    height: 100%;
-    img {
-        width: 100%;
-        height: 100%;
-        max-height: 50px;
-        max-width: 50px;
-        border-radius: 50%;
-        margin-top: 10%;
-    }
-
-
-}
 
 .comment_main--showcase_author {
     grid-area: author;

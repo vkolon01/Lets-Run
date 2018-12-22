@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.scss']
+  styleUrls: ['./signin.component.scss', '../../global-css/global-input.scss']
 })
 export class SigninComponent implements OnInit {
 
   signInFrom: FormGroup;
+  hide = true;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService,  private snackBarService: SnackBarService) { }
 
   ngOnInit() {
    this.signInFrom = new FormGroup({
@@ -28,6 +30,7 @@ export class SigninComponent implements OnInit {
     console.log(this.signInFrom);
     
     if(this.signInFrom.invalid) {
+      this.snackBarService.showMessage('Please check your registration information!', 'OK');
       return;
     }
     this.authService.createUser(

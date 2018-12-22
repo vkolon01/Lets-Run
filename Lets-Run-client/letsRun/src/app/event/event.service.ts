@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { EventModule } from "./event.model";
 import { Subject, pipe } from "rxjs";
 import { map } from "rxjs/operators";
+import { SnackBarService } from "../services/snack-bar.service";
 
 
 
@@ -28,13 +29,13 @@ export class EventService {
     private likes: string[] =[];
     private eventLikeUpdated = new Subject<{ likes: string[] }>();
 
-    constructor(private http: HttpClient, private router: Router) { }
+    constructor(private http: HttpClient, private router: Router,  private snackBarService: SnackBarService) { }
 
     getEvents() {
         return this.events;
     }
 
-    createEvent(location: string, distance, pace: string, eventDate, image: File) {
+    createEvent(location: string, distance, pace: string, eventDate, desc: string, image: File) {
 
         const newEvent = new FormData();
         newEvent.append("location", location);
@@ -42,14 +43,15 @@ export class EventService {
         newEvent.append("eventDate", eventDate);
         newEvent.append("distance", distance);
         newEvent.append("image", image, location);
-
+        newEvent.append('description', desc);
          this.http.post(BACKEND_URL + '/events/add-event', newEvent).subscribe(
             result => {
+                this.snackBarService.showMessageWithDuration('Event added', 'OK', 3000);
                 this.eventUpdated.next({
                     events: [...this.events],
                     eventCount: this.maxEvents
                 })
-                this.getEventList(5, 1);
+                this.getEventList(2, 1);
             }
         )
     }
@@ -68,11 +70,9 @@ export class EventService {
                             eventDate: event.eventDate,
                             author: event.author,
                             comments: event.comments,
-                            picture: event.picture,
-                            likes: event.likes,
-                            runners: event.runners
+                            picture: event.picture
                         };
-                    }),
+                    }), 
                     maxEvents: eventData.maxEvents
                 };
             })
@@ -92,8 +92,7 @@ export class EventService {
     }
 
     getLikesUpdate() {
-        return this.eventLikeUpdated.asObservable()
-        ;
+        return this.eventLikeUpdated.asObservable();
     }
 
     getCreatorName() {
@@ -127,7 +126,7 @@ export class EventService {
                 this.event = event.eventById;
                 this.creatorName = event.creatorName;
                 this.creatorId = event.creatorId;
-
+                
                 console.log(event.eventById.likes);
 
                 this.creatorNameAndId.next({
@@ -142,7 +141,7 @@ export class EventService {
             });
     }
 
-    updateEvent(id: string,location: string,distance ,pace: string,eventDate ,author: string, image: File){
+    updateEvent(id: string,location: string,distance ,pace: string,eventDate ,author: string, description: string){
         
         console.log('update event id');
         console.log(id);
@@ -154,10 +153,13 @@ export class EventService {
         updatedEvent.append("pace", pace);
         updatedEvent.append("eventDate", eventDate);
         updatedEvent.append("distance", distance);
-        updatedEvent.append("image", image, location);
+        updatedEvent.append("description", description);
+
+        // updatedEvent.append("image", image, location); description
 
         this.http.put(BACKEND_URL + '/events/' + id, updatedEvent)
             .subscribe(response => {
+                this.snackBarService.showMessageWithDuration('Event updated', 'OK', 3000);
                 this.eventUpdate.next({
                     event: this.event
                 })
@@ -165,10 +167,25 @@ export class EventService {
             });
     }
 
+    uploadEventPicture(event_id: string, image: File | string) {
+        let avatarData: string | FormData;
+  
+          if(typeof image === "object") {
+            avatarData = new FormData();
+            avatarData.append("image", image, event_id );
+          } else {
+            return;
+          }
+  
+          this.http.put(BACKEND_URL + "/events/" + "add_event_picture/" + event_id, avatarData).subscribe(result => { this.getEventById(event_id); });
+  
+          }
+
     deleteEvent(id: string) {
         console.log('delete ' + id);
         return this.http.delete(BACKEND_URL + '/events/' + id)
                     .subscribe(result => {
+                        this.snackBarService.showMessageWithDuration('Event deleted', 'OK', 3000);
                         this.getEventList(5, 1)
                         this.router.navigate(["/events"]);
                     });
@@ -177,6 +194,7 @@ export class EventService {
     eventLikeSwitcher(id: string) {
         return this.http.get(BACKEND_URL + '/events/' + id + '/like_event_switcher')
             .subscribe(result => {
+                
                 this.getEventById(id);
             });
     }

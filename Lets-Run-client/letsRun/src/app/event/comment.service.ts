@@ -5,6 +5,7 @@ import { environment } from "../../environments/environment"
 import { CommentModule } from "../models/comment.model";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
+import { SnackBarService } from "../services/snack-bar.service";
 
 
 
@@ -17,12 +18,13 @@ export class CommentService {
     private commentUpdated = new Subject<{ comments: CommentModule[] }>();
 
 
-    constructor(private http: HttpClient, private router: Router) { }
+    constructor(private http: HttpClient, private router: Router,  private snackBarService: SnackBarService) { }
 
     addComment(content: string, eventId: string) {
         const newContent = { content: content };
         this.http.post(BACKEND_URL + '/events/' + eventId + '/add_comment', newContent)
             .subscribe(result => {
+                this.snackBarService.showMessageWithDuration('Comment added', '', 3000);
                 this.commentUpdated.next({
                     comments: [...this.comments]
                 })
@@ -33,10 +35,6 @@ export class CommentService {
         const queryParams = `?index=${index}&count=${count}`;
        return this.http.get<{ message: string, comments: any, authorId: string, }>(BACKEND_URL + '/events/' + eventId + '/get_comments' + queryParams)
             .pipe(map(commentDate => {
-
-                // console.log('commentDate');
-                // console.log(commentDate);
-
                 
                 return {
                     comments: commentDate.comments.map(comment => {
@@ -45,7 +43,8 @@ export class CommentService {
                             content: comment.content,
                             author: comment.author.username,
                             authorId: comment.author._id,
-                            authorImage: comment.author.imagePath
+                            authorImage: comment.author.imagePath,
+                            createdAt: comment.createdAt
                         }
                     }),
 
@@ -68,14 +67,17 @@ export class CommentService {
 
         this.http.put(BACKEND_URL + '/events/' + eventId + '/' + comment_id, newComment)
             .subscribe(response => {
-                // this.getCommentsList(eventId);
+                this.commentUpdated.next({
+                    comments: [...this.comments]
+                })
+                this.snackBarService.showMessageWithDuration('Comment updated', '', 3000);
             });
     }
 
     deleteComent(eventId: string, commentId: string) {
         return this.http.delete(BACKEND_URL + '/events/' + eventId + '/' + commentId).subscribe(result => {
 
-            // this.getCommentsList(eventId);
+            this.snackBarService.showMessageWithDuration('Comment deleted', '', 3000);
         })
     }
 

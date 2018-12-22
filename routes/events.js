@@ -11,6 +11,9 @@ const { body } = require('express-validator/check');
 
 router.get('/', EventController.getEvents);
 
+router.put('/add_event_picture/:event_id', authCheck, extractFile, EventController.add_event_picture);
+
+
 router.put('/:event_id', [
     body('location')
     .trim()
@@ -44,6 +47,7 @@ router.post('/add-event',[
 router.delete('/:event_id', authCheck, EventController.deleteEvent);
 
 //////////////////////// CONTROLLERS FOR EVENT LIKES AND FOLLOWING
+
 
 router.get('/:event_id/like_event_switcher', authCheck, EventController.eventLikeSwitcher);
 

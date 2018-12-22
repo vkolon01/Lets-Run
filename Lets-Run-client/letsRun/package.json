@@ -24,6 +24,7 @@
     "@angular/router": "~7.0.0",
     "angular-ui-scroll": "^1.7.2",
     "core-js": "^2.5.4",
+    "moment": "^2.23.0",
     "ngx-ui-scroll": "^1.0.1",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"

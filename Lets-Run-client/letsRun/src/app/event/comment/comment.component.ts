@@ -4,6 +4,8 @@ import { CommentModule } from 'src/app/models/comment.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CommentService } from '../comment.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { DialogService } from 'src/app/services/DialogService';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-comment',
@@ -14,22 +16,28 @@ export class CommentComponent implements OnInit {
 
   showEditCommentForm = false;
   editCommentForm: FormGroup;
-
   userId;
 
   @Output() deletedCommentEmiter = new EventEmitter<boolean>();
   commentDeleted = false;
   @Input() comment: CommentModule;
   @Input() eventId: string;
+   timeAgo;
 
 
-  constructor(private activeRoute: ActivatedRoute, private commentService: CommentService, private authService: AuthService) { }
+
+  constructor(private activeRoute: ActivatedRoute,
+     private commentService: CommentService,
+      private authService: AuthService,
+      private confirm: DialogService
+      ) {  }
 
   ngOnInit() {
     this.userId = this.authService.getUserId();
     this.editCommentForm = new FormGroup({
       'content': new FormControl(null, {validators: [Validators.required]}),
     });
+    this.timeAgo = moment(this.comment.createdAt).fromNow();
     
   }
 
@@ -54,8 +62,17 @@ export class CommentComponent implements OnInit {
     if(this.comment.author === this.userId) {
       return;
     }
-    this.commentService.deleteComent(this.eventId, this.comment.id);
-    this.editCommentForm.reset();
-    this.commentDeleted = true;
+
+    this.confirm.openConfirmDialog('Are you sure want to delete the comment?')
+    .afterClosed().subscribe(result => {
+      if(result) {
+
+        this.commentService.deleteComent(this.eventId, this.comment.id);
+        this.editCommentForm.reset();
+        this.commentDeleted = true;
+
+      }
+      
+    })
   }
 }

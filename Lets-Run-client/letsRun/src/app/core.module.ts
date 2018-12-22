@@ -11,6 +11,7 @@ import { CommentComponent } from "./event/comment/comment.component";
 import { ErrorComponent } from "./core/error/error.component";
 import { UiScrollModule } from 'ngx-ui-scroll';
 import { AngularMaterialModule } from "./angular-material.module";
+import { MatNativeDateModule } from "@angular/material";
 
 
 @NgModule({
@@ -20,7 +21,7 @@ import { AngularMaterialModule } from "./angular-material.module";
         RouterModule,
         ReactiveFormsModule,
         UiScrollModule,
-        AngularMaterialModule
+        AngularMaterialModule,
     ],
     exports: [FooterComponent, HeaderComponent, HomeComponent, UserPageComponent, EventDetailComponent, CommentComponent]
 })

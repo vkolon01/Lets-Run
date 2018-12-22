@@ -1,10 +1,13 @@
+@import '../../global-css/variables';
+
 .main {
     display: flex;
     height: 100%;
     flex-direction: column;
-    background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+    background: white;
     justify-content: space-between;
     align-items: center;
+    background: $backgroundColor;
 }
 
 form {
@@ -14,175 +17,10 @@ form {
     width: 80%;
     height: 95vh;
     justify-content: space-evenly;
+    background: white;
 }
 
-
-//////////////// INPUT FIELDS
-
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 50px white inset;
-    /* Change the color to your own background color */
-    -webkit-text-fill-color: #333;
-  }
-  
-  input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 50px white inset;
-    -webkit-text-fill-color: #333;
-  }
-  
-  .inputContainer {
-    position: relative !important;
-    background: blue;
+mat-form-field {
     width: 80%;
-    height: 3rem;
-    overflow: hidden;
-    z-index: 1;
-    margin-bottom: 1rem;
-    -webkit-box-shadow: -2px 8px 46px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: -2px 8px 46px 0px rgba(0,0,0,0.75);
-  box-shadow: -2px 8px 46px 0px rgba(0,0,0,0.75);
-  
-    input {
-      width: 100%;
-      height: 100%;
-      padding-top: 1rem;
-      border: none;
-      font-size: 0.9rem;
-      outline: none;
-      font-family: 'Arvo', serif;
-    }
-  
-    label {
-      font-family: 'Arvo', serif;
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      border-bottom: 3px solid #0e2369;
-      color: #0e2369;
-  
-      &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -2px;
-        width: 100%;
-        height: 100%;
-        border-bottom: 3px solid rgb(62, 126, 209);
-        -webkit-transform: translateX(-100%);
-        -ms-transform: translateX(-100%);
-        transform: translateX(-100%);
-        -webkit-transition: -webkit-transform 0.3s ease;
-        transition: -webkit-transform 0.3s ease;
-        -o-transition: transform 0.3s ease;
-        transition: transform 0.3s ease;
-        transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-      }
-  
-    }
-  
-  
-  }
-  
-  .content-name {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    -webkit-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-  }
-  
-  .error-name {
-      position: absolute;
-      bottom: 0px;
-      left: 0;
-      -webkit-transition: all 0.3s ease;
-      -o-transition: all 0.3s ease;
-      transition: all 0.3s ease;
-  }
-  
-  
-  .inputContainer input:focus+.label-name .content-name,
-  .inputContainer input.ng-valid+.label-name .content-name,
-  .inputContainer input.active+.label-name .content-name {
-    -webkit-transform: translateY(-80%);
-    -ms-transform: translateY(-80%);
-    transform: translateY(-80%);
-    color: #213988;
-  }
-  
-  .inputContainer input:focus+.label-name .error-name,
-  .inputContainer input.ng-invalid+.label-name .error-name,
-  .inputContainer input.active+.label-name .error-name {
-    -webkit-transform: translateY(-155%);
-    -ms-transform: translateY(-155%);
-    transform: translateY(-155%);
-    color: #c71818;
-  }
-  
-  .inputContainer input.ng-valid+.label-name .error-name,
-  .inputContainer input:not(.active)+.label-name .error-name,
-  
-   {
-    -webkit-transform: translateY(-100%);
-    -ms-transform: translateY(-100%);
-    transform: translateY(-140%);
-    color: #c71818;
-    opacity: 0;
-  }
-  
-  .inputContainer input:focus+.label-name::after,
-  .inputContainer input.ng-valid+.label-name::after {
-    -webkit-transform: translateX(0%);
-    -ms-transform: translateX(0%);
-    transform: translateX(0%);
-  }
-  
-
-  .dob{
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .error {
-    font-family: 'Arvo', serif;
-    font-size: 1rem;
-    color: #c71818;
-  }
-
-
-  .formButtons{
-    align-items: center;
-    z-index: 2;
 }
 
-button {
-    font-family: 'Bungee Inline', cursive;
-    font-size: 1rem;
-    z-index: 1;
-    width: 150px;
-    height: 3rem;
-    margin-top: 0.5rem;
-    border-radius: 10%;
-    background-image: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);
-    color: #0e2369;
-    border: 3px solid #0e2369;
-
-    
-    &:active {
-        background: #0e2369;
-        color:  #D7FFFE;
-        border: 3px solid #0e2369;
-    }
-
-    &:focus {
-        outline: none;
-
-    }
-
-}
