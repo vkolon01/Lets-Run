@@ -10,6 +10,8 @@ export interface UserModel {
     comment?: [string],
     likedEvent?: [string],
     createdEvent?: [string],
+    eventWillAttempt?: [string],
     blackList?: [string],
-    friendList?: [string]
+    followers?: [string],
+    following?: [string]
 }

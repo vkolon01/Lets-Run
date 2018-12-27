@@ -1,11 +1,33 @@
-.userpage-main {
+@import '../../../global-css/variables';
+
+.main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: $backgroundColor;
+  height: 100%;
+}
+
+.userpage-main {
+  display: flex;
+  width: 95%;
+  height: 100%;
+  flex-direction: column;
+  background: #ffffff;
 }
 
 .avatar-container{
+  position: relative;
   width: 100%;
+
+  h1 {
+    position: absolute;
+    color: $darkBlue;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    text-shadow: 0px 3px 20px #3a50d9, 0px 1px 19px #0a0e27;
+  }
   img {
     width: 100%;
   }
@@ -14,17 +36,51 @@
 .add_avatar-button {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
+  width: 100%;
 
-  form {
+}
+
+nav {
+  width: 100%;
+
+  ul {
+    padding: 0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly;
+    list-style: none;
+    margin: 0;
+
+    li {
+      width: 33%;
+      text-align: center;
+      height: 100%;
+      padding: 10px;
+      background: $darkBlue;
+      color: white;
+      outline: none;
+
+      &.active {
+        background: #42528b;
+      }
+
+    }
   }
+}
+
+
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 input[type="file"] {
   visibility: hidden;
+  width: 0;
 }
 
 

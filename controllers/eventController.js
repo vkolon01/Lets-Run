@@ -10,13 +10,43 @@ var Event = require('../models/event_model');
 var Comment = require('../models/comment_model');
 
 
+
+  // console.log(new Date(searchedEventDate).toISOString());
+
 exports.getEvents = function (req, res, next) {
 
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
+  const searchedEventDate = req.query.filterDate;
+  const searchedEventDistance = req.query.eventDistance;
+  console.log(searchedEventDistance);
+  
 
-  const eventQuery = Event.find();
+  let currentDate = Date.now();
+  var isoCurrentDate = new Date(currentDate).toISOString();
+
+  let eventCounted;
   let fetchedEvent;
+
+  let eventQuery;
+
+  if(!searchedEventDate && !searchedEventDistance) {
+    eventQuery = Event.find({ eventDate :{ $gt : isoCurrentDate } });
+    Event.find({ eventDate :{ $gt : isoCurrentDate } }).countDocuments().then(countedDocuments => { eventCounted =  countedDocuments});
+  } else  if(searchedEventDate && searchedEventDistance) {
+    eventQuery = Event.find({ distance : searchedEventDistance, eventDate : searchedEventDate });
+    Event.find({ distance : searchedEventDistance, eventDate : searchedEventDate }).countDocuments().then(countedDocuments => { eventCounted =  countedDocuments});
+  } else  if(searchedEventDate) {
+    eventQuery = Event.find({ eventDate : searchedEventDate });
+    Event.find({ eventDate : searchedEventDate }).countDocuments().then(countedDocuments => { eventCounted =  countedDocuments});
+  } else  if(searchedEventDistance) {
+    eventQuery = Event.find({ distance : searchedEventDistance });
+    Event.find({ distance : searchedEventDistance }).countDocuments().then(countedDocuments => { eventCounted =  countedDocuments});
+  }
+
+
+
+
 
   if (pageSize && currentPage) {
     eventQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
@@ -24,8 +54,9 @@ exports.getEvents = function (req, res, next) {
 
   eventQuery
     .then(events => {
-
+      
       fetchedEvent = events.map(event => {
+        // eventCount++;
         return {
           _id: event._id,
           location: event.location,
@@ -38,11 +69,13 @@ exports.getEvents = function (req, res, next) {
       })
       return Event.count();
     })
-    .then(count => {
+    .then(eventCount => {
+      console.log(eventCounted);
+      
       res.status(200).json({
         message: 'Fetched Posts',
         events: fetchedEvent,
-        maxEvents: count
+        maxEvents: eventCounted
       });
     })
     .catch(error => {

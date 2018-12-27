@@ -128,6 +128,10 @@ exports.getUserProfile = function (req, res, next) {
   const userId = req.params.user_id;
 
   User.findById(userId)
+    .populate('following', '_id imagePath username')
+    .populate('followers', '_id imagePath username')
+    .populate('createdEvent', '_id location picture eventDate')
+    .populate('eventWillAttempt', '_id location picture eventDate')
     .then(user => {
       if (!user) {
         const error = new Error("No user find.");
@@ -135,8 +139,24 @@ exports.getUserProfile = function (req, res, next) {
         error.data = "No user find.";
         throw error;
       }
+
+      let modifiedUser = new User({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        followers: user.followers,
+        following: user.following,
+        imagePath: user.imagePath,
+        eventWillAttempt: user.eventWillAttempt,
+        createdEvent: user.createdEvent,
+        dob: user.dob,
+        createdAt: user.createdAt
+      });
+
+
       res.status(200).json({
-        user: user
+        user: modifiedUser
       });
     })
     .catch(error => {

@@ -17,7 +17,7 @@
     description: {
       type: String,
       required: true,
-      default: 'No description yeat added'
+      default: 'No description yeat added'  //http://localhost:8080/images/manchester-1544911854844.jpg
     },
     location: {
       type: String,

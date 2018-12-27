@@ -48,7 +48,7 @@
       </div>
 
       <div class="event-description--creator-when">
-          <div> Posted By <a [routerLink]="['/userpage', creatorId]">{{ eventCreatorName }}</a></div>
+          <div> Posted By <a [routerLink]="['/userpage', creatorId, 'info']">{{ eventCreatorName }}</a></div>
           <div> {{ eventCreatedAt }} </div>
         </div>
       <div class="event-ditail-list">
@@ -58,7 +58,7 @@
         </div>
 
         <div><span class="spanInfo">DATE</span>
-          <p>{{ event?.eventDate | date : 'EEEE' }} </p>
+          <p>{{ event?.eventDate | date : 'MMMM' }} </p>
           <p>{{ event?.eventDate | date: 'dd' }} </p>
           <p>{{ event?.eventDate | date: 'yyyy' }} </p>
         </div>
@@ -182,9 +182,12 @@
         <button (click)="showCommentInputArea()">Add comment</button>
 
         <div class="viewport" ui-scroll-viewport>
+
           <div *uiScroll="let comment of datasource; let index = index">
 
             <app-comment *ngIf="!commentDeleted" [comment]="comment" [eventId]="eventId"></app-comment>
+
+            
 
           </div>
         </div>

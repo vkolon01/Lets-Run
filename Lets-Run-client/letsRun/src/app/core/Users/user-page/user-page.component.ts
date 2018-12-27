@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '../user.service';
 import { UserModel } from 'src/app/models/user.model';
 import { Subscription } from 'rxjs';
@@ -6,12 +6,14 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { mimeType } from 'src/app/validators/mime-type.validator';
-import { DialogService } from 'src/app/services/DialogService';
+import { DialogService } from 'src/app/services/dialogService';
 
 @Component({
   selector: 'app-user-page',
   templateUrl: './user-page.component.html',
-  styleUrls: ['./user-page.component.scss']
+  styleUrls: ['./user-page.component.scss',
+              '../../../global-css/global-input.scss'
+             ]
 })
 export class UserPageComponent implements OnInit {
 
@@ -20,6 +22,7 @@ export class UserPageComponent implements OnInit {
   user_id: string;
 
   user: UserModel;
+
   private userSubscription: Subscription;
 
 
@@ -35,9 +38,12 @@ export class UserPageComponent implements OnInit {
       image: new FormControl(null, { validators: [Validators.required], asyncValidators: [ mimeType ] })
     })
 
+    
+
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
 
       this.user_id = paramMap.get('user_id');
+      
 
       
         this.userService.getUserInfo(this.user_id);
@@ -68,18 +74,7 @@ onImagePicked(event: Event){
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
-  deleteUser() {
 
-
-    this.confirm.openConfirmDialog('Are you sure want to delete the User?')
-    .afterClosed().subscribe(result => {
-      if(result) {
-        this.userService.deleteUser(this.user_id);
-      }
-      
-    })
-
-  }
 
   freindManipulation() {
     this.userService.freindManipulating(this.user_id);

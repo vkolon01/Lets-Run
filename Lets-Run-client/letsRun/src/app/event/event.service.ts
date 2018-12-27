@@ -51,13 +51,13 @@ export class EventService {
                     events: [...this.events],
                     eventCount: this.maxEvents
                 })
-                this.getEventList(2, 1);
+                this.getEventList(5, 1, '', '');
             }
         )
     }
 
-    getEventList(eventsPerPage: number, currentPage: number) {
-        const queryParams = `?pagesize=${eventsPerPage}&page=${currentPage}`;
+    getEventList(eventsPerPage: number, currentPage: number, filterDate: string, filterDist) {
+        const queryParams = `?pagesize=${eventsPerPage}&page=${currentPage}&filterDate=${filterDate}&eventDistance=${filterDist}`;
         this.http.get<{ message: string; events: any; maxEvents: number }>(BACKEND_URL + '/events/' + queryParams)
             .pipe(map(eventData => {
                 return {
@@ -143,8 +143,8 @@ export class EventService {
 
     updateEvent(id: string,location: string,distance ,pace: string,eventDate ,author: string, description: string){
         
-        console.log('update event id');
-        console.log(id);
+        // console.log('update event id');
+        // console.log(id);
         
 
         const updatedEvent = new FormData();
@@ -186,7 +186,7 @@ export class EventService {
         return this.http.delete(BACKEND_URL + '/events/' + id)
                     .subscribe(result => {
                         this.snackBarService.showMessageWithDuration('Event deleted', 'OK', 3000);
-                        this.getEventList(5, 1)
+                        this.getEventList(5, 1, '', '')
                         this.router.navigate(["/events"]);
                     });
     }

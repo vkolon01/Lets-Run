@@ -7,7 +7,7 @@ import { EventDetailComponent } from "./event/event-detail/event-detail.componen
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
-    {path: "userpage/:user_id", component: UserPageComponent},
+    {path: "userpage",  loadChildren: './core/users/user.module#UserModule'},
     {path: 'events', loadChildren: './event/events.module#EventsModule'},
     {path: "auth", loadChildren: "./auth/auth.module#AuthModule"},
     {path: "events/:event_id", component: EventDetailComponent},

@@ -7,6 +7,6 @@
     <a *ngIf="!userIsAuthenticated" routerLink="/auth/login">Login</a>
     <a *ngIf="userIsAuthenticated" (click)="onLogOut()">Logout</a>
     <a *ngIf="!userIsAuthenticated" routerLink="/auth/signup">Register</a>
-    <a *ngIf="userIsAuthenticated" [routerLink]="['/userpage', userId]">User Info</a>
+    <a *ngIf="userIsAuthenticated" [routerLink]="['/userpage', userId , 'info']">User Info</a>
   </div>
 </header>

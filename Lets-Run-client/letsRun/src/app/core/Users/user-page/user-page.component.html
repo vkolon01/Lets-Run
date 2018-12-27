@@ -1,42 +1,39 @@
-<div class="avatar-container" *ngIf="!form.get('image').valid">
-    <img src="{{ user?.imagePath }}" alt="avatar">
-</div>
+<div class="main">
 
-<div class="add_avatar-button" >
-      
-        <form [formGroup]="form" (submit)="uploadAvatar()">
-  
-              <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
-                  <img [src]="imagePreview" alt="avatar">
-              </div>
-  
-              <button  type="button" (click)="filePicker.click()">Change the avatar</button>
-              <input type="file" #filePicker (change)="onImagePicked($event)">
-  
-              <button *ngIf="form.get('image').valid" type="submit">Upload avatar</button>
-        </form>
-  
+  <div class="avatar-container" *ngIf="!form.get('image').valid" (click)="filePicker.click()">
+  <h1 class="user_title">{{ user?.firstName }} {{ user?.lastName }} </h1>
+    <img src="{{ user?.imagePath }}" alt="avatar">
+  </div>
+
+  <!-- <div class="add_avatar-button" > -->
+
+  <form [formGroup]="form" (submit)="uploadAvatar()">
+
+    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+      <img [src]="imagePreview" alt="avatar">
     </div>
 
-<div class="userpage-main">
-  <h1>  Full Name: {{ user?.firstName }} {{ user?.lastName }}  </h1>
+    <!-- <button  type="button" (click)="filePicker.click()">Change the avatar</button> -->
+    <!-- <span>Change the avatar : </span>  <mat-icon  (click)="filePicker.click()" > image_search </mat-icon> -->
+    <input type="file" #filePicker (change)="onImagePicked($event)">
 
+    <button *ngIf="form.get('image').valid" type="submit">Upload avatar</button>
 
+  </form>
 
-  <div>
-      username: {{ user?.username }}
+  <!-- </div> -->
+
+  <div class="userpage-main">
+
+    <nav>
+      <ul>
+        <li routerLink="info" routerLinkActive="active"><a >Info</a></li>
+        <li routerLink="freinds" routerLinkActive="active"><a>Followers</a></li>
+        <li routerLink="activety" routerLinkActive="active"><a>Activety</a></li>
+      </ul>
+    </nav>
+    <router-outlet></router-outlet>
+
   </div>
-  <div>
-      email:  {{ user?.email }}
-  </div>
-  registration Date: {{ user?.createdAt }}
-  <div>
-      dob:  {{ user?.dob }}
-  </div>
-<div>
-    <button (click)="deleteUser()" >Delete User</button>
-    <button (click)="freindManipulation()" >Follow</button>
+  <!-- <button (click)="UserProfile()">User Profile</button> -->
 </div>
-  
-</div>
-<!-- <button (click)="UserProfile()">User Profile</button> -->

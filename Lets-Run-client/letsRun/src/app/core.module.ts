@@ -15,7 +15,7 @@ import { MatNativeDateModule } from "@angular/material";
 
 
 @NgModule({
-    declarations: [FooterComponent, HeaderComponent, HomeComponent, UserPageComponent, EventDetailComponent, CommentComponent],
+    declarations: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent],
     imports: [
         CommonModule,
         RouterModule,
@@ -23,7 +23,7 @@ import { MatNativeDateModule } from "@angular/material";
         UiScrollModule,
         AngularMaterialModule,
     ],
-    exports: [FooterComponent, HeaderComponent, HomeComponent, UserPageComponent, EventDetailComponent, CommentComponent]
+    exports: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent]
 })
 
 export class CoreModule {}

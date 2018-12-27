@@ -13,14 +13,17 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
   selector: 'app-events-list',
   templateUrl: './events-list.component.html',
   styleUrls: ['./events-list.component.scss',
-              './event-list-event-grid.component.scss',
-              '../../global-css/global-input.scss'
-             ]
+    './event-list-event-grid.component.scss',
+    '../../global-css/global-input.scss'
+  ]
 })
 export class EventsListComponent implements OnInit, OnDestroy {
 
   addEventModule = false;
+  searchEventModule = false;
+
   eventForm: FormGroup;
+  eventSearchForm: FormGroup;
 
   imagePreview: string;
   userIsAuthenticated = false;
@@ -28,12 +31,24 @@ export class EventsListComponent implements OnInit, OnDestroy {
   totalEvents = 0;
   eventsPerPage = 5;
   currentPage = 1;
-  pageSizeOptions = [5, 1, 20]
-  
+  pageSizeOptions = [2, 5, 10, 20]
+
   events: EventModule[] = [];
   private eventSub: Subscription;
 
-  distances = ['Couch to 5k', '5K', '10K', 'Half Marathon', 'Marathon', 'Mud Run & fun Run', 'Trail', 'Walking'];
+  distances = [
+    {value: '', viewValue: "Clear"},
+    {value: 'Couch to 5k', viewValue: 'Couch to 5k'},
+    {value: '5K', viewValue: '5K'},
+    {value: '10K', viewValue: '10K'},
+    {value: 'Half Marathon', viewValue: 'Half Marathon'},
+    {value: 'Marathon', viewValue: 'Marathon'},
+    {value: 'Mud Run & fun Run', viewValue: 'Mud Run & fun Run'},
+    {value: 'Trail', viewValue: 'Trail'},
+    {value: 'Walking', viewValue: 'Walking'}
+  ]
+
+  // distances = ['Couch to 5k', '5K', '10K', 'Half Marathon', 'Marathon', 'Mud Run & fun Run', 'Trail', 'Walking'];
 
   constructor(private snackBarService: SnackBarService, private eventService: EventService, private authService: AuthService, private route: Router) { }
 
@@ -42,25 +57,49 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.userIsAuthenticated = this.authService.getIsAuth();
 
     this.eventForm = new FormGroup({
-      'location': new FormControl(null, {validators: [Validators.required]}),
-      'distance': new FormControl(null, {validators: [Validators.required]}),
-      'pace': new FormControl(null, {validators: [Validators.required]}),
-      'image': new FormControl(null, {  asyncValidators: [ mimeType ] }),
-      'eventDate': new FormControl(null, {validators: [Validators.required]}),
-      'description': new FormControl(null, {validators: [Validators.required]}),
-    }); 
-    this.eventService.getEventList(this.eventsPerPage, this.currentPage);
+      'location': new FormControl(null, { validators: [Validators.required] }),
+      'distance': new FormControl(null, { validators: [Validators.required] }),
+      'pace': new FormControl(null, { validators: [Validators.required] }),
+      'image': new FormControl(null, { asyncValidators: [mimeType] }),
+      'eventDate': new FormControl(null, { validators: [Validators.required] }),
+      'description': new FormControl(null, { validators: [Validators.required] }),
+    });
+    this.eventService.getEventList(this.eventsPerPage, this.currentPage, '', '');
 
     this.eventSub = this.eventService.getEventUpdateListener()
-        .subscribe((value: {events: EventModule[], eventCount: number}) => {
-          this.events = value.events;
-          this.totalEvents = value.eventCount;
-        });
-    
+      .subscribe((value: { events: EventModule[], eventCount: number }) => {
+        this.events = value.events;
+        this.totalEvents = value.eventCount;
+      });
+
+    this.eventSearchForm = new FormGroup({
+      'eventDate': new FormControl(''),
+      'dist': new FormControl('')
+    });
+
+  }
+
+  searchEvent() {
+
+    this.eventService.getEventList(this.eventsPerPage,
+                                   this.currentPage,
+                                   this.eventSearchForm.value.eventDate,
+                                   this.eventSearchForm.value.dist);
+  }
+
+  clearSearchBox() {
+    this.eventSearchForm.setValue({
+      'eventDate': '',
+      'dist': ''
+    })
+  }
+
+  searchEventMenu() {
+    this.searchEventModule = !this.searchEventModule;
   }
 
   openEvent(id: string) {
-    if(!this.userIsAuthenticated) {
+    if (!this.userIsAuthenticated) {
       this.snackBarService.showMessage('Please login for entering in event!', 'OK');
       return;
     }
@@ -70,16 +109,16 @@ export class EventsListComponent implements OnInit, OnDestroy {
   onChangedPage(pageData: PageEvent) {
     this.currentPage = pageData.pageIndex + 1;
     this.eventsPerPage = pageData.pageSize;
-    this.eventService.getEventList(this.eventsPerPage, this.currentPage);
+    this.eventService.getEventList(this.eventsPerPage, this.currentPage, this.eventSearchForm.value.eventDate, this.eventSearchForm.value.dist);
   }
 
-  onImagePicked(event: Event){
+  onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
-    this.eventForm.patchValue({image: file});
+    this.eventForm.patchValue({ image: file });
     this.eventForm.get('image').updateValueAndValidity();
     console.log('event.target');
     console.log(event);
-    
+
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result as string;
@@ -88,18 +127,18 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   addEventMenu() {
-    if(!this.userIsAuthenticated) {
-    // this.snackbar.open();
-    this.snackBarService.showMessage('Please login to add event!', 'OK');
+    if (!this.userIsAuthenticated) {
+      // this.snackbar.open();
+      this.snackBarService.showMessage('Please login to add event!', 'OK');
       return;
     }
 
     this.addEventModule = !this.addEventModule;
   }
 
-  addEvent(){
-    if(this.eventForm.invalid) {
-    this.snackBarService.showMessage('Please fill the required fields', 'OK');
+  addEvent() {
+    if (this.eventForm.invalid) {
+      this.snackBarService.showMessage('Please fill the required fields', 'OK');
       return;
     }
 

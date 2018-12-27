@@ -4,7 +4,7 @@ import { CommentModule } from 'src/app/models/comment.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CommentService } from '../comment.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { DialogService } from 'src/app/services/DialogService';
+import { DialogService } from 'src/app/services/dialogService';
 import * as moment from 'moment';
 
 @Component({

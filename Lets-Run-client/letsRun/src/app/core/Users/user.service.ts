@@ -5,6 +5,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment"
 import { UserModel } from "src/app/models/user.model";
 import { Subject } from "rxjs";
+import { SnackBarService } from "src/app/services/snack-bar.service";
 
 
 const BACKEND_URL = environment.apiUrl; 
@@ -46,7 +47,8 @@ export class UserService {
     freindManipulating(user_id: string) {
       return this.http.get(BACKEND_URL + "/users/" + user_id + '/freind_manipulation')
                  .subscribe(result => {
-                  this.route.navigate(["/events"]);
+                   
+                  this.getUserInfo(user_id);
                  })
     }
 

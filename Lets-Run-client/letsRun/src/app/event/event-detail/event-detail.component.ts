@@ -14,7 +14,7 @@ import { registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { Datasource } from 'ngx-ui-scroll';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { DialogService } from 'src/app/services/DialogService';
+import { DialogService } from 'src/app/services/dialogService';
 import * as moment from 'moment';
 
 registerLocaleData(localeRu);
