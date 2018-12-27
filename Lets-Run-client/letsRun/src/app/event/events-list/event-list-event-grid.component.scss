@@ -5,6 +5,11 @@
     z-index: 2;
   }
 
+  .event-list--noEvents {
+    width: 100%;
+    text-align: center;
+  }
+
   .event-list__element {
     background: #ffffff;
     margin-bottom: 2rem;

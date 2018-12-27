@@ -86,7 +86,13 @@
 
 
   <div class="event-list">
+    <div class="event-list--noEvents" *ngIf="events.length === 0">
+      <h2>Sorry, no Event are found.</h2>
+      <h4>Try different filter setings!</h4>
+    </div>
+
     <div class="event-list__element" *ngFor="let event of events; let index = 'index'">
+
 
       <div class="event-list--grid ">
         <div class="event-list--image"><img src="{{ event?.picture }}" alt=""></div>
