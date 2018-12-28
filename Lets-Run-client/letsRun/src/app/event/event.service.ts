@@ -141,21 +141,43 @@ export class EventService {
             });
     }
 
-    updateEvent(id: string,location: string,distance ,pace: string,eventDate ,author: string, description: string){
-        
-        // console.log('update event id');
-        // console.log(id);
+    updateEvent(id: string,location: string,distance ,pace: string,eventDate: Date ,author: string, description: string, image: File | string){
+        let updatedEvent:  EventModule | FormData;
+
+        if(typeof image === "object") {
+            updatedEvent = new FormData();
+            updatedEvent.append("id", id);
+            updatedEvent.append("location", location);
+            updatedEvent.append("pace", pace);
+            updatedEvent.append("eventDate", eventDate.toString());
+            updatedEvent.append("distance", distance);
+            updatedEvent.append("description", description);
+            updatedEvent.append("image", image, location); 
+
+            console.log('image to send like object');
+            console.log(updatedEvent);
+        } else {
+
+            updatedEvent = {
+                id: id,
+                location: location,
+                pace: pace,
+                eventDate: eventDate,
+                distance: distance,
+                description: description,
+                picture: image
+            }
+            console.log('image to send like string');
+            console.log(updatedEvent);
+
+        }
         
 
-        const updatedEvent = new FormData();
-        updatedEvent.append("id", id);
-        updatedEvent.append("location", location);
-        updatedEvent.append("pace", pace);
-        updatedEvent.append("eventDate", eventDate);
-        updatedEvent.append("distance", distance);
-        updatedEvent.append("description", description);
 
-        // updatedEvent.append("image", image, location); description
+
+
+        
+        // description
 
         this.http.put(BACKEND_URL + '/events/' + id, updatedEvent)
             .subscribe(response => {

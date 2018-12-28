@@ -1,0 +1,54 @@
+  <div class="main" mat-dialog-content>
+    <form [formGroup]="eventForm" (ngSubmit)="addEvent()">
+
+      <mat-form-field> 
+        <input matInput placeholder="Location" formControlName="location">
+        <mat-hint>The location of the event!</mat-hint>
+        <mat-error *ngIf="eventForm.get('location').errors">Location is requied</mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field>
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+        <mat-hint>Location description!</mat-hint>
+        <mat-error *ngIf="eventForm.get('description').errors">Description is requied</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select placeholder="Select the Distance" formControlName="distance">
+          <mat-option *ngFor="let distanceValue of distances" [value]="distanceValue.value">
+            {{ distanceValue.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Pace" formControlName="pace">
+        <mat-hint></mat-hint>
+        <mat-error *ngIf="eventForm.get('pace').errors">Pace is requied</mat-error>
+      </mat-form-field>
+
+      <button type="button" (click)="filePicker.click()" *ngIf="!data">Add photo</button>
+      <button type="button" (click)="filePicker.click()" *ngIf="data">Change photo</button>
+
+      <input type="file" #filePicker (change)="onImagePicked($event)">
+
+      <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+        <img [src]="imagePreview" alt="avatar">
+      </div>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date of Event" formControlName="eventDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+
+      <div class="formButtons">
+        <button type="submit" *ngIf="!data">Add event</button>
+        <button type="submit" *ngIf="data">Update event</button>
+
+      </div>
+
+    </form>
+  </div>

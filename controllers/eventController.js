@@ -187,15 +187,12 @@ exports.getEvent = function (req, res, next) {
 
 exports.updateEvent = function (req, res, next) {
 
-  // let imagePath = req.body.imagePath;
-
-  console.log('req.body');
-  console.log(req.body);
-
-  // if (req.file) {
-  //   const url = req.protocol + "://" + req.get("host");
-  //   imagePath = url + "/images/" + req.file.filename;
-  // } 
+  let imagePath = req.body.picture;
+  
+  if (req.file) {
+    const url = req.protocol + "://" + req.get("host");
+    imagePath = url + "/images/" + req.file.filename;
+  } 
 
   const errors = validationResult(req);
 
@@ -212,7 +209,8 @@ exports.updateEvent = function (req, res, next) {
     distance: req.body.distance,
     pace: req.body.pace,
     eventDate: req.body.eventDate,
-    description: req.body.description
+    description: req.body.description,
+    picture: imagePath
   })
 
   // console.log('result');
@@ -230,7 +228,7 @@ exports.updateEvent = function (req, res, next) {
           description: event.description,
           pace: event.pace,
           eventDate: event.eventDate,
-          // picture: event.picture
+          picture: event.picture
         }
       })
 

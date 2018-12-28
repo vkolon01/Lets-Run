@@ -1,32 +1,10 @@
 <div class="comment_main" *ngIf="!commentDeleted">
 
-  <!-- <div class="comment_main--showcase" *ngIf="!showEditCommentForm">
-    <div class="comment_main--showcase_avatar">
-      <img src="{{ comment.authorImage }}" alt="">
-    </div>
-
-    <div class="comment_main--showcase_author">
-            <h2>By  <a [routerLink]="['/userpage', comment.authorId]">{{ comment.author }}</a></h2>
-            <div *ngIf="comment.authorId === userId">
-                    <mat-icon (click)="showEditCommentInputArea()" class="comment_main--showcase_avatar-edit"> create </mat-icon>
-                    <mat-icon (click)="deleteComment()" class="comment_main--showcase_avatar-delete"> delete_sweep </mat-icon>
-            
-                  </div>
-
-
-    </div>
-
-    <div class="comment_main--showcase_content">
-            <p>content: {{ comment.content }}</p>
-    </div>
-
-  </div> -->
-
 
   <mat-card class="comment" *ngIf="!showEditCommentForm">
       <mat-card-header>
         <img mat-card-avatar class="example-header-image" src="{{ comment.authorImage }}" alt="User avatar">
-        <mat-card-title>Author: <a [routerLink]="['/userpage', comment.authorId]">{{ comment.author }}</a>  </mat-card-title>
+        <mat-card-title>Author: <a [routerLink]="['/userpage', comment.authorId, 'info']">{{ comment.author }}</a>  </mat-card-title>
         <mat-card-subtitle><p>Posted: {{ timeAgo}}</p></mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>

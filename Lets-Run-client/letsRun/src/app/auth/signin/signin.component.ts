@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-signin',
@@ -13,7 +14,9 @@ export class SigninComponent implements OnInit {
   signInFrom: FormGroup;
   hide = true;
 
-  constructor(public authService: AuthService,  private snackBarService: SnackBarService) { }
+  constructor(public authService: AuthService,
+      private snackBarService: SnackBarService,
+      private dialogRef: MatDialogRef<SigninComponent>) { }
 
   ngOnInit() {
    this.signInFrom = new FormGroup({
@@ -41,5 +44,10 @@ export class SigninComponent implements OnInit {
       this.signInFrom.value.lastName,
       this.signInFrom.value.dob
     )
+    this.onClose();
+  }
+
+  onClose() {
+this.dialogRef.close();
   }
 }

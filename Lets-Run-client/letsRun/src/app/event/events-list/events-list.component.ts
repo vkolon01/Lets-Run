@@ -19,13 +19,10 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 })
 export class EventsListComponent implements OnInit, OnDestroy {
 
-  addEventModule = false;
   searchEventModule = false;
 
-  eventForm: FormGroup;
   eventSearchForm: FormGroup;
 
-  imagePreview: string;
   userIsAuthenticated = false;
 
   totalEvents = 0;
@@ -48,7 +45,6 @@ export class EventsListComponent implements OnInit, OnDestroy {
     {value: 'Walking', viewValue: 'Walking'}
   ]
 
-  // distances = ['Couch to 5k', '5K', '10K', 'Half Marathon', 'Marathon', 'Mud Run & fun Run', 'Trail', 'Walking'];
 
   constructor(private snackBarService: SnackBarService, private eventService: EventService, private authService: AuthService, private route: Router) { }
 
@@ -56,14 +52,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
 
     this.userIsAuthenticated = this.authService.getIsAuth();
 
-    this.eventForm = new FormGroup({
-      'location': new FormControl(null, { validators: [Validators.required] }),
-      'distance': new FormControl(null, { validators: [Validators.required] }),
-      'pace': new FormControl(null, { validators: [Validators.required] }),
-      'image': new FormControl(null, { asyncValidators: [mimeType] }),
-      'eventDate': new FormControl(null, { validators: [Validators.required] }),
-      'description': new FormControl(null, { validators: [Validators.required] }),
-    });
+
     this.eventService.getEventList(this.eventsPerPage, this.currentPage, '', '');
 
     this.eventSub = this.eventService.getEventUpdateListener()
@@ -112,50 +101,8 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.eventService.getEventList(this.eventsPerPage, this.currentPage, this.eventSearchForm.value.eventDate, this.eventSearchForm.value.dist);
   }
 
-  onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.eventForm.patchValue({ image: file });
-    this.eventForm.get('image').updateValueAndValidity();
-    console.log('event.target');
-    console.log(event);
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
 
-  addEventMenu() {
-    if (!this.userIsAuthenticated) {
-      // this.snackbar.open();
-      this.snackBarService.showMessage('Please login to add event!', 'OK');
-      return;
-    }
-
-    this.addEventModule = !this.addEventModule;
-  }
-
-  addEvent() {
-    if (this.eventForm.invalid) {
-      this.snackBarService.showMessage('Please fill the required fields', 'OK');
-      return;
-    }
-
-    this.eventService.createEvent(
-      this.eventForm.value.location,
-      this.eventForm.value.distance,
-      this.eventForm.value.pace,
-      this.eventForm.value.eventDate,
-      this.eventForm.value.description,
-      this.eventForm.value.image
-    )
-
-    this.eventForm.reset();
-
-    this.addEventMenu();
-
-  }
 
   ngOnDestroy() {
     this.eventSub.unsubscribe();

@@ -15,12 +15,18 @@ import { ErrorInterceptor } from './error-interceptor';
 import { ErrorComponent } from './core/error/error.component';
 import { UiScrollModule } from 'ngx-ui-scroll';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
+import { LoginComponent } from './auth/login/login.component';
+import { SigninComponent } from './auth/signin/signin.component';
+import { AddEventComponent } from './event/add-event/add-event.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ErrorComponent,
-    MatConfirmDialogComponent
+    MatConfirmDialogComponent,
+    LoginComponent,
+    SigninComponent,
+    AddEventComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +43,6 @@ import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dial
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorComponent, MatConfirmDialogComponent]
+  entryComponents: [ErrorComponent, MatConfirmDialogComponent, LoginComponent, SigninComponent, AddEventComponent]
 })
 export class AppModule { }

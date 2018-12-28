@@ -16,6 +16,8 @@ import { Datasource } from 'ngx-ui-scroll';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { DialogService } from 'src/app/services/dialogService';
 import * as moment from 'moment';
+import { MatDialog, MatDialogConfig } from '@angular/material'
+import { AddEventComponent } from '../add-event/add-event.component';
 
 registerLocaleData(localeRu);
 
@@ -28,9 +30,6 @@ registerLocaleData(localeRu);
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
 
-  distances = ['Couch to 5k', '5K', '10K', 'Half Marathon', 'Marathon', 'Mud Run & fun Run', 'Trail', 'Walking'];
-
-  imagePreview: string;
 
   eventCreatedAt;
 
@@ -53,12 +52,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   eventWillAttemptSubscribe: Subscription;
   containsEvent: boolean;
 
-  eventPhotoForm: FormGroup;
-  eventForm: FormGroup;
   commentForm: FormGroup;
 
-  edit = false;
-  editPhoto = false;
   commentInputArea = false;
 
   userId: string;
@@ -73,7 +68,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     private commentService: CommentService,
     private authService: AuthService,
     private snackBarService: SnackBarService,
-    private confirm: DialogService
+    private confirm: DialogService,
+    private dialog: MatDialog
   ) { }
 
   datasource = new Datasource({
@@ -99,17 +95,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.eventForm = new FormGroup({
-      'location': new FormControl(null, { validators: [Validators.required] }),
-      'distance': new FormControl(null, { validators: [Validators.required] }),
-      'pace': new FormControl(null, { validators: [Validators.required] }),
-      'eventDate': new FormControl(null, { validators: [Validators.required] }),
-      'description': new FormControl(null, {validators: [Validators.required]}),
-    });
 
-    this.eventPhotoForm = new FormGroup({
-       image: new FormControl(null, { asyncValidators: [mimeType] })
-    });
+
 
     this.commentForm = new FormGroup({
       'content': new FormControl(null, { validators: [Validators.required] }),
@@ -149,100 +136,34 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.eventCreatorName = this.eventService.getCreatorName();
   }
 
-  //******************************* */
-  //       ON IMAGE SELECTED                          
-  //********************************* */
+  onEventEdit() {
 
-  onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.eventPhotoForm.patchValue({ image: file });
-    this.eventPhotoForm.get('image').updateValueAndValidity();
-    console.log('event.target');
-    console.log(event);
+    const eventInfoToUpdate = ({
+      id: this.eventId,
+      location: this.event.location,
+      distance: this.event.distance,
+      pace: this.event.pace,
+      image: this.event.picture,
+      eventDate: this.event.eventDate,
+      description: this.event.description
+    })
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = "80%";
+    dialogConfig.height = "50%";
+    dialogConfig.data = eventInfoToUpdate;
+
+    this.dialog.open(AddEventComponent, dialogConfig);
   }
-
 
 
   ngOnDestroy() {
     // this.commentsSub.unsubscribe();
   }
 
-  //******************************* */
-  //       OPENS MENU FOR UPDATE                          
-  //********************************* */
 
-  update() {
-    this.edit = !this.edit;
-    this.editPhoto = false;
-    this.imagePreview = null;
-    let dp = new DatePipe(navigator.language);
-    let p = 'y-MM-dd';
-    let dtr = dp.transform(this.event.eventDate, p);
-
-    // console.log(this.event.picture);
-
-    this.eventForm.setValue({
-      location: this.event.location,
-      distance: this.event.distance,
-      pace: this.event.pace,
-      // image: this.event.picture,
-      eventDate: dtr,
-      description: this.event.description
-    })
-  }
-
-
-
-  updatePhoto() {
-    this.editPhoto = !this.editPhoto;
-    this.edit = false;
-    this.imagePreview = null;
-  }
-
-  //******************************* */
-  //       UPDATING EVENT                          
-  //********************************* */
-
-  updateEvent() {
-
-    if (this.eventForm.invalid) {
-      return;
-    }
-
-    this.eventService.updateEvent(
-      this.eventId,
-      this.eventForm.value.location,
-      this.eventForm.value.distance,
-      this.eventForm.value.pace,
-      this.eventForm.value.eventDate,
-      this.eventForm.value.author,
-      this.eventForm.value.description
-    );
-
-    this.update();
-    this.imagePreview = null;
-  }
-
-  updateEventPicture() {
-    if(this.eventPhotoForm.invalid) {
-      return;
-    }
-
-    this.eventService.uploadEventPicture(this.eventId, this.eventPhotoForm.value.image);
-
-    this.updatePhoto();
-  }
-
-  updateEventPhoto() {
-    console.log('change photo');
-    
-  }
 
   deleteEvent() {
     // this.eventService.deleteEvent(this.eventId);

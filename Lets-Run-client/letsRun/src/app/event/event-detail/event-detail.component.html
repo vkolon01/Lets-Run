@@ -7,17 +7,15 @@
   <div class="event-back-edit-delete-container">
     <div class="event-back-photoChange">
       <mat-icon routerLink="/events" class="back_icon"> settings_backup_restore </mat-icon>
-      <mat-icon *ngIf="creatorId === userId" class="event_detail--mat-icon-setings" (click)="updatePhoto()">
-        image_search </mat-icon>
     </div>
     <div *ngIf="creatorId === userId" class="event-detail--setings">
-      <mat-icon class="event_detail--mat-icon-setings" (click)="update()"> settings </mat-icon>
+      <mat-icon class="event_detail--mat-icon-setings" (click)="onEventEdit()"> settings </mat-icon>
       <mat-icon class="event_detail--mat-icon-delete" (click)="deleteEvent()"> delete_sweep </mat-icon>
     </div>
   </div>
 
 
-  <div class="event_detail--image-container" *ngIf="!edit && !editPhoto">
+  <div class="event_detail--image-container"> 
     <img src="{{ event?.picture }}" alt="">
 
     <div class="event-detail--likes-and-attempts">
@@ -35,7 +33,7 @@
   <div class="event-description-commentSection">
 
 
-    <div class="event-description" *ngIf="!edit && !editPhoto">
+    <div class="event-description">
 
       <div class="event-description--content">
         <p>{{event?.location}}</p>
@@ -69,88 +67,10 @@
 
       </div>
 
-
-
-
-    </div>
-
-    <!-- ///////////////////////////////////////
-                     UPDATE EVENT PHOTO   
-     ///////////////////////////////////////////-->
-
-    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
-      <img [src]="imagePreview" alt="avatar">
     </div>
 
 
-    <form class="photoMode" [formGroup]="eventPhotoForm" (ngSubmit)="updateEventPicture()" *ngIf="editPhoto">
-      <button type="button" (click)="filePicker.click()">Change photo</button>
-      <input type="file" #filePicker (change)="onImagePicked($event)">
 
-      <div class="formButtons">
-        <button type="submit">Update Photo</button>
-        <button (click)="updatePhoto()">Cancel</button>
-      </div>
-    </form>
-
-
-
-    <!-- ///////////////////////////////////////
-                     UPDATE EVENT SECTION   
-     ///////////////////////////////////////////-->
-
-
-
-
-    <div class="events_add_modul" *ngIf="edit">
-
-      <form [formGroup]="eventForm" (ngSubmit)="updateEvent()">
-
-
-        <mat-form-field>
-          <input matInput placeholder="Location" formControlName="location">
-          <mat-hint>Enter Location</mat-hint>
-          <mat-error *ngIf="eventForm.get('location').errors">Location is requied</mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-          <textarea matInput placeholder="Description" formControlName="description"></textarea>
-          <mat-hint>Location description!</mat-hint>
-          <mat-error *ngIf="eventForm.get('description').errors">Description is requied</mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-select placeholder="Select the Distance" formControlName="distance">
-            <mat-option *ngFor="let distanceValue of distances" [value]="distanceValue">
-              {{ distanceValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field>
-          <input matInput placeholder="Pace" formControlName="pace">
-          <mat-hint></mat-hint>
-          <mat-error *ngIf="eventForm.get('pace').errors">Pace is requied</mat-error>
-        </mat-form-field>
-
-
-
-
-        <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Choose a date of Event" formControlName="eventDate">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <div class="formButtons">
-          <button type="submit">Update event</button>
-          <button (click)="update()">Cancel</button>
-        </div>
-
-      </form>
-    </div>
-
-    <hr>
 
     <!-- ///////////////////////////////////////
                      COMMENT SECTION   
@@ -164,9 +84,6 @@
       <div *ngIf="commentInputArea">
         <form [formGroup]="commentForm" (ngSubmit)="add_Comment()">
 
-          <!-- <label for="content">Comment:</label>
-          <textarea formControlName="content" id="content" cols="30" rows="10"></textarea>
-           -->
           <mat-form-field>
               <textarea matInput placeholder="Content" formControlName="content"></textarea>
               <mat-error *ngIf="commentForm.get('content').errors"></mat-error>
@@ -176,7 +93,7 @@
             <button (click)="showCommentInputArea()">Cancel</button>
 
         </form>
-      </div>
+      </div> 
 
       <div class="event_detail--comments" *ngIf="!commentInputArea">
         <button (click)="showCommentInputArea()">Add comment</button>

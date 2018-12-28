@@ -5,9 +5,9 @@ export class EventModule {
     distance: number;
     pace: string;
     eventDate: Date;
-    author: string;
+    author?: string;
     createdAt?: string;
-    comments: [string];
+    comments?: [string];
     picture?: string;
     likes?: [string];
     runners?: [string];

@@ -8,7 +8,7 @@ import { AuthRoutingModule } from "./auth-routing.module";
 import { AngularMaterialModule } from "../angular-material.module";
 
 @NgModule({
-  declarations: [LoginComponent, SigninComponent],
+  declarations: [],
   imports: [CommonModule,  ReactiveFormsModule, AuthRoutingModule, AngularMaterialModule]
 })
 export class AuthModule {}
