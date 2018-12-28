@@ -1,45 +1,49 @@
-<section  class="main">
+<p class="mat-dialog-title" mat-dialog-title>SIGN UP</p>
 
-  <form [formGroup]="signInFrom" (ngSubmit)="onSignin()">
-    <div mat-dialog-content>
+<div mat-dialog-content>
+
+
+    <form class="mainPopUp" [formGroup]="signInFrom" (ngSubmit)="onSignin()">
+   
 
     
+        <mat-form-field>           
+            <input matInput placeholder="Email"  formControlName="email">
+            <mat-error *ngIf="signInFrom.get('email').errors">Email is <strong>requied</strong>!</mat-error>
+        </mat-form-field> 
+  
       <mat-form-field>           
-          <input matInput placeholder="Email"  formControlName="email">
-          <mat-error *ngIf="signInFrom.get('email').errors">Email is <strong>requied</strong>!</mat-error>
+          <input matInput placeholder="Password"  formControlName="password" [type]="hide ? 'password' : 'text'">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="signInFrom.get('password').errors">Password is <strong>requied</strong>!</mat-error>
       </mat-form-field> 
-
-    <mat-form-field>           
-        <input matInput placeholder="Password"  formControlName="password" [type]="hide ? 'password' : 'text'">
-        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        <mat-error *ngIf="signInFrom.get('password').errors">Password is <strong>requied</strong>!</mat-error>
-    </mat-form-field> 
-
-    <mat-form-field>            
-        <input matInput placeholder="firstName"  formControlName="firstName">
-        <mat-error *ngIf="signInFrom.get('firstName').errors">firstName is <strong>requied</strong>!</mat-error>
-    </mat-form-field> 
-
-    <mat-form-field>           
-        <input matInput placeholder="lastName"  formControlName="lastName">
-        <mat-error *ngIf="signInFrom.get('lastName').errors">lastName is <strong>requied</strong>!</mat-error>
-    </mat-form-field> 
-
-    <mat-form-field>           
-        <input matInput placeholder="username"  formControlName="username">
-        <mat-error *ngIf="signInFrom.get('username').errors">username is <strong>requied</strong>!</mat-error>
-    </mat-form-field> 
-
-      <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Choose a date of birth" formControlName="dob">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-      <div class="formButtons">
-          <button type="submit" >Register</button>
-        </div>
-        <p *ngIf="signInFrom.invalid && signInFrom.touched" class="error">Please check the form for errors</p>
-    </div>
-  </form>
-</section>
+  
+      <mat-form-field>            
+          <input matInput placeholder="firstName"  formControlName="firstName">
+          <mat-error *ngIf="signInFrom.get('firstName').errors">firstName is <strong>requied</strong>!</mat-error>
+      </mat-form-field> 
+  
+      <mat-form-field>           
+          <input matInput placeholder="lastName"  formControlName="lastName">
+          <mat-error *ngIf="signInFrom.get('lastName').errors">lastName is <strong>requied</strong>!</mat-error>
+      </mat-form-field> 
+  
+      <mat-form-field>           
+          <input matInput placeholder="username"  formControlName="username">
+          <mat-error *ngIf="signInFrom.get('username').errors">username is <strong>requied</strong>!</mat-error>
+      </mat-form-field> 
+  
+        <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date of birth" formControlName="dob">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+  
+        <div class="formButtons">
+            <button type="submit" >Register</button>
+          </div>
+          <p *ngIf="signInFrom.invalid && signInFrom.touched" class="error">Please check the form for errors</p>
+   
+    </form>
+  
+</div>

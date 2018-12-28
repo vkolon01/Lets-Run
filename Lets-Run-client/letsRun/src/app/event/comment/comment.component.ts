@@ -10,7 +10,9 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.scss']
+  styleUrls: ['./comment.component.scss',
+              '../../global-css/global-input.scss'
+              ]
 })
 export class CommentComponent implements OnInit {
 

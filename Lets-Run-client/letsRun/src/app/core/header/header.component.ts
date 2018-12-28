@@ -57,9 +57,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onRegister() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
+    dialogConfig.autoFocus = false;
     dialogConfig.width = "80%";
-    dialogConfig.height = "60%";
+    dialogConfig.height = "80%";
 
     this.dialog.open(SigninComponent, dialogConfig);
   }
@@ -74,7 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "80%";
-    dialogConfig.height = "60%";
+    dialogConfig.height = "80%";
 
     this.dialog.open(AddEventComponent, dialogConfig);
   }

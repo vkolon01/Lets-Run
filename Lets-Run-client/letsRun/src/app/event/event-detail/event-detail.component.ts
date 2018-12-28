@@ -152,7 +152,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "80%";
-    dialogConfig.height = "50%";
+    dialogConfig.height = "80%";
     dialogConfig.data = eventInfoToUpdate;
 
     this.dialog.open(AddEventComponent, dialogConfig);

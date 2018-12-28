@@ -2,14 +2,6 @@
 @import "../../global-css/variables";
 
 
-.event_detail {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    background: #e9ebee;
-
-}
 
 
 .event-back-edit-delete-container{
@@ -102,7 +94,7 @@
         }
     }
 
-    .event-description--description {
+    .event-description--desc {
         white-space: pre-wrap;
     }
 
@@ -170,10 +162,6 @@
         align-items: center;
     }
 
-    
-
-
-
   ////////////////////////////////////
   /////     COMMENTS SECTION
   ///////////////////////////////////
@@ -190,21 +178,10 @@
     }
   }
 
-    // background: $darkBlue;
-
     app-comment {
     background: $darkBlue !important ;
 
     }
-
-
-  .commentInputArea {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-
-  }
 
   .event_detail--comments {
     display: flex;

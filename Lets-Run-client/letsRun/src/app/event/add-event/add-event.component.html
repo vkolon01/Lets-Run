@@ -1,5 +1,7 @@
-  <div class="main" mat-dialog-content>
-    <form [formGroup]="eventForm" (ngSubmit)="addEvent()">
+<p class="mat-dialog-title" *ngIf="!data" mat-dialog-title>ADD EVENT</p>
+<p class="mat-dialog-title" *ngIf="data" mat-dialog-title>UPDATE EVENT</p>
+  <div mat-dialog-content>
+    <form  class="mainPopUp" [formGroup]="eventForm" (ngSubmit)="addEvent()">
 
       <mat-form-field> 
         <input matInput placeholder="Location" formControlName="location">
