@@ -122,6 +122,7 @@ exports.getCommnentsForEvent = function (req, res, next) {
     }
 
     commentQuery
+        .sort({createdAt: 'desc'})
         .then(comments => {
             fetchedComments = comments;
             return Comment.count();

@@ -28,6 +28,7 @@ export class CommentService {
                 this.commentUpdated.next({
                     comments: [...this.comments]
                 })
+                this.getCommentListFormNgxUiScroll(eventId, 1, 10);
             })
     }
 

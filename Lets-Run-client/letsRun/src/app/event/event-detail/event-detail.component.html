@@ -76,7 +76,7 @@
     <div class="comments_main">
       <h1>comments</h1>
 
-      <div *ngIf="commentInputArea">
+      <div >
         <form [formGroup]="commentForm" (ngSubmit)="add_Comment()">
 
           <mat-form-field>
@@ -90,7 +90,7 @@
         </form>
       </div> 
 
-      <div class="event_detail--comments" *ngIf="!commentInputArea">
+      <div class="event_detail--comments" >
         <button (click)="showCommentInputArea()">Add comment</button>
 
         <div class="viewport" ui-scroll-viewport>

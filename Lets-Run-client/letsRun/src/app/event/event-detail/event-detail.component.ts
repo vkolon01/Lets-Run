@@ -88,15 +88,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         });
     },
     devSettings: {
-      debug: true,
-      immediateLog: false
+      // debug: true,
+      // immediateLog: false
     }
   });
 
   ngOnInit() {
-
-
-
 
     this.commentForm = new FormGroup({
       'content': new FormControl(null, { validators: [Validators.required] }),
@@ -166,10 +163,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
 
   deleteEvent() {
-    // this.eventService.deleteEvent(this.eventId);
     this.confirm.openConfirmDialog('Are you sure want to delete the event?')
       .afterClosed().subscribe(result => {
-        // console.log(result);
         if (result) {
           this.eventService.deleteEvent(this.eventId);
           this.snackBarService.showMessageWithDuration('Event deleted', '', 3000);
@@ -192,10 +187,14 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     if (this.commentForm.invalid) {
       return;
     }
-    this.showCommentInputArea()
     this.commentService.addComment(this.commentForm.value.content, this.eventId);
     this.commentForm.reset();
 
+    this.updateComment();
+
+  }
+  updateComment() {
+    this.datasource.adapter.reload(1)
   }
 
   likeEvent() {
@@ -234,7 +233,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   checkForAttemptExistance() {
-    console.log(this.event.runners.includes(this.userId));
 
     if (this.event.runners.includes(this.userId)) {
       this.containsEvent = true;
