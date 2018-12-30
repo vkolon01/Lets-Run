@@ -3,10 +3,11 @@ import { Router } from "@angular/router";
 import { Injectable } from "@angular/core";
 
 import { environment } from "../../../environments/environment"
-import { UserModel } from "src/app/models/user.model";
+import { UserModel } from "../../models/user.model";
 import { Subject } from "rxjs";
 import { SnackBarService } from "src/app/services/snack-bar.service";
 import { AuthService } from "src/app/auth/auth.service";
+import { routerNgProbeToken } from "@angular/router/src/router_module";
 
 
 const BACKEND_URL = environment.apiUrl; 
@@ -37,11 +38,23 @@ export class UserService {
       return  this.http
         .get<{user: UserModel }>(BACKEND_URL + '/users/' + userId)
         .subscribe(user => {
+          console.log('user');
+          console.log(user);
+          
+
+          // if(this.http) {
+          //   
+          // }
+
           this.user = user.user
           this.userListener.next({
             user: this.user
           })
-        });
+        },
+        error => {
+          this.route.navigate(['/404']);
+        }
+        );
 
     }
 

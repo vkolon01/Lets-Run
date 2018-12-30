@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserModel } from 'src/app/models/user.model';
+import { UserModel } from '../../../models/user.model';
 import { ParamMap, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'src/app/services/dialogService';
 import { AuthService } from 'src/app/auth/auth.service';

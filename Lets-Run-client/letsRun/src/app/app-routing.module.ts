@@ -9,10 +9,11 @@ import { AuthGuard } from "./auth/auth.guard";
 
 const routes: Routes = [
     {path: "", component: HomeComponent},
-    {path: "userpage",  loadChildren: './core/users/user.module#UserModule'},
     {path: 'events', loadChildren: './event/events.module#EventsModule'},
     {path: "auth", loadChildren: "./auth/auth.module#AuthModule"},
+    {path: "userpage",  loadChildren: './core/users/user.module#UserModule', canActivate: [AuthGuard]},
     {path: "events/:event_id", component: EventDetailComponent, canActivate: [AuthGuard]},
+    {path: "404", component: Page404Component},
     {path: "**", component: Page404Component}
 ]
 

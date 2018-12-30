@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserModel } from 'src/app/models/user.model';
+import { UserModel } from '../../../models/user.model';
 import { DialogService } from 'src/app/services/dialogService';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
