@@ -1,0 +1,16 @@
+<header class="header">
+  <div>
+      <a routerLink="/">Main</a>
+      <a routerLink="/events">Events</a>
+      <a *ngIf="userIsAuthenticated" (click)="onAddEvent()">Add event</a>
+  </div>
+  <div class="header-auth">
+    <!-- <a *ngIf="!userIsAuthenticated" routerLink="/auth/login">Login</a> -->
+    <a *ngIf="!userIsAuthenticated" (click)="onLogin()">Login</a>
+
+    <a *ngIf="userIsAuthenticated" (click)="onLogOut()">Logout</a>
+    <a *ngIf="!userIsAuthenticated" (click)="onRegister()">Register</a>
+    <a *ngIf="userIsAuthenticated" [routerLink]="['/userpage', userId , 'info']">User Info</a>
+  </div>
+</header> 
+ 

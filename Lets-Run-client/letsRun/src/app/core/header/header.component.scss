@@ -1,0 +1,15 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: #142355;
+    color: white;
+    padding: 0.5rem 0 0.5rem 0;
+}
+
+a {
+    margin-bottom: 0.2rem;
+    color: white;
+    margin: 0 0.5rem 0 0.5rem;
+}

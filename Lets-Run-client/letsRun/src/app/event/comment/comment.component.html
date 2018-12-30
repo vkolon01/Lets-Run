@@ -1,0 +1,36 @@
+<div  *ngIf="!commentDeleted">
+
+
+  <mat-card class="comment" *ngIf="!showEditCommentForm">
+      <mat-card-header>
+        <img mat-card-avatar class="example-header-image" src="{{ comment.authorImage }}" alt="User avatar">
+        <mat-card-title>Author: <a [routerLink]="['/userpage', comment.authorId, 'info']">{{ comment.author }}</a>  </mat-card-title>
+        <mat-card-subtitle><p>Posted: {{ timeAgo}}</p></mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+            {{ comment.content }} 
+        </p>
+      </mat-card-content>
+      <mat-card-actions *ngIf="comment.authorId === userId">
+        <mat-icon (click)="showEditCommentInputArea()" class="comment_main--showcase_avatar-edit"> create </mat-icon>
+        <mat-icon (click)="deleteComment()" class="comment_main--showcase_avatar-delete"> delete_sweep </mat-icon>
+      </mat-card-actions>
+    </mat-card>
+
+  <div class="editForm" *ngIf="showEditCommentForm">
+    <form [formGroup]="editCommentForm" (ngSubmit)="edit_Comment()">
+
+      <label for="content">Comment:</label>
+      <br>
+      <textarea formControlName="content" [(ngModel)]="comment.content" id="content" cols="30" rows="5"></textarea>
+
+      <div>
+        <button>Update</button>
+        <button (click)="showEditCommentInputArea()">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

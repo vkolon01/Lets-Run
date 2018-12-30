@@ -1,0 +1,33 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#close-icon {
+  align-self: flex-end;
+}
+
+.content-span {
+  align-self: center;
+  padding-bottom: 1rem;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#no-button {
+  background: red;
+  width: 50%;
+  color: white;
+}
+
+#yes-button {
+  background: blue;
+  width: 50%;
+  color: white;
+
+}

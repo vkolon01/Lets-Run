@@ -1,193 +1,365 @@
-'use strict'
+const {
+  validationResult
+} = require('express-validator/check');
 
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
-var User = mongoose.model('users', require('../models/user_model'));
+var bcrypt = require('bcryptjs');
+var User = require('../models/user_model');
 var constants = require('../constants/messages');
 var jwt = require('jsonwebtoken');
-var validator = require('validator');
-var Promise = require('promise');
+var Comment = require('../models/comment_model');
+var Event = require('../models/event_model');
 
-exports.register = function(req,res){
-  validateRegistrationForm(req.body).then(function(validatedForm){
-      var newUser = new User(validatedForm.validatedForm);
-      newUser.hash = bcrypt.hashSync(req.body.password, 10);
-      newUser.save(function(err,user){
-        if(err){
-          return res.status(500).send({
-            errors: constants.errors.badServer
+
+exports.register = function (req, res, next) {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
+  if(req.body.password !== req.body.validatePassword) {
+    const error = new Error("Passwords are not matching.");
+    error.statusCode = 501;
+    throw error;
+  }
+
+
+  bcrypt.hash(req.body.password, 12)
+    .then(hashedPw => {
+      const user = new User({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        username: req.body.username,
+        dob: req.body.dob,
+        password: hashedPw,
+        email: req.body.email
+      });
+      user.save()
+        .then(result => {
+          res.status(201).json({
+            message: 'User created!',
+            userId: result._id
           });
-        }else{
-          return res.status(200).send({
-            message: constants.success.registration
-          })
-        }
-      })
-  },function(err){
-    return res.status(404).json({
-      message: constants.errors.registration,
-      errors: err,
-      success: false
+        })
+        .catch(error => {
+          if (!error.statusCode) {
+            console.log('error');
+
+            console.log(error);
+            
+            error.statusCode = 500;
+          }
+          next(error);
+        });
     });
-  })
 }
 
-exports.uploadAvatar = function(req,res){
-  res.send('tbc')
-}
 
-exports.sign_in = function(req,res){
+exports.sign_in = function (req, res, next) {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
+  let fetchedUser;
   User.findOne({
-    email: req.body.email
-  },function(err,user){
-    if(err) throw err;
-    if(!user){
-      res.status(404).json({message: constants.errors.badAuth});
-    }else{
-      if(user.comparePasswords(req.body.password)){
-        var token = jwt.sign({email: user.email, username: user.username, _id: user._id}, 'RESTFULAPIs');
-        res.status(200).json({token: token, message: constants.success.login});
-      }else{
-        res.status(404).json({message: constants.errors.badAuth});
+      email: req.body.email
+    })
+    .then(user => {
+      if (!user) {
+        const error = new Error("user not found.");
+        error.statusCode = 404;
+        // error.data = "User not found.";
+        throw error;
       }
-    }
-  })
+      const res = bcrypt.compare(req.body.password, user.password)
+
+      fetchedUser = user;
+      return bcrypt.compare(req.body.password, user.password);
+    })
+    .then(result => {
+      if (!result) {
+        const error = new Error("Email or password is incorect..");
+        error.statusCode = 401;
+        // error.data = "Email or password is incorect.";
+        throw error;
+      }
+      const token = jwt.sign({
+        email: fetchedUser.email,
+        username: fetchedUser.username,
+        userId: fetchedUser._id.toString()
+      }, process.env.JWT_KEY, {
+        expiresIn: '1h'
+      });
+      res.status(200).json({
+        token: token,
+        expiresIn: 3600,
+        userId: fetchedUser._id.toString(),
+        username: fetchedUser.username,
+        message: constants.success.login
+      });
+    })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
 };
-exports.getUserProfile = function(req,res){
-  exports.getUser(req.params.user_id).then(function(user){
-    res.send(user);
-  })
-}
 
 /*
   Returns user with the given id.
 */
-exports.getUser = function(user_id){
-  return new Promise(function(fulfill,reject){
-    User.findById(user_id,"-hash",function(err,user){
-      if(err){
-        reject (constants.errors.userNotFound);
+
+exports.getUserProfile = function (req, res, next) {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
+  const userId = req.params.user_id;
+
+  User.findById(userId)
+    .populate('following', '_id imagePath username')
+    .populate('followers', '_id imagePath username')
+    .populate('createdEvent', '_id location picture eventDate')
+    .populate('eventWillAttempt', '_id location picture eventDate')
+    .then(user => {
+      if (!user) {
+        const error = new Error("No user find.");
+        error.statusCode = 404;
+        error.data = "No user find.";
+        throw error;
       }
-      if(user){
-        fulfill(user);
-      }
+
+      let modifiedUser = new User({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        followers: user.followers,
+        following: user.following,
+        imagePath: user.imagePath,
+        eventWillAttempt: user.eventWillAttempt,
+        createdEvent: user.createdEvent,
+        dob: user.dob,
+        createdAt: user.createdAt
+      });
+
+
+      res.status(200).json({
+        user: modifiedUser
+      });
     })
-  })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+
 }
 
-/*
-  Push element into the record
-*/
-exports.pushToUser = function(user_id,field,value){
-  return new Promise(function(fulfill,reject){
-    User.findByIdAndUpdate(user_id,{$push:{[field]:value}},function(err,user){
-      if(err) reject (constants.errors.badServer);
-      fulfill(user);
+exports.deleteUser = function (req, res, next) {
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
+  const userId = req.params.user_id;
+
+  User.findById(userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error("No user find.");
+        error.statusCode = 404;
+        error.data = "No user find.";
+        throw error;
+      }
+      if (user._id.toString() !== req.userData.userId.toString()) {
+        const error = new Error("You are not authorized to do so.");
+        error.statusCode = 401;
+        error.data = "You are not authorized to do so.";
+        throw error;
+      }
+
+      Comment.find({
+          author: user._id
+        })
+        .then(comment => {
+
+          if (!comment) {
+            const error = new Error("Can't find comment by author id");
+            error.statusCode = 404;
+            error.data = "Can't find comment by author id";
+            throw error;
+          }
+
+          for (var i = 0; i < comment.length; i++) {
+
+            comment[i].remove()
+          }
+        });
+
+      Event.find({
+          author: userId
+        })
+        .then(event => {
+          for (var i = 0; i < event.length; i++) {
+            event[i].remove()
+          }
+        })
+
+      user.remove();
+
     })
-  })
+    .then(result => {
+      res.status(200).json({
+        message: 'User deleted'
+      });
+    })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+
 }
 
-  function validateRegistrationForm(payload){
-    return new Promise(function(fulfill,reject){
-      const errors = {};
-      let isFormValid = true;
-      let validatedForm = '';
-      let emailValidation = new Promise((fulfill, reject) => {
-      if(!payload || typeof payload.email !== 'string' || !validator.isEmail(payload.email.trim())){
-        isFormValid = false;z
-        errors.email = 'The email provided is not valid.';
-        fulfill();
-      }else{
-        User.findOne({'email': payload.email.trim()},function(err,person){
-          if(person){
-            isFormValid = false;
-            errors.email = "The email is already taken";
-            fulfill();
-          }else{
-            fulfill();
-          }
-        })
+
+exports.followPersonController = function (req, res, next) {
+
+  const userId = req.params.user_id;
+
+  let fetchedUser;
+
+  User.findById(userId)
+    .then(followerToAd => {
+
+      if (!followerToAd) {
+        const error = new Error('Could not find user');
+        error.statusCode = 404;
+        error.data = "Could not find user";
+        throw error;
       }
+
+      fetchedUser = followerToAd;
     })
 
-    let usernameValidation = new Promise((fulfill,reject) => {
-      if(!payload || typeof payload.username !== 'string' || payload.username.trim().length < 8){
-        isFormValid = false;
-        errors.username = "The username must be over 8 characters long";
-        fulfill();
-      }else{
-        User.findOne({'username': payload.username.trim()},function(err,person){
-          if(person){
-            isFormValid = false;
-            errors.username = "The username is already taken";
-            fulfill();
-          }else{
-            fulfill();
-          }
-        })
+  User.findById(req.userData.userId)
+    .then(user => {
+      if (!user) {
+        const error = new Error('Could not find user');
+        error.statusCode = 404;
+        error.data = "Could not find user";
+        throw error;
       }
-    })
 
-    if(!payload ||  typeof payload.password !== 'string' || payload.password.trim().length < 8){
-      isFormValid = false;
-      errors.password = 'The password must have at least 8 characters.';
-    }
+      if (user._id.toString() === fetchedUser._id.toString()) {
+        const error = new Error("You cannot follow your self, sorry! :)");
+        error.statusCode = 501;
+        throw error;
+      }
 
-    //Date validation. Needs further validation in order to check if the user is old enough
-    if(!payload || !payload.dob){
-      isFormValid = false;
-      errors.dob = "Please provide date of birth.";
-    }
-    if(!payload || typeof payload.firstName !== 'string' || payload.firstName.trim().length === 0){
-      isFormValid = false;
-      errors.firstName = "Please provide your first name.";
-    }
+      let contains = false;
 
-    if(!payload || typeof payload.lastName !== 'string' || payload.lastName.trim().length === 0){
-      isFormValid = false;
-      errors.lastName = "Please provide your last name.";
-    }
+      if (user.following.length < 1) {
+        contains = false;
+      } else {
 
-    Promise.all([emailValidation,usernameValidation]).then(function(){
-        if(isFormValid){
-          validatedForm = {
-            firstName: payload.firstName.trim(),
-            lastName: payload.lastName.trim(),
-            username: payload.username.trim(),
-            email: payload.email.trim(),
-            dob: payload.dob,
-            password: payload.password.trim()
-          };
-          fulfill({validatedForm});
-        }else{
-          reject(errors);
+        for (let i = 0; i < user.following.length; i++) {
+          if (user.following[i].toString() === fetchedUser._id.toString()) {
+            contains = true;
+            break;
+          }
+
         }
+      }
+
+      if (!contains) {
+        user.following.push(fetchedUser._id);
+        User.findByIdAndUpdate(fetchedUser._id, {
+          $push: {
+            "followers": user._id
+          }
+        }).then(user => {
+          user.save()
+        });
+      } else {
+        user.following.pull(fetchedUser._id);
+        User.findByIdAndUpdate(fetchedUser._id, {
+          $pull: {
+            "followers": user._id
+          }
+        }).then(user => {
+          user.save()
+        });
+      }
+
+      user.save();
+
+      res.status(201).json({
+        message: "Following and followers changed",
+      });
+
     })
-  })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+
 }
 
-function validateLoginForm(payload){
-  const errors = {};
-  let isFormValid = true;
-  let message = '';
 
-  if(!payload || typeof payload.email !== 'string' || !validator.isEmail(payload.email)){
-    isFormValid = false;
-    errors.email = 'The email provided is not valid.';
+exports.add_avatar = function (req, res, next) {
+  let imagePath = req.body.imagePath;
+
+  if (req.file) {
+    console.log('file');
+    
+    const url = req.protocol + "://" + req.get("host");
+    imagePath = url + "/images/" + req.file.filename;
   }
 
-  if(!payload ||  typeof payload.password !== 'string' || payload.password.trim().length < 8){
-    isFormValid = false;
-    errors.password = 'The password must have at least 8 characters.';
-  }
+  User.findByIdAndUpdate({
+    _id: req.userData.userId
+  }, {
+    $set: {
+      "imagePath": imagePath
+    }
+  }).then(user => {
+    user.save()
+    res.status(201).json({
+      message: "Avatar changed",
+    });
+  }).catch(error => {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  });
 
-  if(!isFormValid){
-    message = 'Check the form for errors.';
-  }
-
-  return {
-    success: isFormValid,
-    message,
-    errors
-  }
 }

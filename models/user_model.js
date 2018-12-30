@@ -2,63 +2,90 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt');
 
-var UserSchema = new Schema({
+var userSchema = new Schema({
   firstName: {
     type: String,
     trim: true,
     required: true
   },
-  lastName:{
+  lastName: {
     type: String,
     trim: true,
     required: true
   },
-  username:{
-    type:String,
-    unique: true,
-    required: true
+  imagePath: {
+    type: String,
+    default: 'https://vignette.wikia.nocookie.net/villainsfanon/images/f/ff/Unknown-1.jpg/revision/latest?cb=20170521020324'
   },
-  email:{
+  username: {
     type: String,
     unique: true,
     required: true
   },
-  hash:{
-    type: String
+  email: {
+    type: String,
+    unique: true,
+    required: true
   },
-  registrationDate:{
-    type: Date,
-    default: Date.now
+  password: {
+    type: String,
+    required: true
   },
-  dob:{
+  dob: {
     type: Date,
     required: true
   },
-  friendList: {
-    type: [String],
-    default: []
+  activated: {
+    type: Boolean,
+    default: false
   },
-  blackList: {
-    type: [String],
-    default: []
-  },
-  createdPosts: {
-    type: [String],
-    default: []
-  },
-  likedPosts:{
-    type: [String],
-    default: []
-  }
-})
+  following: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  followers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  eventWillAttempt: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Event'
+  }],
+  createdEvent: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Event'
+  }],
+  likedEvent: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Event'
+  }],
+  comment: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Comment'
+  }]
+}, {
+  timestamps: true //auto generation time of creation and last update
+});
 
-UserSchema.methods.comparePasswords = function(password){
-  return (password) ? bcrypt.compareSync(password, this.hash) : false;
-};
+// eventSchema.pre('remove', async function (next) {
+//   try {
 
-//Seems to produce problem if required to change the schema at a later date
-//mongoose.model('User', UserSchema);
+//     var event = this;
+//         await mongoose.model('Event').update({
+//           createdEvent: event._id
+//         }, {
+//           $pull: {
+//             createdEvent: event._id
+//           }
+//         }, {
+//           multi: true
+//         });
 
-module.exports = UserSchema;
+//     next();
+//   } catch (err) {
+//     next(err)
+//   }
+// });
+
+module.exports = mongoose.model('User', userSchema);

@@ -1,0 +1,27 @@
+<div class="main">
+    <p>Created events</p>
+    <p *ngIf="user?.createdEvent.length <= 0"> No created events</p>
+    <div class="events" *ngFor="let event of user?.createdEvent">
+        <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}" class="events_container">
+            <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
+           <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active" >{{event.location}}</a></div> 
+          </div>
+    </div>
+
+    <p>Attempt events history</p>
+    <p *ngIf="user?.eventWillAttempt.length <= 0"> No events will attempt</p>
+    <div class="events" *ngFor="let event of user?.eventWillAttempt">
+        <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}" class="events_container">
+            <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
+           <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active" >{{event.location}}</a></div> 
+          </div>
+    </div>
+    <!-- <p>Following</p>
+    <p *ngIf="user?.following.length <= 0 "> No Followers</p>
+    <div class="users" *ngFor="let following of user?.following"> 
+      <div class="user_container">
+        <div class="user_container--image"><img src="{{following.imagePath}}" alt=""></div>
+       <div><a [routerLink]="['/userpage', following._id]" routerLinkActive="router-link-active" >{{following.username}}</a></div> 
+      </div>
+    </div> -->
+  </div>

@@ -14,44 +14,35 @@ var cors = require('cors');
 
 var app = express();
 
-//authetication middleware
-app.use(function(req,res,next){
-  if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
-    jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', function(err,decode){
-      if(err) req.user = undefined;
-      req.user = decode;
-      next();
-    });
-  }else{
-    req.user = undefined;
-    next();
-  }
-});
-
 //Route initialization
-var index = require('./routes/index');
 var users = require('./routes/users');
-var posts = require('./routes/posts');
 var events = require('./routes/events');
 
-//API access middleware
-app.use(cors());
+mongoose
+  .connect(
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+    "mongodb://Maksim:" + process.env.MONGO_ATLAS_PW + "@maksimdb-shard-00-00-7j1q5.mongodb.net:27017,maksimdb-shard-00-01-7j1q5.mongodb.net:27017,maksimdb-shard-00-02-7j1q5.mongodb.net:27017/test?ssl=true&replicaSet=MaksimDB-shard-0&authSource=admin&retryWrites=true",
+  
+    // "mongodb://Maksim:" +
+    // process.env.MONGO_ATLAS_PW +
+    // "@maksimdb-7j1q5.mongodb.net/test",
+    {
+      "user": process.env.MONGODB_NAME,
+      "pass": process.env.MONGO_ATLAS_PW,
+       useNewUrlParser: true
+  }
+    // { useNewUrlParser: true }
+    )
 
-//database setup
-const config = {
-  db : "mongodb://localhost/letsrun"
-};
-mongoose.connect(config.db);
-mongoose.Promise = global.Promise;
-mongoose.connection.on('connected', function(){
-  console.log('Mongoose default connection open to ' + config.db)
-})
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch(err =>
+    console.log("Connection failed! " + " error - " + err)
+  );
+  mongoose.set('debug', true);
 
-app.use(favicon(path.join(__dirname, 'public','images', 'favicon.png')));
+// app.use(favicon(path.join(__dirname, 'public','images', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -59,12 +50,27 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(cookieParser());
 app.use(methodOverride());
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
-app.use('/posts', posts);
-app.use('/events', events);
+app.use("/images", express.static(path.join("images")));
+
+
+app.use((req, res, next) => {
+  
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+  );
+  next();
+});
+
+app.use('/api/users', users);
+app.use('/api/events', events);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -73,15 +79,12 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  res.status(status).json({ message: message, data: data });
 });
 
 module.exports = app;

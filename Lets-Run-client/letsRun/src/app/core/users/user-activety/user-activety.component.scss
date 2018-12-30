@@ -1,0 +1,74 @@
+@import '../../../global-css/variables';
+
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+}
+
+.events {
+    width: 60%;
+}
+
+.events_container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    align-items: center;
+    background: $darkBlue;
+
+    .events_container--image {
+        height: 50px;
+        width: 50px;
+    }
+
+    img {
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+
+    }
+
+    div {
+        width: 100%;
+        text-align: center;
+
+        &>a {
+            color: white;
+        }
+    }
+    
+    &.ended::after {
+        position: absolute;
+        content: 'Ended';
+        top: 0;
+        right: -10px;
+        transform: rotateZ(15deg);
+        text-align: center;
+        width: 50px;
+        height: 15px;
+        background: $highlightBlue;
+        color: #ed2c2c;
+    }
+
+    &.soon::after {
+        position: absolute;
+        content: 'Starting soon';
+        top: 2px;
+        right: -14px;
+        -webkit-transform: rotateZ(15deg);
+        transform: rotateZ(15deg);
+        text-align: center;
+        width: 100px;
+        height: 19px;
+        background: #3f8c6b;
+        color: #ffffff;
+    }
+
+}
