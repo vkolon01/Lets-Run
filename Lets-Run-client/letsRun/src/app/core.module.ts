@@ -12,10 +12,11 @@ import { ErrorComponent } from "./core/error/error.component";
 import { UiScrollModule } from 'ngx-ui-scroll';
 import { AngularMaterialModule } from "./angular-material.module";
 import { MatNativeDateModule } from "@angular/material";
+import { Page404Component } from "./core/page404/page404.component";
 
 
 @NgModule({
-    declarations: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent],
+    declarations: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component],
     imports: [
         CommonModule,
         RouterModule,
@@ -23,7 +24,7 @@ import { MatNativeDateModule } from "@angular/material";
         UiScrollModule,
         AngularMaterialModule,
     ],
-    exports: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent]
+    exports: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component]
 })
 
 export class CoreModule {}

@@ -36,6 +36,10 @@ var userSchema = new Schema({
     type: Date,
     required: true
   },
+  activated: {
+    type: Boolean,
+    default: false
+  },
   following: [{
     type: Schema.Types.ObjectId,
     ref: 'User'

@@ -22,6 +22,7 @@ export class SigninComponent implements OnInit {
    this.signInFrom = new FormGroup({
       'email': new FormControl(null,  {validators: [Validators.required, Validators.email]}),
       'password': new FormControl(null, {validators: [Validators.required, Validators.minLength(8)]}),
+      'validatePassword': new FormControl(null, {validators: [Validators.required, Validators.minLength(8)]}),
       'firstName': new FormControl(null, {validators: [Validators.required]}),
       'lastName': new FormControl(null, {validators: [Validators.required]}),
       'username': new FormControl(null, {validators: [Validators.required]}),
@@ -39,6 +40,7 @@ export class SigninComponent implements OnInit {
     this.authService.createUser(
       this.signInFrom.value.email,
       this.signInFrom.value.password,
+      this.signInFrom.value.validatePassword,
       this.signInFrom.value.username,
       this.signInFrom.value.firstName,
       this.signInFrom.value.lastName,

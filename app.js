@@ -27,8 +27,8 @@ mongoose
     // process.env.MONGO_ATLAS_PW +
     // "@maksimdb-7j1q5.mongodb.net/test",
     {
-      "user": "Maksim",
-      "pass": "11021102a",
+      "user": process.env.MONGODB_NAME,
+      "pass": process.env.MONGO_ATLAS_PW,
        useNewUrlParser: true
   }
     // { useNewUrlParser: true }

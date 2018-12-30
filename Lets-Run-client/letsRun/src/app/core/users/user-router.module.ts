@@ -4,6 +4,7 @@ import { UserPageComponent } from "./user-page/user-page.component";
 import { UserInfoComponent } from "./user-info/user-info.component";
 import { UserFreindsComponent } from "./user-freinds/user-freinds.component";
 import { UserActivetyComponent } from "./user-activety/user-activety.component";
+import { ActivateUserComponent } from "./activate-user/activate-user.component";
 
 const userRoutes: Routes  = [
     {path: ':user_id', component: UserPageComponent,
@@ -11,7 +12,8 @@ const userRoutes: Routes  = [
     children: [
         {path: 'info', component: UserInfoComponent},
         {path: 'freinds', component: UserFreindsComponent},
-        {path: 'activety', component: UserActivetyComponent}
+        {path: 'activety', component: UserActivetyComponent},
+        {path: 'activated/:ativation_token', component: ActivateUserComponent}
     ]
 
 }

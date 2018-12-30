@@ -6,6 +6,7 @@ import { environment } from "../../../environments/environment"
 import { UserModel } from "src/app/models/user.model";
 import { Subject } from "rxjs";
 import { SnackBarService } from "src/app/services/snack-bar.service";
+import { AuthService } from "src/app/auth/auth.service";
 
 
 const BACKEND_URL = environment.apiUrl; 
@@ -17,7 +18,7 @@ export class UserService {
     private user: UserModel;
     private userListener = new Subject<{user: UserModel}>();
 
-    constructor(private http: HttpClient, private route: Router) {}
+    constructor(private http: HttpClient, private route: Router,private authService: AuthService) {}
 
       getUserId() {
         return this.userId;
@@ -55,6 +56,7 @@ export class UserService {
     deleteUser(user_id: string) {
       return this.http.delete(BACKEND_URL + '/users/' + user_id + '/delete_user')
             .subscribe(result => {
+              this.authService.logout();
               this.route.navigate(["/events"]);
             })
     }

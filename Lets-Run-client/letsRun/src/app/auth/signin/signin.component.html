@@ -17,6 +17,12 @@
           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           <mat-error *ngIf="signInFrom.get('password').errors">Password is <strong>requied</strong>!</mat-error>
       </mat-form-field> 
+
+      <mat-form-field>           
+        <input matInput placeholder="Validate password"  formControlName="validatePassword" [type]="hide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="signInFrom.get('validatePassword').errors">Password is <strong>requied</strong>!</mat-error>
+    </mat-form-field> 
   
       <mat-form-field>            
           <input matInput placeholder="firstName"  formControlName="firstName">

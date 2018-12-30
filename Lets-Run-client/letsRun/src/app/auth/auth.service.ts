@@ -47,10 +47,11 @@ export class AuthService {
         return this.username;
       }
 
-      createUser(email: string, password: string, username: string, firstName: string, lastName: string, dob: Date) {
-        const authData: AuthData = { email: email, password: password, username: username, firstName: firstName, lastName: lastName, dob: dob };
+      createUser(email: string, password: string, validatePassword: string, username: string, firstName: string, lastName: string, dob: Date) {
+        const authData: AuthData = { email: email, password: password, validatePassword: validatePassword, username: username, firstName: firstName, lastName: lastName, dob: dob };
         this.http.post(BACKEND_URL + "/users/register", authData).subscribe(
           () => {
+            this.login(email, password);
             this.router.navigate(["/"]);
           },
           error => {

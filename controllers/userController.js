@@ -22,6 +22,13 @@ exports.register = function (req, res, next) {
     throw error;
   }
 
+  if(req.body.password !== req.body.validatePassword) {
+    const error = new Error("Passwords are not matching.");
+    error.statusCode = 501;
+    throw error;
+  }
+
+
   bcrypt.hash(req.body.password, 12)
     .then(hashedPw => {
       const user = new User({
@@ -323,7 +330,6 @@ exports.followPersonController = function (req, res, next) {
       }
       next(error);
     });
-
 
 }
 

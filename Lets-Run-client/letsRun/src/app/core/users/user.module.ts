@@ -6,9 +6,10 @@ import { UserFreindsComponent } from "./user-freinds/user-freinds.component";
 import { UserActivetyComponent } from "./user-activety/user-activety.component";
 import { UserRouterModule } from "./user-router.module";
 import { UserPageComponent } from "./user-page/user-page.component";
+import { ActivateUserComponent } from "./activate-user/activate-user.component";
 
 @NgModule({
-    declarations: [UserPageComponent, UserInfoComponent, UserFreindsComponent, UserActivetyComponent],
+    declarations: [UserPageComponent, UserInfoComponent, UserFreindsComponent, UserActivetyComponent, ActivateUserComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,
