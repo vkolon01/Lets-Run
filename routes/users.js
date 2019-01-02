@@ -57,7 +57,7 @@ router.get('/:user_id', authCheck,  userHandler.getUserProfile);
 
 router.delete('/:user_id/delete_user', authCheck, userHandler.deleteUser);
 
-router.get('/:user_id/freind_manipulation',authCheck,  userHandler.followPersonController);
+router.get('/:user_id/friend_manipulation',authCheck,  userHandler.followPersonController);
 
 router.put('/add_avatar', authCheck, extractFile, userHandler.add_avatar);
   

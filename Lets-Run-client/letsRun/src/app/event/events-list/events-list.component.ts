@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { EventService } from '../event.service';
 import { PageEvent } from "@angular/material";
 import { EventModule } from '../../models/event.model';
 import { Subscription } from 'rxjs';
-import { mimeType } from 'src/app/validators/mime-type.validator';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
@@ -28,7 +27,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   totalEvents = 0;
   eventsPerPage = 5;
   currentPage = 1;
-  pageSizeOptions = [2, 5, 10, 20]
+  pageSizeOptions = [2, 5, 10, 20];
 
   events: EventModule[] = [];
   private eventSub: Subscription;
@@ -43,7 +42,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
     {value: 'Mud Run & fun Run', viewValue: 'Mud Run & fun Run'},
     {value: 'Trail', viewValue: 'Trail'},
     {value: 'Walking', viewValue: 'Walking'}
-  ]
+  ];
 
 
   constructor(private snackBarService: SnackBarService, private eventService: EventService, private authService: AuthService, private route: Router) { }

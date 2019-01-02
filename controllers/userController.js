@@ -57,7 +57,7 @@ exports.register = function (req, res, next) {
           next(error);
         });
     });
-}
+};
 
 
 exports.sign_in = function (req, res, next) {
@@ -173,7 +173,7 @@ exports.getUserProfile = function (req, res, next) {
       next(error);
     });
 
-}
+};
 
 exports.deleteUser = function (req, res, next) {
 
@@ -245,7 +245,7 @@ exports.deleteUser = function (req, res, next) {
       next(error);
     });
 
-}
+};
 
 
 exports.followPersonController = function (req, res, next) {
@@ -331,7 +331,7 @@ exports.followPersonController = function (req, res, next) {
       next(error);
     });
 
-}
+};
 
 
 exports.add_avatar = function (req, res, next) {
@@ -362,4 +362,4 @@ exports.add_avatar = function (req, res, next) {
     next(error);
   });
 
-}
+};

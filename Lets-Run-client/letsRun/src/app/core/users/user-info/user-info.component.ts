@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserModel } from '../../../models/user.model';
 import { UserService } from '../user.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -14,7 +14,6 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 })
 export class UserInfoComponent implements OnInit {
 
-
   memberSince;
   age;
   currentUserId;
@@ -24,7 +23,7 @@ export class UserInfoComponent implements OnInit {
   private userSubscription: Subscription;
 
   user: UserModel;
-  alreadyFreinds;
+  alreadyFriends;
 
   constructor(public userService: UserService,
     private activeRoute: ActivatedRoute,
@@ -35,59 +34,51 @@ export class UserInfoComponent implements OnInit {
 
   ngOnInit() {
 
-
-
     this.activeRoute.parent.paramMap.subscribe((paramMap: ParamMap) => {
 
       this.user_id = paramMap.get('user_id');
-
       this.currentUserId = this.authService.getUserId();
-
       this.userService.getUserInfo(this.user_id);
 
       this.userSubscription = this.userService.getUserListener()
         .subscribe((value: { user: UserModel }) => {
-          this.user = value.user,
-            this.memberSince = moment(this.user.createdAt).fromNow();
+          this.user = value.user;
+          this.memberSince = moment(this.user.createdAt).fromNow();
           this.age = moment().diff(this.user.dob, 'year');
 
-          console.log('value.user.followers');
-
-          this.alreadyFreinds = this.checkIfAlreadyFreinds(value.user.followers, this.currentUserId);
+          this.alreadyFriends = this.checkIfAlreadyFriends(value.user.followers, this.currentUserId);
         })
-
-
     })
-
   }
 
-  checkIfAlreadyFreinds(followers, currentUserId) {
+  checkIfAlreadyFriends(followers, currentUserId) {
 
     // this.snackBarService.showMessageWithDuration('Welcome back ' + this.username + '!', 'OK', 3000);
 
-    if (followers.length < 0) {
+    if (followers && followers.length > 0) {
+
+      for (let i = 0; i < followers.length; i++) {
+        if (followers[i]._id === currentUserId) {
+          return true;
+        }else if(i == followers.length - 1){
+          return false;
+        }
+      }
+
+    }else{
       return false;
     }
 
-    for (let i = 0; i < followers.length; i++) {
-      if (followers[i]._id === currentUserId) {
-        return true;
-      }
-    }
-    return false;
   }
 
+  friendManipulation() {
 
-
-
-  freindManipulation() {
-
-    if (!this.checkIfAlreadyFreinds(this.user.followers, this.currentUserId)) {
+    if (!this.checkIfAlreadyFriends(this.user.followers, this.currentUserId)) {
       this.snackBarService.showMessageWithDuration('You following ' + this.user.username + '!', 'OK', 3000);
-      this.userService.freindManipulating(this.user_id);
+      this.userService.friendManipulating(this.user_id);
     } else {
       this.snackBarService.showMessageWithDuration('You stopped following ' + this.user.username + '!', 'OK', 3000);
-      this.userService.freindManipulating(this.user_id);
+      this.userService.friendManipulating(this.user_id);
 
     }
 
