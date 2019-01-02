@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment"
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { EventModule } from "./event.model";
+import { EventModule } from "../models/event.model";
 import { Subject, pipe } from "rxjs";
 import { map } from "rxjs/operators";
 import { SnackBarService } from "../services/snack-bar.service";
@@ -72,7 +72,7 @@ export class EventService {
                             comments: event.comments,
                             picture: event.picture
                         };
-                    }), 
+                    }),
                     maxEvents: eventData.maxEvents
                 };
             })
@@ -101,7 +101,7 @@ export class EventService {
 
     getCreatorId() {
         console.log(this.creatorId);
-        
+
         return this.creatorId;
     }
 
@@ -122,11 +122,11 @@ export class EventService {
         }>(BACKEND_URL + '/events/' + id)
             .subscribe(event => {
                 console.log('event.eventById');
-                
+
                 this.event = event.eventById;
                 this.creatorName = event.creatorName;
                 this.creatorId = event.creatorId;
-                
+
                 console.log(event.eventById.likes);
 
                 this.creatorNameAndId.next({
@@ -152,7 +152,7 @@ export class EventService {
             updatedEvent.append("eventDate", eventDate.toString());
             updatedEvent.append("distance", distance);
             updatedEvent.append("description", description);
-            updatedEvent.append("image", image, location); 
+            updatedEvent.append("image", image, location);
 
             console.log('image to send like object');
             console.log(updatedEvent);
@@ -171,12 +171,12 @@ export class EventService {
             console.log(updatedEvent);
 
         }
-        
 
 
 
 
-        
+
+
         // description
 
         this.http.put(BACKEND_URL + '/events/' + id, updatedEvent)
@@ -191,16 +191,16 @@ export class EventService {
 
     uploadEventPicture(event_id: string, image: File | string) {
         let avatarData: string | FormData;
-  
+
           if(typeof image === "object") {
             avatarData = new FormData();
             avatarData.append("image", image, event_id );
           } else {
             return;
           }
-  
+
           this.http.put(BACKEND_URL + "/events/" + "add_event_picture/" + event_id, avatarData).subscribe(result => { this.getEventById(event_id); });
-  
+
           }
 
     deleteEvent(id: string) {
@@ -216,7 +216,7 @@ export class EventService {
     eventLikeSwitcher(id: string) {
         return this.http.get(BACKEND_URL + '/events/' + id + '/like_event_switcher')
             .subscribe(result => {
-                
+
                 this.getEventById(id);
             });
     }

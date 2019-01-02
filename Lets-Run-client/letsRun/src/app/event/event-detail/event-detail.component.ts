@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EventModule } from '../event.model';
+import { EventModule } from '../../models/event.model';
 import { EventService } from '../event.service';
 import { CommentService } from '../comment.service';
 import { ActivatedRouteSnapshot, ActivatedRoute, ParamMap, Route } from '@angular/router';
@@ -173,9 +173,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       })
   }
 
-  //   
+  //
   // COMMENT SECTION
-  // 
+  //
 
   showCommentInputArea() {
     this.commentInputArea = !this.commentInputArea;

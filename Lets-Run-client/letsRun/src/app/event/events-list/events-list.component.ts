@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { EventService } from '../event.service';
 import { PageEvent } from "@angular/material";
-import { EventModule } from '../event.model';
+import { EventModule } from '../../models/event.model';
 import { Subscription } from 'rxjs';
 import { mimeType } from 'src/app/validators/mime-type.validator';
 import { AuthService } from 'src/app/auth/auth.service';
