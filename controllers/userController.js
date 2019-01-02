@@ -252,84 +252,125 @@ exports.followPersonController = function (req, res, next) {
 
   const userId = req.params.user_id;
 
-  let fetchedUser;
+  let userToFollowPromise = new Promise((resolve,reject) => {
+    User.findById(userId)
+        .then(user => {
 
-  User.findById(userId)
-    .then(followerToAd => {
-
-      if (!followerToAd) {
-        const error = new Error('Could not find user');
-        error.statusCode = 404;
-        error.data = "Could not find user";
-        throw error;
-      }
-
-      fetchedUser = followerToAd;
-    })
-
-  User.findById(req.userData.userId)
-    .then(user => {
-      if (!user) {
-        const error = new Error('Could not find user');
-        error.statusCode = 404;
-        error.data = "Could not find user";
-        throw error;
-      }
-
-      if (user._id.toString() === fetchedUser._id.toString()) {
-        const error = new Error("You cannot follow your self, sorry! :)");
-        error.statusCode = 501;
-        throw error;
-      }
-
-      let contains = false;
-
-      if (user.following.length < 1) {
-        contains = false;
-      } else {
-
-        for (let i = 0; i < user.following.length; i++) {
-          if (user.following[i].toString() === fetchedUser._id.toString()) {
-            contains = true;
-            break;
+          if (!user) {
+            const error = new Error('Could not find user');
+            error.statusCode = 404;
+            error.data = "Could not find user";
+            reject(error);
+          }else{
+            resolve(user);
           }
 
+        })
+        .catch((err) => {
+          reject(err);
+        })
+  });
+
+  let getCurrentUserPromise = new Promise((resolve, reject) => {
+    User.findById(req.userData.userId)
+        .then(user => {
+          if (!user) {
+            const error = new Error('Could not find user');
+            error.statusCode = 404;
+            error.data = "Could not find user";
+            reject(error);
+          }else{
+            resolve(user);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        })
+  });
+
+  Promise.all([userToFollowPromise,getCurrentUserPromise])
+      .then((usersArray) => {
+        let userToFollow = usersArray[0];
+        let curUser = usersArray[1];
+
+        if (curUser._id.toString() === userToFollow._id.toString()) {
+          res.status(501).json({
+            message: "You cannot follow your self, sorry! :)"
+          })
+        }else{
+          if(curUser.following.includes(userToFollow._id)){
+            curUser.following.push(userToFollow._id);
+            User.findByIdAndUpdate(userToFollow._id, {
+              $push: {
+                "followers": curUser._id
+              }
+            })
+                .then(followedUser => {
+                  User.findByIdAndUpdate(curUser._id, {
+                    $push: {
+                      "followers": curUser._id
+                    }
+                  })
+                      .then(updatedCurUser => {
+                        followedUser.save();
+                        updatedCurUser.save();
+                        res.status(201).json({
+                          message: "Following and followers changed",
+                        });
+                      })
+                      .catch(() => {
+                        res.status(501).json({
+                          message: "some error has occurred"
+                        })
+                      });
+                  res.status(201).json({
+                    message: "Following and followers changed",
+                  });
+                })
+                .catch((err) => {
+                  res.status(501).json({
+                    message: "some error has occurred"
+                  })
+                });
+          }else{
+            User.findByIdAndUpdate(userToFollow._id, {
+              $pull: {
+                "followers": curUser._id
+              }
+            })
+                .then(unfollowedUser => {
+                  User.findByIdAndUpdate(curUser._id,{
+                    $pull: {
+                      "followers": userToFollow._id
+                    }
+                  })
+                      .then(updatedCurrentUser => {
+                        unfollowedUser.save();
+                        updatedCurrentUser.save();
+                        res.status(201).json({
+                          message: "Following and followers changed",
+                        });
+                      })
+                      .catch(() => {
+                        res.status(501).json({
+                          message: "some error has occurred"
+                        })
+                      });
+
+                })
+                .catch((err) => {
+                  res.status(501).json({
+                    message: "some error has occurred"
+                  })
+                })
+          }
         }
-      }
-
-      if (!contains) {
-        user.following.push(fetchedUser._id);
-        User.findByIdAndUpdate(fetchedUser._id, {
-          $push: {
-            "followers": user._id
-          }
-        }).then(user => {
-          user.save()
-        });
-      } else {
-        user.following.pull(fetchedUser._id);
-        User.findByIdAndUpdate(fetchedUser._id, {
-          $pull: {
-            "followers": user._id
-          }
-        }).then(user => {
-          user.save()
-        });
-      }
-
-      user.save();
-
-      res.status(201).json({
-        message: "Following and followers changed",
+      })
+      .catch((err) => {
+        res.status(501).json({
+          message: "some error has occurred when retrieving user"
+        })
       });
-
-    })
-    .catch(error => {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    });
 
 };
 
@@ -351,7 +392,7 @@ exports.add_avatar = function (req, res, next) {
       "imagePath": imagePath
     }
   }).then(user => {
-    user.save()
+    user.save();
     res.status(201).json({
       message: "Avatar changed",
     });
