@@ -60,5 +60,7 @@ router.delete('/:user_id/delete_user', authCheck, userHandler.deleteUser);
 router.get('/:user_id/freind_manipulation',authCheck,  userHandler.followPersonController);
 
 router.put('/add_avatar', authCheck, extractFile, userHandler.add_avatar);
+
+router.get('/authenticate/:authToken', userHandler.activetUser);
   
 module.exports = router;

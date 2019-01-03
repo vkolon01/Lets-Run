@@ -76,7 +76,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     get: (index, count, success) => {
 
       const start = Math.max(this.MIN, index);
-      const end = Math.min(index + count - 1, this.MAX);
+      const  end = Math.min(index + count - 1, this.MAX);
 
       return this.commentService.getCommentListFormNgxUiScroll(this.eventId, index, count)
         .subscribe(result => {
@@ -193,8 +193,9 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.updateComment();
 
   }
+  
   updateComment() {
-    this.datasource.adapter.reload(1)
+    this.datasource.adapter.reload(1);
   }
 
   likeEvent() {

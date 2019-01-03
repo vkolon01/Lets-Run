@@ -40,11 +40,6 @@ export class UserService {
         .subscribe(user => {
           console.log('user');
           console.log(user);
-          
-
-          // if(this.http) {
-          //   
-          // }
 
           this.user = user.user
           this.userListener.next({

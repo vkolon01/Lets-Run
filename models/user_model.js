@@ -40,6 +40,7 @@ var userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  authToken: String,
   following: [{
     type: Schema.Types.ObjectId,
     ref: 'User'

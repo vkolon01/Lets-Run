@@ -1,18 +1,32 @@
 const {
   validationResult
 } = require('express-validator/check');
-
+const crypto = require('crypto');
 var bcrypt = require('bcryptjs');
 var User = require('../models/user_model');
 var constants = require('../constants/messages');
 var jwt = require('jsonwebtoken');
 var Comment = require('../models/comment_model');
 var Event = require('../models/event_model');
+var nodemailer = require('nodemailer');
+
+
+var transporter = nodemailer.createTransport({
+  host: "smtp.google.com",
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_EMAIL,
+    pass: process.env.GMAIL_PASSWORD
+  }
+});
 
 
 exports.register = function (req, res, next) {
 
+  crypto.randomBytes(32, (err, buffer) => { 
+
   const errors = validationResult(req);
+  const token = buffer.toString('hex');
 
   if (!errors.isEmpty()) {
     
@@ -37,10 +51,32 @@ exports.register = function (req, res, next) {
         username: req.body.username,
         dob: req.body.dob,
         password: hashedPw,
-        email: req.body.email
+        email: req.body.email,
+        authToken: token
       });
       user.save()
         .then(result => {
+
+          const emailToSend = {
+            from: '"LetsRun" <events@letsrun.com>',
+            to: user.email,
+            subject: "You have to Authenticate",
+            text: "You have to Authenticate",
+            html: `
+            <p>You have to Authenticate</p>
+            <p> You need to authenticate your self</p>
+            <p> simply by clicking on this <a href="http://localhost:4200/auth/${token}">link</a></p>
+            <p>You'r Lets Run team!</p>
+          `
+          };
+
+          transporter.sendMail(emailToSend, function (err, info) {
+            if (err)
+              console.log(err)
+            else
+              console.log(info);
+          });
+
           res.status(201).json({
             message: 'User created!',
             userId: result._id
@@ -57,6 +93,56 @@ exports.register = function (req, res, next) {
           next(error);
         });
     });
+  });
+}
+
+exports.activetUser = async function(req, res, next) {
+  const errors = validationResult(req);
+  userToken = req.params.authToken;
+
+  try {
+    var user = await User.findOne({authToken: userToken});
+
+    if(!user) {
+      const error = new Error('User not found');
+      error.statusCode = 404;
+      error.data = errors.array();
+      throw error;
+    }
+
+    user.activated = true;
+
+    user.save();
+
+    const emailToSend = {
+      from: '"LetsRun" <events@letsrun.com>',
+      to: user.email,
+      subject: "You have Authenticated",
+      text: "You have Authenticated",
+      html: `
+      <p>You have Authenticated</p>
+      <p>You can now post new events and comments and be the one of our community!</p>
+      <p>You'r Lets Run team!</p>
+    `
+    };
+
+    transporter.sendMail(emailToSend, function (err, info) {
+      if (err)
+        console.log(err)
+      else
+        console.log(info);
+    });
+
+    res.status(200).json({
+      message: 'User Authenticated!'
+    });
+  } catch (error) {
+    next(error);
+  }
+
+
+  
+
 }
 
 

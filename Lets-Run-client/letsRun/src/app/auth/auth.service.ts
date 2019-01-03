@@ -90,6 +90,14 @@ export class AuthService {
       }
 
 
+      authenticateUser(userToken: string) {
+
+        this.http.get(BACKEND_URL + "/users/authenticate/" + userToken)
+             .subscribe(result => {
+             });
+      }
+
+
 
       autoAuthUser() {
         const authInformation = this.getAuthData();
