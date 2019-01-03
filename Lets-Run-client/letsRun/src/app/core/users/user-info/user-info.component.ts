@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserModel } from '../../../models/user.model';
-import { UserService } from '../user.service';
+import { UserService } from '../../../services/user.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { DialogService } from 'src/app/services/dialogService';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
@@ -44,7 +44,7 @@ export class UserInfoComponent implements OnInit {
       this.currentUserId = this.authService.getUserId();
 
 
-      this.userService.getUserInfo(this.user_id);
+      this.userService.getUserInfo(this.user_id, '');
 
       this.userSubscription = this.userService.getUserListener()
         .subscribe((value: { user: UserModel }) => {

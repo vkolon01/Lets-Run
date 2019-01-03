@@ -1,12 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserService } from '../user.service';
+import { UserService } from '../../../services/user.service';
 import { UserModel } from '../../../models/user.model';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { mimeType } from 'src/app/validators/mime-type.validator';
 import { DialogService } from 'src/app/services/dialogService';
+// import { userInfo } from 'os';
 
 @Component({
   selector: 'app-user-page',
@@ -20,7 +21,7 @@ export class UserPageComponent implements OnInit {
   form: FormGroup;
   imagePreview: string;
   user_id: string;
-
+  current_user_id: string;
   user: UserModel;
 
   private userSubscription: Subscription;
@@ -46,18 +47,27 @@ export class UserPageComponent implements OnInit {
       
 
       
-        this.userService.getUserInfo(this.user_id);
+        this.userService.getUserInfo(this.user_id, '');
 
         this.userSubscription = this.userService.getUserListener()
             .subscribe((value: {user: UserModel}) => {
               this.user = value.user
             })
 
+            this.current_user_id = this.authService.getUserId();
+
   })
+
+
 
 }
 
 onImagePicked(event: Event){
+
+  if(this.user_id === this.current_user_id) {
+    return;
+  }
+
   const file = (event.target as HTMLInputElement).files[0];
   this.form.patchValue({image: file});
   this.form.get('image').updateValueAndValidity();

@@ -5,8 +5,8 @@ import { Subject } from "rxjs";
 
 import { environment } from "../../environments/environment"
 
-import { AuthData } from "./auth-data.model";
-import { SnackBarService } from "../services/snack-bar.service";
+import { AuthData } from "../models/auth-data.model";
+import { SnackBarService } from "./snack-bar.service";
 
 const BACKEND_URL = environment.apiUrl; 
 

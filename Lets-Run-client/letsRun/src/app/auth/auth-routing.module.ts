@@ -6,8 +6,7 @@ import { SigninComponent } from "./signin/signin.component";
 import { AuthenticateUserComponent } from "./authenticate-user/authenticate-user.component";
 
 const routes: Routes = [
-  { path: ":authToken", component: AuthenticateUserComponent },
-  // { path: "signup", component: SigninComponent },
+  { path: ":authToken", component: AuthenticateUserComponent }
 
 ]
 

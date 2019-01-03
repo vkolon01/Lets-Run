@@ -23,87 +23,89 @@ var transporter = nodemailer.createTransport({
 
 exports.register = function (req, res, next) {
 
-  crypto.randomBytes(32, (err, buffer) => { 
+  crypto.randomBytes(32, (err, buffer) => {
 
-  const errors = validationResult(req);
-  const token = buffer.toString('hex');
+    const errors = validationResult(req);
+    const token = buffer.toString('hex');
 
-  if (!errors.isEmpty()) {
-    
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
+    if (!errors.isEmpty()) {
 
-  if(req.body.password !== req.body.validatePassword) {
-    const error = new Error("Passwords are not matching.");
-    error.statusCode = 501;
-    throw error;
-  }
+      const error = new Error('Validation failed.');
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
+
+    if (req.body.password !== req.body.validatePassword) {
+      const error = new Error("Passwords are not matching.");
+      error.statusCode = 501;
+      throw error;
+    }
 
 
-  bcrypt.hash(req.body.password, 12)
-    .then(hashedPw => {
-      const user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        username: req.body.username,
-        dob: req.body.dob,
-        password: hashedPw,
-        email: req.body.email,
-        authToken: token
-      });
-      user.save()
-        .then(result => {
+    bcrypt.hash(req.body.password, 12)
+      .then(hashedPw => {
+        const user = new User({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          username: req.body.username,
+          dob: req.body.dob,
+          password: hashedPw,
+          email: req.body.email,
+          authToken: token
+        });
+        user.save()
+          .then(result => {
 
-          const emailToSend = {
-            from: '"LetsRun" <events@letsrun.com>',
-            to: user.email,
-            subject: "You have to Authenticate",
-            text: "You have to Authenticate",
-            html: `
+            const emailToSend = {
+              from: '"LetsRun" <events@letsrun.com>',
+              to: user.email,
+              subject: "You have to Authenticate",
+              text: "You have to Authenticate",
+              html: `
             <p>You have to Authenticate</p>
             <p> You need to authenticate your self</p>
             <p> simply by clicking on this <a href="http://localhost:4200/auth/${token}">link</a></p>
             <p>You'r Lets Run team!</p>
           `
-          };
+            };
 
-          transporter.sendMail(emailToSend, function (err, info) {
-            if (err)
-              console.log(err)
-            else
-              console.log(info);
+            transporter.sendMail(emailToSend, function (err, info) {
+              if (err)
+                console.log(err)
+              else
+                console.log(info);
+            });
+
+            res.status(201).json({
+              message: 'User created!',
+              userId: result._id
+            });
+          })
+          .catch(error => {
+            if (!error.statusCode) {
+              console.log('error');
+
+              console.log(error);
+
+              error.statusCode = 500;
+            }
+            next(error);
           });
-
-          res.status(201).json({
-            message: 'User created!',
-            userId: result._id
-          });
-        })
-        .catch(error => {
-          if (!error.statusCode) {
-            console.log('error');
-
-            console.log(error);
-            
-            error.statusCode = 500;
-          }
-          next(error);
-        });
-    });
+      });
   });
 }
 
-exports.activetUser = async function(req, res, next) {
+exports.activetUser = async function (req, res, next) {
   const errors = validationResult(req);
   userToken = req.params.authToken;
 
   try {
-    var user = await User.findOne({authToken: userToken});
+    var user = await User.findOne({
+      authToken: userToken
+    });
 
-    if(!user) {
+    if (!user) {
       const error = new Error('User not found');
       error.statusCode = 404;
       error.data = errors.array();
@@ -141,7 +143,7 @@ exports.activetUser = async function(req, res, next) {
   }
 
 
-  
+
 
 }
 
@@ -210,6 +212,25 @@ exports.sign_in = function (req, res, next) {
 exports.getUserProfile = function (req, res, next) {
 
   const errors = validationResult(req);
+  const userId = req.params.user_id;
+
+  const queryParams = req.query.info;
+
+  console.log('req.query.queryParams');
+  console.log(req.query.info);
+
+
+  let followersPopulation = '';
+  let followersPopulationDetails = '';
+
+  let followingPopulation = '';
+  let followingPopulationDetails = '';
+
+  let createdEventsPopulation = '';
+  let createdEventsPopulationDetails = '';
+
+  let eventsWillAttemptPopulation = '';
+  let eventsWillAttemptPopulationDetails = '';
 
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -218,13 +239,29 @@ exports.getUserProfile = function (req, res, next) {
     throw error;
   }
 
-  const userId = req.params.user_id;
+  if (queryParams === 'friends') {
+    followingPopulation = 'following'; 
+    followingPopulationDetails = '_id imagePath username';
+
+    followersPopulation = 'followers';
+    followersPopulationDetails = '_id imagePath username';
+  } else if (queryParams === 'eventHistory') {
+    createdEventsPopulation = 'createdEvent';
+    createdEventsPopulationDetails = '_id location picture eventDate';
+
+    eventsWillAttemptPopulation = 'eventWillAttempt';
+    eventsWillAttemptPopulationDetails = '_id location picture eventDate';
+  }
+
+  console.log('followingPopulation');
+  console.log(followingPopulation);
+  
 
   User.findById(userId)
-    .populate('following', '_id imagePath username')
-    .populate('followers', '_id imagePath username')
-    .populate('createdEvent', '_id location picture eventDate')
-    .populate('eventWillAttempt', '_id location picture eventDate')
+    .populate(followersPopulation, followersPopulationDetails)
+    .populate(followingPopulation, followingPopulationDetails)
+    .populate(createdEventsPopulation, createdEventsPopulationDetails)
+    .populate(eventsWillAttemptPopulation, eventsWillAttemptPopulationDetails)
     .then(user => {
       if (!user) {
         const error = new Error("No user find.");
@@ -233,19 +270,41 @@ exports.getUserProfile = function (req, res, next) {
         throw error;
       }
 
-      let modifiedUser = new User({
+      let modifiedUser;
+
+      modifiedUser = new User({
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username,
-        followers: user.followers,
-        following: user.following,
         imagePath: user.imagePath,
-        eventWillAttempt: user.eventWillAttempt,
-        createdEvent: user.createdEvent,
         dob: user.dob,
         createdAt: user.createdAt
       });
+
+      if (queryParams === 'friends') {
+        modifiedUser = new User({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          followers: user.followers,
+          following: user.following,
+          imagePath: user.imagePath
+        });
+      } else if (queryParams === 'eventHistory') {
+          modifiedUser = new User({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          imagePath: user.imagePath,
+          eventWillAttempt: user.eventWillAttempt,
+          createdEvent: user.createdEvent
+        });
+      }
+
+
+
+
 
 
       res.status(200).json({
@@ -425,7 +484,7 @@ exports.add_avatar = function (req, res, next) {
 
   if (req.file) {
     console.log('file');
-    
+
     const url = req.protocol + "://" + req.get("host");
     imagePath = url + "/images/" + req.file.filename;
   }

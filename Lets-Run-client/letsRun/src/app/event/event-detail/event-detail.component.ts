@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EventModule } from '../event.model';
-import { EventService } from '../event.service';
-import { CommentService } from '../comment.service';
+import { EventModule } from '../../models/event.model';
+import { EventService } from '../../services/event.service';
+import { CommentService } from '../../services/comment.service';
 import { ActivatedRouteSnapshot, ActivatedRoute, ParamMap, Route } from '@angular/router';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommentModule } from 'src/app/models/comment.model';
 import { Subscription, Observable } from 'rxjs';
 import { log } from 'util';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { mimeType } from 'src/app/validators/mime-type.validator';
 import { DatePipe } from '@angular/common'
 import { registerLocaleData } from '@angular/common';

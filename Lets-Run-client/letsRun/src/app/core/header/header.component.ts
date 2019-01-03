@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog, MatDialogConfig } from '@angular/material'
 
 import { LoginComponent } from 'src/app/auth/login/login.component';

@@ -1,6 +1,7 @@
 <div class="main">
 
-  <div class="avatar-container" *ngIf="!form.get('image').valid" (click)="filePicker.click()">
+  <div class="avatar-container" *ngIf="!form.get('image').valid" >
+  <div class="image_asPicker" *ngIf="user_id === current_user_id" (click)="filePicker.click()"></div>
   <h1 class="user_title">{{ user?.firstName }} {{ user?.lastName }} </h1>
     <img src="{{ user?.imagePath }}" alt="avatar">
   </div>

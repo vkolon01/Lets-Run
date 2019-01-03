@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment"
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { EventModule } from "./event.model";
+import { EventModule } from "../models/event.model";
 import { Subject, pipe } from "rxjs";
 import { map } from "rxjs/operators";
-import { SnackBarService } from "../services/snack-bar.service";
+import { SnackBarService } from "./snack-bar.service";
 
 
 

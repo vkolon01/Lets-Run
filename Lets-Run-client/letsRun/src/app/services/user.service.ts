@@ -2,11 +2,11 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Injectable } from "@angular/core";
 
-import { environment } from "../../../environments/environment"
-import { UserModel } from "../../models/user.model";
+import { environment } from "../../environments/environment"
+import { UserModel } from "../models/user.model";
 import { Subject } from "rxjs";
 import { SnackBarService } from "src/app/services/snack-bar.service";
-import { AuthService } from "src/app/auth/auth.service";
+import { AuthService } from "src/app/services/auth.service";
 import { routerNgProbeToken } from "@angular/router/src/router_module";
 
 
@@ -18,6 +18,8 @@ export class UserService {
     private userId: string;
     private user: UserModel;
     private userListener = new Subject<{user: UserModel}>();
+    private userFriends: UserModel;
+    private userFriendsListener = new Subject<{userFreinds: UserModel}>();
 
     constructor(private http: HttpClient, private route: Router,private authService: AuthService) {}
 
@@ -33,10 +35,11 @@ export class UserService {
         return this.userListener.asObservable()
       }
 
-      getUserInfo(user_id: string){
+      getUserInfo(user_id: string, queryPage: string){
+        const queryParams = `?info=${queryPage}`
         const userId = user_id;
-      return  this.http
-        .get<{user: UserModel }>(BACKEND_URL + '/users/' + userId)
+         return  this.http
+        .get<{user: UserModel }>(BACKEND_URL + '/users/' + userId + queryParams)
         .subscribe(user => {
           console.log('user');
           console.log(user);
@@ -57,7 +60,7 @@ export class UserService {
       return this.http.get(BACKEND_URL + "/users/" + user_id + '/freind_manipulation')
                  .subscribe(result => {
                    
-                  this.getUserInfo(user_id);
+                  this.getUserInfo(user_id, '');
                  })
     }
 
@@ -79,7 +82,7 @@ export class UserService {
           return;
         }
 
-        this.http.put(BACKEND_URL + "/users/" + "add_avatar", avatarData).subscribe(result => { this.getUserInfo(id) });
+        this.http.put(BACKEND_URL + "/users/" + "add_avatar", avatarData).subscribe(result => { this.getUserInfo(id, '') });
 
         } 
     }
