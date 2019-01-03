@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
   userId: string;
-  private userIdSub: Subscription;
+  username: string;
 
   constructor(private authService: AuthService,
               private dialog: MatDialog) {}
@@ -24,25 +24,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.userId = this.authService.getUserId();
-
     this.authListenerSubs = this.authService.getAuthStatusListener()
     .subscribe(isAuthenticated => {
       this.userIsAuthenticated = isAuthenticated;
     });
 
-    this.userIdSub = this.authService.getUserIdListener()
-        .subscribe(userId => {
-          this.userId = userId;
-        })
+
+    this.username = this.authService.getUsername();
+        
+
   }
-
-  // ngOnChanges() {
-  //   this.userIdSub = this.authService.getUserIdListener()
-  //   .subscribe(userId => {
-  //     this.userId = userId;
-  //   })
-
-  // }
 
   onLogin() {
     const dialogConfig = new MatDialogConfig();
@@ -81,7 +72,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.authListenerSubs.unsubscribe();
-    this.userIdSub.unsubscribe();
   }
 
 

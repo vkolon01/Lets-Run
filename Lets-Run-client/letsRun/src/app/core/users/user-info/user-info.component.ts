@@ -43,6 +43,7 @@ export class UserInfoComponent implements OnInit {
 
       this.currentUserId = this.authService.getUserId();
 
+
       this.userService.getUserInfo(this.user_id);
 
       this.userSubscription = this.userService.getUserListener()
