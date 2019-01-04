@@ -62,5 +62,12 @@ router.get('/:user_id/freind_manipulation',authCheck,  userHandler.followPersonC
 router.put('/add_avatar', authCheck, extractFile, userHandler.add_avatar);
 
 router.get('/authenticate/:authToken', userHandler.activetUser);
+
+router.post('/reset/password', userHandler.resetPasswordGetToken);
+
+router.post('/change_password', userHandler.changePassword);
+
+router.get('/get_change/password/:token', userHandler.getChangePassword);
+
   
 module.exports = router;

@@ -216,10 +216,6 @@ exports.getUserProfile = function (req, res, next) {
 
   const queryParams = req.query.info;
 
-  console.log('req.query.queryParams');
-  console.log(req.query.info);
-
-
   let followersPopulation = '';
   let followersPopulationDetails = '';
 
@@ -240,7 +236,7 @@ exports.getUserProfile = function (req, res, next) {
   }
 
   if (queryParams === 'friends') {
-    followingPopulation = 'following'; 
+    followingPopulation = 'following';
     followingPopulationDetails = '_id imagePath username';
 
     followersPopulation = 'followers';
@@ -252,10 +248,6 @@ exports.getUserProfile = function (req, res, next) {
     eventsWillAttemptPopulation = 'eventWillAttempt';
     eventsWillAttemptPopulationDetails = '_id location picture eventDate';
   }
-
-  console.log('followingPopulation');
-  console.log(followingPopulation);
-  
 
   User.findById(userId)
     .populate(followersPopulation, followersPopulationDetails)
@@ -292,7 +284,7 @@ exports.getUserProfile = function (req, res, next) {
           imagePath: user.imagePath
         });
       } else if (queryParams === 'eventHistory') {
-          modifiedUser = new User({
+        modifiedUser = new User({
           _id: user._id,
           firstName: user.firstName,
           lastName: user.lastName,
@@ -301,11 +293,6 @@ exports.getUserProfile = function (req, res, next) {
           createdEvent: user.createdEvent
         });
       }
-
-
-
-
-
 
       res.status(200).json({
         user: modifiedUser
@@ -506,5 +493,119 @@ exports.add_avatar = function (req, res, next) {
     }
     next(error);
   });
+
+}
+
+exports.resetPasswordGetToken = async function (req, res, next) {
+  console.log('RESETE');
+  
+  let token;
+
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      const error = err;
+      error.statusCode = 500;
+      error.data = "No user find.";
+      throw error;
+    }
+
+    token = buffer.toString('hex');
+
+  });
+
+  try {
+    const user = await User.findOne({
+      email: req.body.email
+    });
+    if (!user) {
+      const error = new Error('No account with that email found.');
+      error.statusCode = 404;
+      error.data = "No account with that email found.";
+      throw error;
+    }
+
+    user.resetToken = token;
+    user.resetTokenExpiration = Date.now() + 36000000;
+    user.save();
+
+    const emailToSend = {
+      from: '"LetsRun" <events@letsrun.com>',
+      to: user.email,
+      subject: "You have requested to change your password",
+      text: "You have requested to change your password",
+      html: `
+    <p>You have received this email because you have requested to change your password</p>
+    <p> If it was not you, please don't click on this link, and your password will not change!</p>
+    <p> If it was you, simply click on this <a href="http://localhost:4200/auth/resetPassword/${token}">link to change your password</a></p>
+    <p>You'r Lets Run team!</p>
+  `
+    };
+
+    transporter.sendMail(emailToSend, function (err, info) {
+      if (err)
+        console.log(err)
+      else
+        console.log(info);
+    });
+
+    res.status(201).json({
+      message: 'email send'
+    });
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+
+exports.getChangePassword = async function (req, res, next) {
+  const token = req.params.token;
+  
+  try {
+
+    user = await User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}});
+
+    res.status(200).json({
+      message: 'Info to change password',
+      userId: user._id.toString(),
+      passwordToken: token
+    });
+
+  } catch(error) {
+    next(error);
+  }
+
+}
+
+exports.changePassword = async function(req, res, next) {
+  const resetToken =  req.body.resetToken;
+  const userId =      req.body.userId;
+  const newPassword = req.body.password;
+
+  try {
+
+    const user = await User.findOne({resetToken: resetToken,
+                               resetTokenExpiration: {$gt: Date.now()},
+                               _id: userId});
+    if (!user) {
+      const error = new Error('No account found.');
+      error.statusCode = 404;
+      error.data = "No account found.";
+      throw error;
+    }
+
+    const hashedPw = await bcrypt.hash(newPassword, 12);
+    user.password = hashedPw;
+    user.resetToken = undefined;
+    user.resetTokenExpiration = undefined;
+    user.save();
+
+    res.status(200).json({
+      message: 'Password changed'
+    });
+
+  }catch(err) {
+    next(err);
+  }
 
 }

@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,9 @@ import { MatDialogRef } from '@angular/material';
 export class LoginComponent implements OnInit {
   logInFrom: FormGroup;
   hide = true;
-
+  private authListenerSubs: Subscription;
+  userIsAuthenticated = false;
+  
   constructor(public authService: AuthService,
               private snackBarService: SnackBarService,
               private dialogRef: MatDialogRef<LoginComponent>
@@ -25,6 +28,11 @@ export class LoginComponent implements OnInit {
       'email': new FormControl(null, {validators: [Validators.required, Validators.email]}),
       'password': new FormControl(null, {validators: [Validators.required, Validators.minLength(8)]})
     });
+
+    // this.authListenerSubs = this.authService.getAuthStatusListener()
+    // .subscribe(isAuthenticated => {
+    //   this.userIsAuthenticated = isAuthenticated;
+    // });
   }
 
   onlognin(){
@@ -36,7 +44,10 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(this.logInFrom.value.email, this.logInFrom.value.password);
-    this.onClose();
+    
+      this.onClose();
+    
+ 
   }
 
   onClose() {

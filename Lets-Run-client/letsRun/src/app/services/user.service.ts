@@ -21,7 +21,10 @@ export class UserService {
     private userFriends: UserModel;
     private userFriendsListener = new Subject<{userFreinds: UserModel}>();
 
-    constructor(private http: HttpClient, private route: Router,private authService: AuthService) {}
+    constructor(private http: HttpClient,
+       private route: Router,
+       private authService: AuthService,
+       private snackBarService: SnackBarService) {}
 
       getUserId() {
         return this.userId;
@@ -85,4 +88,24 @@ export class UserService {
         this.http.put(BACKEND_URL + "/users/" + "add_avatar", avatarData).subscribe(result => { this.getUserInfo(id, '') });
 
         } 
+
+        userGetResetToken(email: string) {
+          const data = { email: email}
+          this.http.post(BACKEND_URL + "/users/" + "reset/password", data)
+              .subscribe(result => {
+                this.snackBarService.showMessageWithDuration('Message with instruction send to email addres',  'ok', 3000);
+                this.route.navigate(['/']);
+              });
+        }
+
+        userGetChangePassword(token: string) {
+         return this.http.get<{ passwordToken: string, userId: string }>(BACKEND_URL + "/users/get_change/password/" + token);
+        }
+
+        changePassword(resetToken: string, userId: string, password: string) {
+          const data = { resetToken: resetToken,  userId: userId, password: password }
+          return this.http.post(BACKEND_URL + '/users/change_password', data)
+
+        }
+
     }

@@ -62,7 +62,7 @@ export class AuthService {
 
       login(email: string, password: string) {
         const authData = { email: email, password: password };
-        this.http.post<{ token: string; expiresIn: number; username: string; userId: string }>(BACKEND_URL + "/users/sign_in", authData)
+        return this.http.post<{ token: string; expiresIn: number; username: string; userId: string }>(BACKEND_URL + "/users/sign_in", authData)
             .subscribe(response => {
                 const token = response.token;
                 this.token = token;
@@ -93,13 +93,14 @@ export class AuthService {
 
 
       authenticateUser(userToken: string) {
-
         this.http.get(BACKEND_URL + "/users/authenticate/" + userToken);
       }
 
 
 
       autoAuthUser() {
+        
+        
         const authInformation = this.getAuthData();
         if (!authInformation) {
           return;
