@@ -22,17 +22,23 @@ var transporter = nodemailer.createTransport({
 
 
 exports.register = function (req, res, next) {
+  let token;
 
   crypto.randomBytes(32, (err, buffer) => {
+    token = buffer.toString('hex');
+  });
 
     const errors = validationResult(req);
-    const token = buffer.toString('hex');
 
     if (!errors.isEmpty()) {
 
-      const error = new Error('Validation failed.');
+      let error;
+      error = new Error(req._validationErrors[0].msg);
+      if (!error) {
+        error = new Error('Validation failed.');
+      }
       error.statusCode = 422;
-      error.data = errors.array();
+      // error.data = errors.array();
       throw error;
     }
 
@@ -93,7 +99,7 @@ exports.register = function (req, res, next) {
             next(error);
           });
       });
-  });
+  
 };
 
 exports.activetUser = async function (req, res, next) {

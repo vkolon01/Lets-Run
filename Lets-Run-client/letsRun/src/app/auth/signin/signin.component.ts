@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-signin',
@@ -12,7 +13,8 @@ import { MatDialogRef } from '@angular/material';
 export class SigninComponent implements OnInit {
 
   signInFrom: FormGroup;
-  hide = true;
+  success;
+  private authSub: Subscription;
 
   constructor(public authService: AuthService,
       private snackBarService: SnackBarService,
@@ -37,7 +39,8 @@ export class SigninComponent implements OnInit {
       this.snackBarService.showMessage('Please check your registration information!', 'OK');
       return;
     }
-    this.authService.createUser(
+    
+      this.authService.createUser(
       this.signInFrom.value.email,
       this.signInFrom.value.password,
       this.signInFrom.value.validatePassword,
@@ -46,7 +49,14 @@ export class SigninComponent implements OnInit {
       this.signInFrom.value.lastName,
       this.signInFrom.value.dob
     )
-    this.onClose();
+        this.authSub = this.authService.getRegisteredListener().subscribe(result => {
+          if(result === true) {
+            this.onClose();
+          }
+        })
+        
+
+    
   }
 
   onClose() {

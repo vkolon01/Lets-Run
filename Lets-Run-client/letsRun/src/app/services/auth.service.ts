@@ -17,7 +17,8 @@ export class AuthService {
     private tokenTimer: any;
     private userId: string;
     private authStatusListener = new Subject<boolean>();
-    private userIdAndUsernameListener = new Subject<string>();
+    private userIdListener = new Subject<string>();
+    private registeredListener = new Subject<boolean>();
     private username: string;
     private usernameListener = new Subject<string>();
     constructor(private http: HttpClient, private router: Router, private snackBarService: SnackBarService) {}
@@ -39,8 +40,12 @@ export class AuthService {
         return this.authStatusListener.asObservable();
       }
 
+      getRegisteredListener() {
+        return this.registeredListener.asObservable();
+      }
+
       getUserIdListener() {
-        return this.userIdAndUsernameListener.asObservable();
+        return this.userIdListener.asObservable();
       }
 
       getUserNameListener() {
@@ -55,12 +60,14 @@ export class AuthService {
 
       createUser(email: string, password: string, validatePassword: string, username: string, firstName: string, lastName: string, dob: Date) {
         const authData: AuthData = { email: email, password: password, validatePassword: validatePassword, username: username, firstName: firstName, lastName: lastName, dob: dob };
-        this.http.post(BACKEND_URL + "/users/register", authData).subscribe(
+       this.http.post(BACKEND_URL + "/users/register", authData).subscribe(
           () => {
+            this.registeredListener.next(true);
             this.login(email, password);
             this.router.navigate(["/"]);
           },
           error => {
+            this.registeredListener.next(false);
             this.authStatusListener.next(false);
           }
         );
@@ -81,14 +88,14 @@ export class AuthService {
                   this.authStatusListener.next(true);
                   this.username = response.username;
                   this.usernameListener.next(response.username);
-                  this.userIdAndUsernameListener.next(response.userId);
+                  this.userIdListener.next(response.userId);
                   const now = new Date();
                   const expirationDate = new Date(
                     now.getTime() + expiresInDuration * 1000
                   );
                   // console.log(expirationDate);
                   this.saveAuthData(token, expirationDate, this.userId, this.username);
-                  this.snackBarService.showMessageWithDuration('Welcome back ' + this.username + '!', 'OK', 3000);
+                  this.snackBarService.showMessageWithDuration('Welcome ' + this.username + '!', 'OK', 3000);
                   this.router.navigate(["/"]);
                 }
               },
@@ -117,7 +124,7 @@ export class AuthService {
           this.userId = authInformation.userId;
           this.setAuthTimer(expiresIn / 1000);
           this.authStatusListener.next(true);
-          this.userIdAndUsernameListener.next(authInformation.userId);
+          this.userIdListener.next(authInformation.userId);
           this.usernameListener.next(authInformation.username);
           console.log('authInformation.username  service');
           console.log(authInformation.username);
@@ -129,7 +136,7 @@ export class AuthService {
         this.token = null;
         this.isAuthenticated = false;
         this.authStatusListener.next(false);
-        this.userIdAndUsernameListener.next(null);        
+        this.userIdListener.next(null);        
         this.userId = null;
         clearTimeout(this.tokenTimer);
         this.clearAuthData();
@@ -137,7 +144,6 @@ export class AuthService {
       }
     
       private setAuthTimer(duration: number) {
-        // console.log("Setting timer: " + duration);
         this.tokenTimer = setTimeout(() => {
           this.logout();
         }, duration * 1000);

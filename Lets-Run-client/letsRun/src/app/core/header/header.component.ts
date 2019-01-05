@@ -16,22 +16,27 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 export class HeaderComponent implements OnInit, OnDestroy {
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
-  userId: string;
-  username: string;
-  private usernameSub: Subscription;
+  userId:                   string;
+  username:                 string;
+  private usernameSub:      Subscription;
+  private userIdSub:        Subscription;
 
   constructor(private authService: AuthService,
               private dialog: MatDialog)
               {
-
                 this.usernameSub = this.authService.getUserNameListener().subscribe(result => {
                   this.username = result;
                 });
+                this.userIdSub = this.authService.getUserIdListener().subscribe(result => {
+                  this.userId = result;
+                })
               }
 
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();
-    this.userId = this.authService.getUserId();
+    this.userIdSub = this.authService.getUserIdListener().subscribe(result => {
+      this.userId = result;
+    })
     this.authListenerSubs = this.authService.getAuthStatusListener()
     .subscribe(isAuthenticated => {
       this.userIsAuthenticated = isAuthenticated;
@@ -39,11 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.usernameSub = this.authService.getUserNameListener().subscribe(result => {
       this.username = result;
-      console.log('this.username');
-      console.log(this.username);
     });
-
-        
   }
 
 
@@ -71,7 +72,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogOut() {
-
     this.authService.logout();
   }
 
@@ -88,6 +88,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(){
     this.authListenerSubs.unsubscribe();
     this.usernameSub.unsubscribe();
+    this.userIdSub.unsubscribe();
   }
 
 

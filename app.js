@@ -23,15 +23,13 @@ mongoose
 
     "mongodb://Maksim:" + process.env.MONGO_ATLAS_PW + "@maksimdb-shard-00-00-7j1q5.mongodb.net:27017,maksimdb-shard-00-01-7j1q5.mongodb.net:27017,maksimdb-shard-00-02-7j1q5.mongodb.net:27017/test?ssl=true&replicaSet=MaksimDB-shard-0&authSource=admin&retryWrites=true",
   
-    // "mongodb://Maksim:" +
-    // process.env.MONGO_ATLAS_PW +
-    // "@maksimdb-7j1q5.mongodb.net/test",
     {
-      "user": process.env.MONGODB_NAME,
-      "pass": process.env.MONGO_ATLAS_PW,
+      // "user": process.env.MONGODB_NAME,
+      // "pass": process.env.MONGO_ATLAS_PW,
+      "user": 'Maksim',
+      "pass": '11021102a',
        useNewUrlParser: true
   }
-    // { useNewUrlParser: true }
     )
 
   .then(() => {
