@@ -72,7 +72,7 @@ exports.register = function (req, res, next) {
 
             transporter.sendMail(emailToSend, function (err, info) {
               if (err)
-                console.log(err)
+                console.log(err);
               else
                 console.log(info);
             });
@@ -94,7 +94,7 @@ exports.register = function (req, res, next) {
           });
       });
   });
-}
+};
 
 exports.activetUser = async function (req, res, next) {
   const errors = validationResult(req);
@@ -141,12 +141,7 @@ exports.activetUser = async function (req, res, next) {
   } catch (error) {
     next(error);
   }
-
-
-
-
-}
-
+};
 
 exports.sign_in = function (req, res, next) {
 
@@ -305,7 +300,7 @@ exports.getUserProfile = function (req, res, next) {
       next(error);
     });
 
-}
+};
 
 exports.deleteUser = function (req, res, next) {
 
@@ -377,93 +372,133 @@ exports.deleteUser = function (req, res, next) {
       next(error);
     });
 
-}
+};
 
 
 exports.followPersonController = function (req, res, next) {
 
   const userId = req.params.user_id;
 
-  let fetchedUser;
+  let userToFollowPromise = new Promise((resolve,reject) => {
+    User.findById(userId)
+        .then(user => {
 
-  User.findById(userId)
-    .then(followerToAd => {
-
-      if (!followerToAd) {
-        const error = new Error('Could not find user');
-        error.statusCode = 404;
-        error.data = "Could not find user";
-        throw error;
-      }
-
-      fetchedUser = followerToAd;
-    })
-
-  User.findById(req.userData.userId)
-    .then(user => {
-      if (!user) {
-        const error = new Error('Could not find user');
-        error.statusCode = 404;
-        error.data = "Could not find user";
-        throw error;
-      }
-
-      if (user._id.toString() === fetchedUser._id.toString()) {
-        const error = new Error("You cannot follow your self, sorry! :)");
-        error.statusCode = 501;
-        throw error;
-      }
-
-      let contains = false;
-
-      if (user.following.length < 1) {
-        contains = false;
-      } else {
-
-        for (let i = 0; i < user.following.length; i++) {
-          if (user.following[i].toString() === fetchedUser._id.toString()) {
-            contains = true;
-            break;
+          if (!user) {
+            const error = new Error('Could not find user');
+            error.statusCode = 404;
+            error.data = "Could not find user";
+            reject(error);
+          }else{
+            resolve(user);
           }
 
+        })
+        .catch((err) => {
+          reject(err);
+        })
+  });
+
+  let getCurrentUserPromise = new Promise((resolve, reject) => {
+    User.findById(req.userData.userId)
+        .then(user => {
+          if (!user) {
+            const error = new Error('Could not find user');
+            error.statusCode = 404;
+            error.data = "Could not find user";
+            reject(error);
+          }else{
+            resolve(user);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        })
+  });
+
+  Promise.all([userToFollowPromise,getCurrentUserPromise])
+      .then((usersArray) => {
+        let selectedUserFollow = usersArray[0];
+        let curUser = usersArray[1];
+
+        if (curUser._id.toString() === selectedUserFollow._id.toString()) {
+          res.status(501).json({
+            message: "You cannot follow your self, sorry! :)"
+          })
+        }else{
+
+          if(curUser.following.map((followedUserId) => {return followedUserId._id.toString();}).includes(selectedUserFollow._id.toString())){
+
+            User.findByIdAndUpdate(selectedUserFollow._id, {
+              $pull: {
+                "followers": curUser._id
+              }
+            })
+                .then(unfollowedUser => {
+                  User.findByIdAndUpdate(curUser._id, {
+                    $pull: {
+                      "following": unfollowedUser._id
+                    }
+                  })
+                      .then(updatedCurUser => {
+                        console.log(unfollowedUser.followers);
+                        unfollowedUser.save();
+                        updatedCurUser.save();
+                        res.status(201).json({
+                          message: "Following and followers changed",
+                        });
+                      })
+                      .catch(() => {
+                        res.status(501).json({
+                          message: "some error has occurred"
+                        })
+                      });
+                })
+                .catch((err) => {
+                  res.status(501).json({
+                    message: "some error has occurred"
+                  })
+                });
+          }else{
+            User.findByIdAndUpdate(selectedUserFollow._id, {
+              $push: {
+                "followers": curUser._id
+              }
+            })
+                .then(followedUser => {
+                  User.findByIdAndUpdate(curUser._id,{
+                    $push: {
+                      "following": followedUser._id
+                    }
+                  })
+                      .then(updatedCurrentUser => {
+                        followedUser.save();
+                        updatedCurrentUser.save();
+                        res.status(201).json({
+                          message: "Following and followers changed",
+                        });
+                      })
+                      .catch(() => {
+                        res.status(501).json({
+                          message: "some error has occurred"
+                        })
+                      });
+
+                })
+                .catch((err) => {
+                  res.status(501).json({
+                    message: "some error has occurred"
+                  })
+                })
+          }
         }
-      }
-
-      if (!contains) {
-        user.following.push(fetchedUser._id);
-        User.findByIdAndUpdate(fetchedUser._id, {
-          $push: {
-            "followers": user._id
-          }
-        }).then(user => {
-          user.save()
-        });
-      } else {
-        user.following.pull(fetchedUser._id);
-        User.findByIdAndUpdate(fetchedUser._id, {
-          $pull: {
-            "followers": user._id
-          }
-        }).then(user => {
-          user.save()
-        });
-      }
-
-      user.save();
-
-      res.status(201).json({
-        message: "Following and followers changed",
+      })
+      .catch((err) => {
+        res.status(501).json({
+          message: "some error has occurred when retrieving user"
+        })
       });
 
-    })
-    .catch(error => {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    });
-
-}
+};
 
 
 exports.add_avatar = function (req, res, next) {
@@ -483,7 +518,7 @@ exports.add_avatar = function (req, res, next) {
       "imagePath": imagePath
     }
   }).then(user => {
-    user.save()
+    user.save();
     res.status(201).json({
       message: "Avatar changed",
     });
@@ -494,7 +529,7 @@ exports.add_avatar = function (req, res, next) {
     next(error);
   });
 
-}
+};
 
 exports.resetPasswordGetToken = async function (req, res, next) {
   console.log('RESETE');
@@ -555,7 +590,7 @@ exports.resetPasswordGetToken = async function (req, res, next) {
   } catch (err) {
     next(err);
   }
-}
+};
 
 
 exports.getChangePassword = async function (req, res, next) {
@@ -575,7 +610,7 @@ exports.getChangePassword = async function (req, res, next) {
     next(error);
   }
 
-}
+};
 
 exports.changePassword = async function(req, res, next) {
   const resetToken =  req.body.resetToken;
@@ -608,4 +643,4 @@ exports.changePassword = async function(req, res, next) {
     next(err);
   }
 
-}
+};

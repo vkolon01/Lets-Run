@@ -2,18 +2,15 @@
   <div >
     <p class="user_sub">{{ user?.username }}</p>
   </div>
-   <p class="user_sub">Joined: {{ memberSince }}</p> 
+   <p class="user_sub">Joined: {{ memberSince }}</p>
   <div>
-   <p class="user_sub">age: {{ age }} years</p> 
+   <p class="user_sub">age: {{ age }} years</p>
   </div>
   <div>
-    <!--  <button (click)="deleteUser()">Delete User</button> -->
-        <!-- <button (click)="freindManipulation()">Follow</button> -->
         <ul>
-            <li *ngIf="!alreadyFreinds && user_id !== currentUserId" (click)="freindManipulation()">Follow</li>
-            <li *ngIf="alreadyFreinds && user_id !== currentUserId" (click)="freindManipulation()">Stop following</li>
+            <li *ngIf="user_id !== currentUserId" (click)="friendManipulation()"><span>{{alreadyFriends ? "Unfollow" : "Follow"}}</span> </li>
             <li *ngIf="user_id === currentUserId" (click)="deleteUser()">Delete Yourself</li>
           </ul>
   </div>
-  
+
 </div>

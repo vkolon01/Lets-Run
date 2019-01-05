@@ -28,7 +28,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   totalEvents = 0;
   eventsPerPage = 5;
   currentPage = 1;
-  pageSizeOptions = [2, 5, 10, 20]
+  pageSizeOptions = [2, 5, 10, 20];
 
   events: EventModule[] = [];
   private eventSub: Subscription;
@@ -43,7 +43,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
     {value: 'Mud Run & fun Run', viewValue: 'Mud Run & fun Run'},
     {value: 'Trail', viewValue: 'Trail'},
     {value: 'Walking', viewValue: 'Walking'}
-  ]
+  ];
 
 
   constructor(private snackBarService: SnackBarService, private eventService: EventService, private authService: AuthService, private route: Router) { }

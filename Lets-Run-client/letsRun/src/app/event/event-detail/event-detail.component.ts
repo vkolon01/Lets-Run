@@ -9,7 +9,7 @@ import { Subscription, Observable } from 'rxjs';
 import { log } from 'util';
 import { AuthService } from 'src/app/services/auth.service';
 import { mimeType } from 'src/app/validators/mime-type.validator';
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { Datasource } from 'ngx-ui-scroll';
@@ -28,11 +28,9 @@ registerLocaleData(localeRu);
     '../../global-css/global-input.scss'
   ]
 })
-export class EventDetailComponent implements OnInit, OnDestroy {
-
+export class EventDetailComponent implements OnInit {
 
   eventCreatedAt;
-
   event: EventModule;
   private eventSub: Subscription;
 
@@ -42,14 +40,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   // comments: CommentModule[] = [];
   eventId: string;
-  hasComments = false;
 
   eventLikes: string[] = [];
   private eventLikeSubscribe: Subscription;
   containsLike: boolean;
 
   eventWillAttempt: string[] = [];
-  eventWillAttemptSubscribe: Subscription;
   containsEvent: boolean;
 
   commentForm: FormGroup;
@@ -60,8 +56,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   MIN = 1;
   MAX = 1;
-
-  // private commentsSub: Subscription;
 
   constructor(private eventService: EventService,
     private activeRoute: ActivatedRoute,
@@ -99,36 +93,33 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       'content': new FormControl(null, { validators: [Validators.required] }),
     });
 
-
     this.userId = this.authService.getUserId();
 
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
 
       this.eventId = paramMap.get('event_id');
-
       this.eventService.getEventById(this.eventId);
-
 
       this.eventSub = this.eventService.getEventUpdate()
         .subscribe((value: { event: EventModule }) => {
           this.event = value.event;
-         this.eventCreatedAt = moment(this.event.createdAt).fromNow()
-          this.checkForLikeExistance();
-          this.checkForAttemptExistance();
-        })
+          this.eventCreatedAt = moment(this.event.createdAt).fromNow();
+          this.checkForLikeExistence();
+          this.checkForAttemptExistence();
+        });
 
       this.eventLikeSubscribe = this.eventService.getLikesUpdate()
         .subscribe((value: { likes: string[] }) => {
           this.eventLikes = value.likes
-        })
+        });
 
       this.creatorNameAndIdSub = this.eventService.getCreatorNameAndId()
         .subscribe((value: { creatorName: string, creatorId: string }) => {
-          this.creatorId = value.creatorId,
-            this.eventCreatorName = value.creatorName
+          this.creatorId = value.creatorId;
+          this.eventCreatorName = value.creatorName;
         });
 
-    })
+    });
     this.creatorId = this.eventService.getCreatorId();
     this.eventCreatorName = this.eventService.getCreatorName();
   }
@@ -143,7 +134,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       image: this.event.picture,
       eventDate: this.event.eventDate,
       description: this.event.description
-    })
+    });
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -155,13 +146,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.dialog.open(AddEventComponent, dialogConfig);
   }
 
-
-  ngOnDestroy() {
-    // this.commentsSub.unsubscribe();
-  }
-
-
-
   deleteEvent() {
     this.confirm.openConfirmDialog('Are you sure want to delete the event?')
       .afterClosed().subscribe(result => {
@@ -169,7 +153,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           this.eventService.deleteEvent(this.eventId);
           this.snackBarService.showMessageWithDuration('Event deleted', '', 3000);
         }
-
       })
   }
 
@@ -179,7 +162,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   showCommentInputArea() {
     this.commentInputArea = !this.commentInputArea;
-
   }
 
   add_Comment() {
@@ -193,13 +175,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.updateComment();
 
   }
-  
+
   updateComment() {
     this.datasource.adapter.reload(1);
   }
 
   likeEvent() {
-    this.checkForLikeExistance();
+    this.checkForLikeExistence();
 
     if (!this.containsLike) {
       this.eventService.eventLikeSwitcher(this.eventId);
@@ -220,27 +202,15 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     }
 
     this.eventService.participateAtEvent(this.eventId);
-    this.checkForAttemptExistance();
+    this.checkForAttemptExistence();
   }
 
-  checkForLikeExistance() {
-
-    if (this.event.likes.includes(this.userId)) {
-      this.containsLike = true;
-    } else {
-      this.containsLike = false;
-    }
-
+  checkForLikeExistence() {
+    this.containsLike = this.event.likes.includes(this.userId);
   }
 
-  checkForAttemptExistance() {
-
-    if (this.event.runners.includes(this.userId)) {
-      this.containsEvent = true;
-    } else {
-      this.containsEvent = false;
-    }
-
+  checkForAttemptExistence() {
+    this.containsEvent = this.event.runners.includes(this.userId);
   }
 
 }
