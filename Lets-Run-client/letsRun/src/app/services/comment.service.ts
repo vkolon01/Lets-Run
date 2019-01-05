@@ -5,7 +5,7 @@ import { environment } from "../../environments/environment"
 import { CommentModule } from "../models/comment.model";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
-import { SnackBarService } from "../services/snack-bar.service";
+import { SnackBarService } from "./snack-bar.service";
 
 
 

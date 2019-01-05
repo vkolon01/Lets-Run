@@ -6,9 +6,12 @@ import { LoginComponent } from "./login/login.component";
 import { SigninComponent } from "./signin/signin.component";
 import { AuthRoutingModule } from "./auth-routing.module";
 import { AngularMaterialModule } from "../angular-material.module";
+import { AuthenticateUserComponent } from './authenticate-user/authenticate-user.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [AuthenticateUserComponent, ResetPasswordComponent, ChangePasswordComponent],
   imports: [CommonModule,  ReactiveFormsModule, AuthRoutingModule, AngularMaterialModule]
 })
 export class AuthModule {}

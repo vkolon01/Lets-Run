@@ -60,5 +60,14 @@ router.delete('/:user_id/delete_user', authCheck, userHandler.deleteUser);
 router.get('/:user_id/friend_manipulation',authCheck,  userHandler.followPersonController);
 
 router.put('/add_avatar', authCheck, extractFile, userHandler.add_avatar);
+
+router.get('/authenticate/:authToken', userHandler.activetUser);
+
+router.post('/reset/password', userHandler.resetPasswordGetToken);
+
+router.post('/change_password', userHandler.changePassword);
+
+router.get('/get_change/password/:token', userHandler.getChangePassword);
+
   
 module.exports = router;

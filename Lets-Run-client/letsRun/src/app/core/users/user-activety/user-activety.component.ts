@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UserModel } from '../../../models/user.model';
 import { ParamMap, ActivatedRoute } from '@angular/router';
 import { DialogService } from 'src/app/services/dialogService';
-import { AuthService } from 'src/app/auth/auth.service';
-import { UserService } from '../user.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 
@@ -29,7 +29,7 @@ export class UserActivetyComponent implements OnInit {
   
         this.user_id = paramMap.get('user_id');
         
-          this.userService.getUserInfo(this.user_id);
+          this.userService.getUserInfo(this.user_id, 'eventHistory');
   
           this.userSubscription = this.userService.getUserListener()
               .subscribe((value: {user: UserModel}) => {

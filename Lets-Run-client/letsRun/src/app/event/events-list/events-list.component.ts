@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { EventService } from '../event.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { EventService } from '../../services/event.service';
 import { PageEvent } from "@angular/material";
 import { EventModule } from '../../models/event.model';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
+import { mimeType } from 'src/app/validators/mime-type.validator';
+import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 

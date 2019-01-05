@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { mimeType } from 'src/app/validators/mime-type.validator';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { EventService } from '../event.service';
+import { EventService } from '../../services/event.service';
 import { MatDialogRef } from '@angular/material';
 import {MAT_DIALOG_DATA} from '@angular/material';
 
@@ -41,7 +41,7 @@ export class AddEventComponent implements OnInit {
       'pace': new FormControl(null, { validators: [Validators.required] }),
       'image': new FormControl(null, { asyncValidators: [mimeType] }),
       'eventDate': new FormControl(null, { validators: [Validators.required] }),
-      'description': new FormControl(null, { validators: [Validators.required] }),
+      'description': new FormControl(null),
     });
 
     if(this.data) {
