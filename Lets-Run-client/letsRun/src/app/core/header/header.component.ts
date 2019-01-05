@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog, MatDialogConfig } from '@angular/material'
 
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { SigninComponent } from 'src/app/auth/signin/signin.component';
 import { AddEventComponent } from 'src/app/event/add-event/add-event.component';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -17,9 +18,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private authListenerSubs: Subscription;
   userId: string;
   username: string;
+  private usernameSub: Subscription;
 
   constructor(private authService: AuthService,
-              private dialog: MatDialog) {}
+              private dialog: MatDialog)
+              {
+
+                this.usernameSub = this.authService.getUserNameListener().subscribe(result => {
+                  this.username = result;
+                });
+              }
 
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();
@@ -29,9 +37,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.userIsAuthenticated = isAuthenticated;
     });
 
-    this.username = this.authService.getUsername();
+    this.usernameSub = this.authService.getUserNameListener().subscribe(result => {
+      this.username = result;
+      console.log('this.username');
+      console.log(this.username);
+    });
+
         
   }
+
 
   onLogin() {
     const dialogConfig = new MatDialogConfig();
@@ -41,6 +55,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     dialogConfig.height = "50%";
 
     this.dialog.open(LoginComponent, dialogConfig);
+    this.usernameSub = this.authService.getUserNameListener().subscribe(result => {
+      this.username = result;
+    });
   }
 
   onRegister() {
@@ -70,6 +87,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.authListenerSubs.unsubscribe();
+    this.usernameSub.unsubscribe();
   }
 
 

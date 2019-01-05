@@ -28,15 +28,9 @@ export class LoginComponent implements OnInit {
       'email': new FormControl(null, {validators: [Validators.required, Validators.email]}),
       'password': new FormControl(null, {validators: [Validators.required, Validators.minLength(8)]})
     });
-
-    // this.authListenerSubs = this.authService.getAuthStatusListener()
-    // .subscribe(isAuthenticated => {
-    //   this.userIsAuthenticated = isAuthenticated;
-    // });
   }
 
   onlognin(){
-    // console.log(this.logInFrom.value.password);
     
     if (this.logInFrom.invalid) {
       this.snackBarService.showMessage('Please check your login information!', 'OK');
@@ -45,7 +39,15 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.logInFrom.value.email, this.logInFrom.value.password);
     
-      this.onClose();
+    this.authService.getAuthStatusListener().subscribe(result => {
+      if(result === true) {
+        this.onClose();
+      }
+
+    })
+
+    
+
     
  
   }

@@ -44,8 +44,6 @@ export class UserService {
          return  this.http
         .get<{user: UserModel }>(BACKEND_URL + '/users/' + userId + queryParams)
         .subscribe(user => {
-          console.log('user');
-          console.log(user);
 
           this.user = user.user
           this.userListener.next({

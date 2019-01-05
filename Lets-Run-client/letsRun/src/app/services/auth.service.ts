@@ -19,7 +19,7 @@ export class AuthService {
     private authStatusListener = new Subject<boolean>();
     private userIdAndUsernameListener = new Subject<string>();
     private username: string;
-  
+    private usernameListener = new Subject<string>();
     constructor(private http: HttpClient, private router: Router, private snackBarService: SnackBarService) {}
 
     getToken() {
@@ -43,9 +43,15 @@ export class AuthService {
         return this.userIdAndUsernameListener.asObservable();
       }
 
+      getUserNameListener() {
+        return this.usernameListener.asObservable();
+      }
+
       getUsername() {
         return this.username;
       }
+
+
 
       createUser(email: string, password: string, validatePassword: string, username: string, firstName: string, lastName: string, dob: Date) {
         const authData: AuthData = { email: email, password: password, validatePassword: validatePassword, username: username, firstName: firstName, lastName: lastName, dob: dob };
@@ -66,8 +72,7 @@ export class AuthService {
             .subscribe(response => {
                 const token = response.token;
                 this.token = token;
-                console.log('this.username  service');
-                console.log(response.username);
+
                 if (token) {
                   const expiresInDuration = response.expiresIn;
                   this.setAuthTimer(expiresInDuration);
@@ -75,6 +80,7 @@ export class AuthService {
                   this.userId = response.userId;
                   this.authStatusListener.next(true);
                   this.username = response.username;
+                  this.usernameListener.next(response.username);
                   this.userIdAndUsernameListener.next(response.userId);
                   const now = new Date();
                   const expirationDate = new Date(
@@ -99,8 +105,6 @@ export class AuthService {
 
 
       autoAuthUser() {
-        
-        
         const authInformation = this.getAuthData();
         if (!authInformation) {
           return;
@@ -114,7 +118,9 @@ export class AuthService {
           this.setAuthTimer(expiresIn / 1000);
           this.authStatusListener.next(true);
           this.userIdAndUsernameListener.next(authInformation.userId);
-          this.username = authInformation.username;
+          this.usernameListener.next(authInformation.username);
+          console.log('authInformation.username  service');
+          console.log(authInformation.username);
         }
       }
     
@@ -131,7 +137,7 @@ export class AuthService {
       }
     
       private setAuthTimer(duration: number) {
-        console.log("Setting timer: " + duration);
+        // console.log("Setting timer: " + duration);
         this.tokenTimer = setTimeout(() => {
           this.logout();
         }, duration * 1000);
