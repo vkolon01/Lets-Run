@@ -72,7 +72,7 @@ exports.register = function (req, res, next) {
 
             transporter.sendMail(emailToSend, function (err, info) {
               if (err)
-                console.log(err)
+                console.log(err);
               else
                 console.log(info);
             });
@@ -94,7 +94,7 @@ exports.register = function (req, res, next) {
           });
       });
   });
-}
+};
 
 exports.activetUser = async function (req, res, next) {
   const errors = validationResult(req);
@@ -417,29 +417,31 @@ exports.followPersonController = function (req, res, next) {
 
   Promise.all([userToFollowPromise,getCurrentUserPromise])
       .then((usersArray) => {
-        let userToFollow = usersArray[0];
+        let selectedUserFollow = usersArray[0];
         let curUser = usersArray[1];
 
-        if (curUser._id.toString() === userToFollow._id.toString()) {
+        if (curUser._id.toString() === selectedUserFollow._id.toString()) {
           res.status(501).json({
             message: "You cannot follow your self, sorry! :)"
           })
         }else{
-          if(curUser.following.includes(userToFollow._id)){
-            curUser.following.push(userToFollow._id);
-            User.findByIdAndUpdate(userToFollow._id, {
-              $push: {
+
+          if(curUser.following.map((followedUserId) => {return followedUserId._id.toString();}).includes(selectedUserFollow._id.toString())){
+
+            User.findByIdAndUpdate(selectedUserFollow._id, {
+              $pull: {
                 "followers": curUser._id
               }
             })
-                .then(followedUser => {
+                .then(unfollowedUser => {
                   User.findByIdAndUpdate(curUser._id, {
-                    $push: {
-                      "followers": curUser._id
+                    $pull: {
+                      "following": unfollowedUser._id
                     }
                   })
                       .then(updatedCurUser => {
-                        followedUser.save();
+                        console.log(unfollowedUser.followers);
+                        unfollowedUser.save();
                         updatedCurUser.save();
                         res.status(201).json({
                           message: "Following and followers changed",
@@ -450,9 +452,6 @@ exports.followPersonController = function (req, res, next) {
                           message: "some error has occurred"
                         })
                       });
-                  res.status(201).json({
-                    message: "Following and followers changed",
-                  });
                 })
                 .catch((err) => {
                   res.status(501).json({
@@ -460,19 +459,19 @@ exports.followPersonController = function (req, res, next) {
                   })
                 });
           }else{
-            User.findByIdAndUpdate(userToFollow._id, {
-              $pull: {
+            User.findByIdAndUpdate(selectedUserFollow._id, {
+              $push: {
                 "followers": curUser._id
               }
             })
-                .then(unfollowedUser => {
+                .then(followedUser => {
                   User.findByIdAndUpdate(curUser._id,{
-                    $pull: {
-                      "followers": userToFollow._id
+                    $push: {
+                      "following": followedUser._id
                     }
                   })
                       .then(updatedCurrentUser => {
-                        unfollowedUser.save();
+                        followedUser.save();
                         updatedCurrentUser.save();
                         res.status(201).json({
                           message: "Following and followers changed",
