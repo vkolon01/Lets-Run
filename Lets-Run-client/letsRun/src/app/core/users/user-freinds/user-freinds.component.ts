@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserModel } from '../../../models/user.model';
 import { DialogService } from 'src/app/services/dialogService';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { UserService } from '../user.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-user-freinds',
@@ -32,7 +32,7 @@ export class UserFreindsComponent implements OnInit {
       
 
       
-        this.userService.getUserInfo(this.user_id);
+        this.userService.getUserInfo(this.user_id, 'friends');
 
         this.userSubscription = this.userService.getUserListener()
             .subscribe((value: {user: UserModel}) => {

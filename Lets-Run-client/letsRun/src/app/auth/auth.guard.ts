@@ -7,7 +7,7 @@ import {
   import { Injectable } from "@angular/core";
   import { Observable } from "rxjs";
   
-  import { AuthService } from "./auth.service";
+  import { AuthService } from "../services/auth.service";
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { LoginComponent } from "./login/login.component";
   

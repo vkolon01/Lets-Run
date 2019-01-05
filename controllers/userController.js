@@ -1,62 +1,150 @@
 const {
   validationResult
 } = require('express-validator/check');
-
+const crypto = require('crypto');
 var bcrypt = require('bcryptjs');
 var User = require('../models/user_model');
 var constants = require('../constants/messages');
 var jwt = require('jsonwebtoken');
 var Comment = require('../models/comment_model');
 var Event = require('../models/event_model');
+var nodemailer = require('nodemailer');
+
+
+var transporter = nodemailer.createTransport({
+  host: "smtp.google.com",
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_EMAIL,
+    pass: process.env.GMAIL_PASSWORD
+  }
+});
 
 
 exports.register = function (req, res, next) {
 
-  const errors = validationResult(req);
+  crypto.randomBytes(32, (err, buffer) => {
 
-  if (!errors.isEmpty()) {
-    
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
+    const errors = validationResult(req);
+    const token = buffer.toString('hex');
 
-  if(req.body.password !== req.body.validatePassword) {
-    const error = new Error("Passwords are not matching.");
-    error.statusCode = 501;
-    throw error;
-  }
+    if (!errors.isEmpty()) {
+
+      const error = new Error('Validation failed.');
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
+
+    if (req.body.password !== req.body.validatePassword) {
+      const error = new Error("Passwords are not matching.");
+      error.statusCode = 501;
+      throw error;
+    }
 
 
-  bcrypt.hash(req.body.password, 12)
-    .then(hashedPw => {
-      const user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        username: req.body.username,
-        dob: req.body.dob,
-        password: hashedPw,
-        email: req.body.email
-      });
-      user.save()
-        .then(result => {
-          res.status(201).json({
-            message: 'User created!',
-            userId: result._id
-          });
-        })
-        .catch(error => {
-          if (!error.statusCode) {
-            console.log('error');
-
-            console.log(error);
-            
-            error.statusCode = 500;
-          }
-          next(error);
+    bcrypt.hash(req.body.password, 12)
+      .then(hashedPw => {
+        const user = new User({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          username: req.body.username,
+          dob: req.body.dob,
+          password: hashedPw,
+          email: req.body.email,
+          authToken: token
         });
+        user.save()
+          .then(result => {
+
+            const emailToSend = {
+              from: '"LetsRun" <events@letsrun.com>',
+              to: user.email,
+              subject: "You have to Authenticate",
+              text: "You have to Authenticate",
+              html: `
+            <p>You have to Authenticate</p>
+            <p> You need to authenticate your self</p>
+            <p> simply by clicking on this <a href="http://localhost:4200/auth/${token}">link</a></p>
+            <p>You'r Lets Run team!</p>
+          `
+            };
+
+            transporter.sendMail(emailToSend, function (err, info) {
+              if (err)
+                console.log(err)
+              else
+                console.log(info);
+            });
+
+            res.status(201).json({
+              message: 'User created!',
+              userId: result._id
+            });
+          })
+          .catch(error => {
+            if (!error.statusCode) {
+              console.log('error');
+
+              console.log(error);
+
+              error.statusCode = 500;
+            }
+            next(error);
+          });
+      });
+  });
+}
+
+exports.activetUser = async function (req, res, next) {
+  const errors = validationResult(req);
+  userToken = req.params.authToken;
+
+  try {
+    var user = await User.findOne({
+      authToken: userToken
     });
+
+    if (!user) {
+      const error = new Error('User not found');
+      error.statusCode = 404;
+      error.data = errors.array();
+      throw error;
+    }
+
+    user.activated = true;
+
+    user.save();
+
+    const emailToSend = {
+      from: '"LetsRun" <events@letsrun.com>',
+      to: user.email,
+      subject: "You have Authenticated",
+      text: "You have Authenticated",
+      html: `
+      <p>You have Authenticated</p>
+      <p>You can now post new events and comments and be the one of our community!</p>
+      <p>You'r Lets Run team!</p>
+    `
+    };
+
+    transporter.sendMail(emailToSend, function (err, info) {
+      if (err)
+        console.log(err)
+      else
+        console.log(info);
+    });
+
+    res.status(200).json({
+      message: 'User Authenticated!'
+    });
+  } catch (error) {
+    next(error);
+  }
+
+
+
+
 }
 
 
@@ -124,6 +212,21 @@ exports.sign_in = function (req, res, next) {
 exports.getUserProfile = function (req, res, next) {
 
   const errors = validationResult(req);
+  const userId = req.params.user_id;
+
+  const queryParams = req.query.info;
+
+  let followersPopulation = '';
+  let followersPopulationDetails = '';
+
+  let followingPopulation = '';
+  let followingPopulationDetails = '';
+
+  let createdEventsPopulation = '';
+  let createdEventsPopulationDetails = '';
+
+  let eventsWillAttemptPopulation = '';
+  let eventsWillAttemptPopulationDetails = '';
 
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -132,13 +235,25 @@ exports.getUserProfile = function (req, res, next) {
     throw error;
   }
 
-  const userId = req.params.user_id;
+  if (queryParams === 'friends') {
+    followingPopulation = 'following';
+    followingPopulationDetails = '_id imagePath username';
+
+    followersPopulation = 'followers';
+    followersPopulationDetails = '_id imagePath username';
+  } else if (queryParams === 'eventHistory') {
+    createdEventsPopulation = 'createdEvent';
+    createdEventsPopulationDetails = '_id location picture eventDate';
+
+    eventsWillAttemptPopulation = 'eventWillAttempt';
+    eventsWillAttemptPopulationDetails = '_id location picture eventDate';
+  }
 
   User.findById(userId)
-    .populate('following', '_id imagePath username')
-    .populate('followers', '_id imagePath username')
-    .populate('createdEvent', '_id location picture eventDate')
-    .populate('eventWillAttempt', '_id location picture eventDate')
+    .populate(followersPopulation, followersPopulationDetails)
+    .populate(followingPopulation, followingPopulationDetails)
+    .populate(createdEventsPopulation, createdEventsPopulationDetails)
+    .populate(eventsWillAttemptPopulation, eventsWillAttemptPopulationDetails)
     .then(user => {
       if (!user) {
         const error = new Error("No user find.");
@@ -147,20 +262,37 @@ exports.getUserProfile = function (req, res, next) {
         throw error;
       }
 
-      let modifiedUser = new User({
+      let modifiedUser;
+
+      modifiedUser = new User({
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username,
-        followers: user.followers,
-        following: user.following,
         imagePath: user.imagePath,
-        eventWillAttempt: user.eventWillAttempt,
-        createdEvent: user.createdEvent,
         dob: user.dob,
         createdAt: user.createdAt
       });
 
+      if (queryParams === 'friends') {
+        modifiedUser = new User({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          followers: user.followers,
+          following: user.following,
+          imagePath: user.imagePath
+        });
+      } else if (queryParams === 'eventHistory') {
+        modifiedUser = new User({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          imagePath: user.imagePath,
+          eventWillAttempt: user.eventWillAttempt,
+          createdEvent: user.createdEvent
+        });
+      }
 
       res.status(200).json({
         user: modifiedUser
@@ -339,7 +471,7 @@ exports.add_avatar = function (req, res, next) {
 
   if (req.file) {
     console.log('file');
-    
+
     const url = req.protocol + "://" + req.get("host");
     imagePath = url + "/images/" + req.file.filename;
   }
@@ -361,5 +493,119 @@ exports.add_avatar = function (req, res, next) {
     }
     next(error);
   });
+
+}
+
+exports.resetPasswordGetToken = async function (req, res, next) {
+  console.log('RESETE');
+  
+  let token;
+
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      const error = err;
+      error.statusCode = 500;
+      error.data = "No user find.";
+      throw error;
+    }
+
+    token = buffer.toString('hex');
+
+  });
+
+  try {
+    const user = await User.findOne({
+      email: req.body.email
+    });
+    if (!user) {
+      const error = new Error('No account with that email found.');
+      error.statusCode = 404;
+      error.data = "No account with that email found.";
+      throw error;
+    }
+
+    user.resetToken = token;
+    user.resetTokenExpiration = Date.now() + 36000000;
+    user.save();
+
+    const emailToSend = {
+      from: '"LetsRun" <events@letsrun.com>',
+      to: user.email,
+      subject: "You have requested to change your password",
+      text: "You have requested to change your password",
+      html: `
+    <p>You have received this email because you have requested to change your password</p>
+    <p> If it was not you, please don't click on this link, and your password will not change!</p>
+    <p> If it was you, simply click on this <a href="http://localhost:4200/auth/resetPassword/${token}">link to change your password</a></p>
+    <p>You'r Lets Run team!</p>
+  `
+    };
+
+    transporter.sendMail(emailToSend, function (err, info) {
+      if (err)
+        console.log(err)
+      else
+        console.log(info);
+    });
+
+    res.status(201).json({
+      message: 'email send'
+    });
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+
+exports.getChangePassword = async function (req, res, next) {
+  const token = req.params.token;
+  
+  try {
+
+    user = await User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}});
+
+    res.status(200).json({
+      message: 'Info to change password',
+      userId: user._id.toString(),
+      passwordToken: token
+    });
+
+  } catch(error) {
+    next(error);
+  }
+
+}
+
+exports.changePassword = async function(req, res, next) {
+  const resetToken =  req.body.resetToken;
+  const userId =      req.body.userId;
+  const newPassword = req.body.password;
+
+  try {
+
+    const user = await User.findOne({resetToken: resetToken,
+                               resetTokenExpiration: {$gt: Date.now()},
+                               _id: userId});
+    if (!user) {
+      const error = new Error('No account found.');
+      error.statusCode = 404;
+      error.data = "No account found.";
+      throw error;
+    }
+
+    const hashedPw = await bcrypt.hash(newPassword, 12);
+    user.password = hashedPw;
+    user.resetToken = undefined;
+    user.resetTokenExpiration = undefined;
+    user.save();
+
+    res.status(200).json({
+      message: 'Password changed'
+    });
+
+  }catch(err) {
+    next(err);
+  }
 
 }

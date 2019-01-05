@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { EventModule } from "../models/event.model";
 import { Subject, pipe } from "rxjs";
 import { map } from "rxjs/operators";
-import { SnackBarService } from "../services/snack-bar.service";
+import { SnackBarService } from "./snack-bar.service";
 
 
 

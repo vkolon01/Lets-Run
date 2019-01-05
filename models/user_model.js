@@ -40,6 +40,9 @@ var userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  authToken: String,
+  resetToken: String,
+  resetTokenExpiration: Date,
   following: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
