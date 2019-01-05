@@ -39,26 +39,21 @@ export class UserPageComponent implements OnInit {
       image: new FormControl(null, { validators: [Validators.required], asyncValidators: [ mimeType ] })
     })
 
-    
+
 
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
 
       this.user_id = paramMap.get('user_id');
-      
 
-      
         this.userService.getUserInfo(this.user_id, '');
-
         this.userSubscription = this.userService.getUserListener()
             .subscribe((value: {user: UserModel}) => {
               this.user = value.user
-            })
+            });
 
             this.current_user_id = this.authService.getUserId();
 
   })
-
-
 
 }
 
@@ -86,8 +81,8 @@ onImagePicked(event: Event){
 
 
 
-  freindManipulation() {
-    this.userService.freindManipulating(this.user_id);
+  friendManipulation() {
+    this.userService.friendManipulating(this.user_id);
   }
 
   uploadAvatar() {

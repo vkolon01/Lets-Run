@@ -10,11 +10,11 @@ import { AuthService } from "src/app/services/auth.service";
 import { routerNgProbeToken } from "@angular/router/src/router_module";
 
 
-const BACKEND_URL = environment.apiUrl; 
+const BACKEND_URL = environment.apiUrl;
 
 @Injectable({providedIn: "root"})
 export class UserService {
-  
+
     private userId: string;
     private user: UserModel;
     private userListener = new Subject<{user: UserModel}>();
@@ -57,10 +57,10 @@ export class UserService {
 
     }
 
-    freindManipulating(user_id: string) {
-      return this.http.get(BACKEND_URL + "/users/" + user_id + '/freind_manipulation')
+    friendManipulating(user_id: string) {
+      return this.http.get(BACKEND_URL + "/users/" + user_id + '/friend_manipulation')
                  .subscribe(result => {
-                   
+
                   this.getUserInfo(user_id, '');
                  })
     }
@@ -85,7 +85,7 @@ export class UserService {
 
         this.http.put(BACKEND_URL + "/users/" + "add_avatar", avatarData).subscribe(result => { this.getUserInfo(id, '') });
 
-        } 
+        }
 
         userGetResetToken(email: string) {
           const data = { email: email}
