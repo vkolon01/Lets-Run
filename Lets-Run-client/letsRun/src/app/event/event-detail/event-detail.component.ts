@@ -32,6 +32,8 @@ export class EventDetailComponent implements OnInit {
 
   eventCreatedAt;
   event: EventModule;
+  showMap = false;
+  eventLocation: string;
   private eventSub: Subscription;
 
   eventCreatorName: string;
@@ -103,6 +105,7 @@ export class EventDetailComponent implements OnInit {
       this.eventSub = this.eventService.getEventUpdate()
         .subscribe((value: { event: EventModule }) => {
           this.event = value.event;
+          this.eventLocation = value.event.location;
           this.eventCreatedAt = moment(this.event.createdAt).fromNow();
           this.checkForLikeExistence();
           this.checkForAttemptExistence();
@@ -124,10 +127,19 @@ export class EventDetailComponent implements OnInit {
     this.eventCreatorName = this.eventService.getCreatorName();
   }
 
+  onMapStateChange() {
+    this.showMap = !this.showMap;
+    this.eventSub = this.eventService.getEventUpdate()
+    .subscribe((value: { event: EventModule }) => {
+      this.eventLocation = value.event.location;
+    });
+  }
+
   onEventEdit() {
 
     const eventInfoToUpdate = ({
       id: this.eventId,
+      title: this.event.title,
       location: this.event.location,
       distance: this.event.distance,
       pace: this.event.pace,

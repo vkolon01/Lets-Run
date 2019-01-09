@@ -19,6 +19,11 @@
       required: true,
       default: 'No description yeat added'  //http://localhost:8080/images/manchester-1544911854844.jpg
     },
+    title: {
+      type: String,
+      required: true,
+      default: "No title entered"
+    },
     location: {
       type: String,
       required: true

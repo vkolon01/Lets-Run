@@ -8,6 +8,9 @@
     <div class="event-back-photoChange">
       <mat-icon routerLink="/events" class="back_icon"> settings_backup_restore </mat-icon>
     </div>
+    <div class="event-title">
+      <h1>{{event?.title}}</h1>
+    </div>
     <div *ngIf="creatorId === userId" class="event-detail--setings">
       <mat-icon class="event_detail--mat-icon-setings" (click)="onEventEdit()"> settings </mat-icon>
       <mat-icon class="event_detail--mat-icon-delete" (click)="deleteEvent()"> delete_sweep </mat-icon>
@@ -28,8 +31,12 @@
  
   <div class="event-description-commentSection">
 
+    <!-- <button (click)="onMapStateChange()">Show map</button> -->
 
-      <app-google-map [location]="event?.location" style="display: contents;"></app-google-map>
+    <div class="google_map">
+      <app-google-map [location]="eventLocation" class="google_map"></app-google-map>
+
+    </div>
 
 
  

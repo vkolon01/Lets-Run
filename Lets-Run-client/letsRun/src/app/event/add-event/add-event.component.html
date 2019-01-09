@@ -4,10 +4,18 @@
   <form class="mainPopUp" [formGroup]="eventForm" (ngSubmit)="addEvent()">
 
     <mat-form-field>
-      <input google-places matInput (onSelect)="onChanges($event)" placeholder="Location" formControlName="location"> 
-      <mat-hint>The location of the event!</mat-hint> 
-      <mat-error *ngIf="eventForm.get('location').errors">Location is requied</mat-error>
+      <input matInput placeholder="Title" formControlName="title"> 
+      <mat-hint>The title of the event!</mat-hint> 
+      <mat-error *ngIf="eventForm.get('title').errors">Title is requied</mat-error>
     </mat-form-field>
+
+    <mat-form-field>
+      <input google-places matInput (onSelect)="onChanges($event)" placeholder="Starting location" formControlName="location"> 
+      <mat-hint>The starting location of the event!</mat-hint> 
+      <mat-error *ngIf="eventForm.get('location').errors">Starting location is requied</mat-error>
+    </mat-form-field>
+
+    <app-google-map [location]="eventLocation" class="google_map"></app-google-map>
 
     <!-- <input google-places type="text" class="google-place-input" placeholder="Type to search.."> -->
 
@@ -48,8 +56,7 @@
 
 
     <div class="formButtons">
-      <button type="submit" *ngIf="!data">Add event</button> 
-      <button type="button" *ngIf="!data" (click)="showInfo()">Show info</button>
+      <button type="submit" *ngIf="!data">Add event</button>
       <button type="submit" *ngIf="data">Update event</button>
 
     </div>

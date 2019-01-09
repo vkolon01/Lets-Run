@@ -11,7 +11,6 @@ export class GooglePlacesDirective implements OnInit {
 
   getLocation(place) {
     let location;
-
   }
 
   constructor(private elRef: ElementRef) {

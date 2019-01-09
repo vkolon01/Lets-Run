@@ -35,9 +35,10 @@ export class EventService {
         return this.events;
     }
 
-    createEvent(location: string, distance, pace: string, eventDate, desc: string, image: File) {
+    createEvent(title: string, location: string, distance, pace: string, eventDate, desc: string, image: File) {
 
         const newEvent = new FormData();
+        newEvent.append("title", title);
         newEvent.append("location", location);
         newEvent.append("pace", pace);
         newEvent.append("eventDate", eventDate);
@@ -64,6 +65,7 @@ export class EventService {
                     events: eventData.events.map(event => {
                         return {
                             id: event._id,
+                            title: event.title,
                             location: event.location,
                             distance: event.distance,
                             pace: event.pace,
@@ -141,12 +143,13 @@ export class EventService {
             });
     }
 
-    updateEvent(id: string,location: string,distance ,pace: string,eventDate: Date ,author: string, description: string, image: File | string){
+    updateEvent(id: string, title: string, location: string,distance ,pace: string,eventDate: Date ,author: string, description: string, image: File | string){
         let updatedEvent:  EventModule | FormData;
 
         if(typeof image === "object") {
             updatedEvent = new FormData();
             updatedEvent.append("id", id);
+            updatedEvent.append("title", title);
             updatedEvent.append("location", location);
             updatedEvent.append("pace", pace);
             updatedEvent.append("eventDate", eventDate.toString());
@@ -160,6 +163,7 @@ export class EventService {
 
             updatedEvent = {
                 id: id,
+                title: title,
                 location: location,
                 pace: pace,
                 eventDate: eventDate,
@@ -171,14 +175,6 @@ export class EventService {
             console.log(updatedEvent);
 
         }
-
-
-
-
-
-
-        // description
-
         this.http.put(BACKEND_URL + '/events/' + id, updatedEvent)
             .subscribe(response => {
                 this.snackBarService.showMessageWithDuration('Event updated', 'OK', 3000);

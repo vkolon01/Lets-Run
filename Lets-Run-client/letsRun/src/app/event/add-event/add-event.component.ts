@@ -28,14 +28,18 @@ export class AddEventComponent implements OnInit {
     {value: 'Walking', viewValue: 'Walking'}
   ]
 
+  eventLocation: string;
+
   constructor(private snackBarService: SnackBarService,
      private eventService: EventService,
      private dialogRef: MatDialogRef<AddEventComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    this.eventLocation = "New York";
 
     this.eventForm = new FormGroup({
+      'title': new FormControl(null, { validators: [Validators.required] }),
       'location': new FormControl(null, { validators: [Validators.required] }),
       'distance': new FormControl(null, { validators: [Validators.required] }),
       'pace': new FormControl(null, { validators: [Validators.required] }),
@@ -46,6 +50,7 @@ export class AddEventComponent implements OnInit {
 
     if(this.data) {
       this.eventForm.setValue({
+      title: this.data.title,
       location: this.data.location,
       distance: this.data.distance,
       pace: this.data.pace,
@@ -56,15 +61,16 @@ export class AddEventComponent implements OnInit {
 
     }
 
-    // this.onChanges();
   }
 
   showInfo(event) {
     console.log(this.eventForm.get('location').value);
+    
   }
 
   onChanges(event) {
-    this.eventForm.get('location').setValue(event)
+    this.eventForm.get('location').setValue(event);
+    this.eventLocation = event;
   }
 
   onImagePicked(event: Event) {
@@ -90,6 +96,7 @@ export class AddEventComponent implements OnInit {
       }
   
       this.eventService.createEvent(
+        this.eventForm.value.title,
         this.eventForm.value.location,
         this.eventForm.value.distance,
         this.eventForm.value.pace,
@@ -111,6 +118,7 @@ export class AddEventComponent implements OnInit {
       
       this.eventService.updateEvent(
         this.data.id,
+        this.eventForm.value.title,
         this.eventForm.value.location,
         this.eventForm.value.distance,
         this.eventForm.value.pace,

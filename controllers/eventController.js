@@ -102,6 +102,7 @@ exports.getEvents = function (req, res, next) {
           author: event.author,
           eventDate: event.eventDate,
           pace: event.pace,
+          title:  event.title,
           distance: event.distance
         }
       })
@@ -141,6 +142,7 @@ exports.addEvent = function (req, res, next) {
     eventDate: req.body.eventDate,
     author: req.userData.userId,
     picture: imagePath,
+    title:  req.body.title,
     description: req.body.description
   });
 
@@ -273,6 +275,7 @@ exports.updateEvent = function (req, res, next) {
     pace: req.body.pace,
     eventDate: req.body.eventDate,
     description: req.body.description,
+    title:  req.body.title,
     picture: imagePath
   })
 
@@ -286,6 +289,7 @@ exports.updateEvent = function (req, res, next) {
         distance: event.distance,
         description: event.description,
         pace: event.pace,
+        title:  event.title,
         eventDate: event.eventDate,
         picture: event.picture
       }
@@ -589,15 +593,3 @@ exports.participateAtEvent = function (req, res, next) {
       next(error);
     });
 }
-
-
-
-// from: '"LetsRun" <events@letsrun.com>',
-// to: user.email,
-// subject: "You'r event heve new attempt",
-// text: "New attempt event",
-// html: `
-// <h1 style="text-align: center">You'r <a href="http://localhost:4200/events/${eventId}">event</a> have new attempt</h1>
-// <p></p>
-// <p>You'r Lets Run team!</p>
-// `

@@ -1,5 +1,6 @@
 export class EventModule {
     id: string;
+    title: string;
     location: string;
     description: string;
     distance: number;
