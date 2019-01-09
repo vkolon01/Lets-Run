@@ -12,7 +12,7 @@ describe('GoogleMapComponent', () => {
     })
     .compileComponents();
   }));
-
+ 
   beforeEach(() => {
     fixture = TestBed.createComponent(GoogleMapComponent);
     component = fixture.componentInstance;
