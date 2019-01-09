@@ -3,8 +3,8 @@ declare var google: any;
 import { } from 'googlemaps';
 import { Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
 import { environment } from "../../../environments/environment"
-import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { shrinkUpAndDownAnimation } from '../../animations/animationsUpDown'; 
+import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-google-map',
@@ -23,12 +23,11 @@ export class GoogleMapComponent implements OnInit, OnChanges {
   @Input()location: any;
   animation_state = 'up';
 
-  googleUrl = "https://maps.googleapis.com/maps/api/js?key=" + environment.googleApi + "&callback=initMap";
 
-  constructor(private snackBarService: SnackBarService,) { }
+  constructor(private snackBarService: SnackBarService) { }
 
   ngOnInit() {
-
+    // this.snackBarService.showMessage('Map location could not be found', '3000');
     this.location = "New York";
 
     var mapProp = {
@@ -48,8 +47,7 @@ ngOnChanges() {
 }
 
   geocodeAddress(geocoder, resultsMap) {
-    // var address = ;
-    geocoder.geocode({ 'address': this.location }, function (results, status) {
+    geocoder.geocode({ 'address': this.location },  (results, status) => {
       if (status === 'OK') {
         resultsMap.setCenter(results[0].geometry.location);
         var marker = new google.maps.Marker({
@@ -58,8 +56,9 @@ ngOnChanges() {
           position: results[0].geometry.location
         });
       } else {
-        // this.snackBarService.showMessageWithDuration('Map location could not be found', '', 3000);
+        this.snackBarService.showMessage('Map location could not be found', 'ok');
       }
+
     });
 
   }

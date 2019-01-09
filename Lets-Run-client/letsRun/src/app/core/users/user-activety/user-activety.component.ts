@@ -42,8 +42,6 @@ export class UserActivetyComponent implements OnInit {
       let now = moment().format("MMMM DD YYYY");
       let formatedDate = moment(date).format("MMMM DD YYYY");
 
-      // console.log(' ENDED ' + name + '  event date : ' + formatedDate + " and now date : " + now + " State : " + moment(now).isAfter(formatedDate));
-
       if(moment(now).isAfter(formatedDate)) {
         return true;
       }
@@ -56,13 +54,10 @@ export class UserActivetyComponent implements OnInit {
       let now = moment().format("MMMM DD YYYY");
       let formatedDate = moment(date).format("MMMM DD YYYY");
       
-      // console.log( 'SOON '  + name + ' event date : ' + formatedDate + "now date : " + now + ' last 5 days ' + last5days + " STATE " + moment(now).isBetween(last5days, formatedDate));
-      
       if(moment(now).isBetween(last5days, formatedDate)) {
         return true;
       }
         return false;
-      
-    }
+      }
 
 }

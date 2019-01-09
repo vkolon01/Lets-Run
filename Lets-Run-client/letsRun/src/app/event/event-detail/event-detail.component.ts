@@ -127,14 +127,6 @@ export class EventDetailComponent implements OnInit {
     this.eventCreatorName = this.eventService.getCreatorName();
   }
 
-  onMapStateChange() {
-    this.showMap = !this.showMap;
-    this.eventSub = this.eventService.getEventUpdate()
-    .subscribe((value: { event: EventModule }) => {
-      this.eventLocation = value.event.location;
-    });
-  }
-
   onEventEdit() {
 
     const eventInfoToUpdate = ({

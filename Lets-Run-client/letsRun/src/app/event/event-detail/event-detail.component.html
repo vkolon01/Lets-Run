@@ -16,7 +16,7 @@
       <mat-icon class="event_detail--mat-icon-delete" (click)="deleteEvent()"> delete_sweep </mat-icon>
     </div>
   </div>
-
+ 
   <div class="event_detail--image-container"> 
     <img src="{{ event?.picture }}" alt="">
 
@@ -31,12 +31,9 @@
  
   <div class="event-description-commentSection">
 
-    <!-- <button (click)="onMapStateChange()">Show map</button> -->
 
-    <div class="google_map">
       <app-google-map [location]="eventLocation" class="google_map"></app-google-map>
 
-    </div>
 
 
  

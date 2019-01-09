@@ -244,10 +244,10 @@ exports.getUserProfile = function (req, res, next) {
     followersPopulationDetails = '_id imagePath username';
   } else if (queryParams === 'eventHistory') {
     createdEventsPopulation = 'createdEvent';
-    createdEventsPopulationDetails = '_id location picture eventDate';
+    createdEventsPopulationDetails = '_id title picture eventDate';
 
     eventsWillAttemptPopulation = 'eventWillAttempt';
-    eventsWillAttemptPopulationDetails = '_id location picture eventDate';
+    eventsWillAttemptPopulationDetails = '_id title picture eventDate';
   }
 
   User.findById(userId)

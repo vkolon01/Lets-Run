@@ -67,12 +67,12 @@
   .event-list--image {
     max-height: 160px;
     grid-area: eventImage;
-    align-self: center;
   
     img {
       height: 100%;
       max-height: 160px;
       width: 100%;
+      object-fit: cover;
     }
   
     z-index: 1;
