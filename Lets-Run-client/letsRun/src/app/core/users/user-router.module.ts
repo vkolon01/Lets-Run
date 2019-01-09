@@ -13,7 +13,7 @@ const userRoutes: Routes  = [
     children: [
         {path: 'info', component: UserInfoComponent},
         {path: 'friends', component: UserFriendsComponent},
-        {path: 'activety', component: UserActivetyComponent},
+        {path: 'activity', component: UserActivetyComponent},
         {path: 'activated/:ativation_token', component: ActivateUserComponent},
     ]
 }

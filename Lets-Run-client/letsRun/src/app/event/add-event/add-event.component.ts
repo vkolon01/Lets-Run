@@ -56,12 +56,15 @@ export class AddEventComponent implements OnInit {
 
     }
 
-    console.log('this.data');
-    console.log(this.data);
+    // this.onChanges();
+  }
 
-    console.log('this.data form');
-    console.log(this.eventForm.value.image);
-    
+  showInfo(event) {
+    console.log(this.eventForm.get('location').value);
+  }
+
+  onChanges(event) {
+    this.eventForm.get('location').setValue(event)
   }
 
   onImagePicked(event: Event) {

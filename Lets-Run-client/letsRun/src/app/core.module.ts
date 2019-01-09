@@ -13,10 +13,12 @@ import { UiScrollModule } from 'ngx-ui-scroll';
 import { AngularMaterialModule } from "./angular-material.module";
 import { MatNativeDateModule } from "@angular/material";
 import { Page404Component } from "./core/page404/page404.component";
+import { GoogleMapComponent } from "./event/google-map/google-map.component";
+import { GooglePlacesDirective } from "./directives/google-palces.directive";
 
 
 @NgModule({
-    declarations: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component],
+    declarations: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component,GoogleMapComponent, GooglePlacesDirective],
     imports: [
         CommonModule,
         RouterModule,
@@ -24,7 +26,7 @@ import { Page404Component } from "./core/page404/page404.component";
         UiScrollModule,
         AngularMaterialModule,
     ],
-    exports: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component]
+    exports: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component,GoogleMapComponent, GooglePlacesDirective]
 })
 
 export class CoreModule {}

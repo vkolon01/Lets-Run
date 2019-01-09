@@ -6,6 +6,7 @@ import { EventsRouterModule } from "./events-router.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AngularMaterialModule } from "../angular-material.module";
 import { UiScrollModule } from 'ngx-ui-scroll';
+import { GoogleMapComponent } from "./google-map/google-map.component";
 
 @NgModule({
     declarations: [EventsListComponent],

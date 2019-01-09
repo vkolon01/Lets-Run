@@ -3,3 +3,4 @@ nodemon.json
 Lets-Run-client/letsRun/src/environments/environment.ts
 Lets-Run-client/letsRun/src/environments/environment.prod.ts
 node_modules
+Lets-Run-client/letsRun/api
