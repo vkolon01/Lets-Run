@@ -150,40 +150,65 @@
 
   .event_detail--weather {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(to bottom, rgba(125, 185, 232, 0.8) 0%, rgba(41, 137, 216, 0.8) 40%, rgba(32, 124, 202, 8) 59%, rgba(30, 87, 153, 8) 100%);
-
-    .event_detail--weather-icon {
-
-      transform: translateY(-14px);
-
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(to bottom,  rgba(14, 34, 103, 0.8) 0%, rgba(14, 34, 103, 0.8) 40%, rgba(14, 34, 103, 8) 59%, rgba(14, 34, 103, 8) 100%);
+    .event_detail--weather-noWeather {
       p {
         font-size: 1.2rem;
         text-align: center;
-        padding-top: 5%;
-      }
-
-      .event_detail--weather-info {
-        position: absolute;
-        display: block;
-        text-align: -webkit-center;
-        bottom: 0;
-        width: 100%;
-        height: 22px;
-        transform: translateY(-38px);
-
-        span {
-          font-size: 100%;
-          color: #100054;
-          font-family: cursive;
-          text-shadow: -2px 0px 2px rgb(69, 173, 172);
-
-        }
+        color: #ffffff;
+        font-family: cursive;
+        text-shadow: -2px 0px 2px rgb(69, 173, 172);
+        margin: 0;
+        margin-top: 10px;
       }
     }
+
+    .event_detail--weather-flex {
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-evenly;
+      font-size: 1.2rem;
+      color: #ffffff;
+      font-family: cursive;
+      text-shadow: -2px 0px 2px rgb(69, 173, 172);
+
+      .event_detail--weather-icon {
+        height: 100%;
+        width: 50px;
+
+        img {
+          height: 100%;
+        }
+
+
+
+        //   .event_detail--weather-info {
+        //     position: absolute;
+        //     display: block;
+        //     text-align: -webkit-center;
+        //     bottom: 0;
+        //     width: 100%;
+        //     height: 22px;
+        //     transform: translateY(-38px);
+
+        //     span {
+        //       font-size: 100%;
+        //       color: #100054;
+        //       font-family: cursive;
+        //       text-shadow: -2px 0px 2px rgb(69, 173, 172);
+        //     }
+        //   }
+      }
+    }
+
+
+
 
 
   }

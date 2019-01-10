@@ -20,11 +20,15 @@
   <div class="event_detail--image-container"> 
     <img src="{{ event?.picture }}" alt="">
     <div class="event_detail--weather">
-      <div class="event_detail--weather-icon" *ngIf="currentWeather"><img src="{{ currentWeather?.condition.icon }}" alt="">
-        <div class="event_detail--weather-info"> <span> {{ currentWeather?.condition.text }}</span>  <span> {{ currentWeather?.temp_c}}</span> </div>
+      <div *ngIf="currentWeather" class="event_detail--weather-flex">
+          <!-- <p>Weather will be</p> -->
+          <div class="event_detail--weather-info"> <span> {{ currentWeather?.condition.text }}</span></div>
+          <span> {{ currentWeather?.temp_c}} &#8451;</span> 
+          <div class="event_detail--weather-icon" *ngIf="currentWeather"><img src="{{ currentWeather?.condition.icon }}" alt=""> </div>    
       </div>
-      <div *ngIf="!currentWeather" class="event_detail--weather-icon">
-        <p>Weather will be available in {{ willShowWeatherIn }}</p>
+     
+      <div *ngIf="!currentWeather" class="event_detail--weather-noWeather">
+        <p>Weather will be available {{ willShowWeatherIn }}</p>
       </div>
     </div>
     <div class="event-detail--likes-and-attempts">
