@@ -19,7 +19,12 @@
  
   <div class="event_detail--image-container"> 
     <img src="{{ event?.picture }}" alt="">
-
+    <div class="event_detail--weather">
+      <div class="event_detail--weather-icon"><img src="{{ currentWeather?.condition.icon }}" alt="">
+        <div class="event_detail--weather-info"> <span> {{ currentWeather?.condition.text }}</span>  <span> {{ currentWeather?.temp_c}}</span> </div>
+      </div>
+      
+    </div>
     <div class="event-detail--likes-and-attempts">
       <mat-icon [class.contains]="containsLike" class="event_detail--mat-icon" matBadge="{{ event?.likes.length }}"
         (click)="likeEvent()" matBadgeColor="warn"> thumb_up </mat-icon>

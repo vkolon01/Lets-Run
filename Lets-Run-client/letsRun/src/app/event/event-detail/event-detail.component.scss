@@ -144,6 +144,39 @@
         img {
             width: 100%;
         }
+
+        .event_detail--weather {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(125,185,232,0.8) 0%,rgba(41,137,216,0.8) 40%,rgba(32,124,202,8) 59%,rgba(30,87,153,8) 100%);
+           
+            .event_detail--weather-icon {
+
+                transform: translateY(-14px);
+
+                .event_detail--weather-info {
+                    position: absolute;
+                    display: block;
+                    text-align: -webkit-center;
+                    bottom: 0;
+                    width: 100%;
+                    height: 22px;
+                    transform: translateY(-38px);
+                    span {
+                        font-size: 2rem;
+                        color: #100054;
+                        text-shadow: -2px 0px 2px #00b1ff;
+                    }
+                }
+            }
+
+
+        }
+
+
     }
 
     .event-description--creator-when {

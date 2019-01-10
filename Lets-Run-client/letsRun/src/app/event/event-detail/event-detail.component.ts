@@ -18,6 +18,8 @@ import { DialogService } from 'src/app/services/dialogService';
 import * as moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material'
 import { AddEventComponent } from '../add-event/add-event.component';
+import { WeatherService } from 'src/app/services/weather.service';
+import { Weather } from 'src/app/models/weather.model';
 
 registerLocaleData(localeRu);
 
@@ -47,6 +49,9 @@ export class EventDetailComponent implements OnInit {
   private eventLikeSubscribe: Subscription;
   containsLike: boolean;
 
+  currentWeather: Weather;
+  weatherForecast: Weather[] = [];
+
   eventWillAttempt: string[] = [];
   containsEvent: boolean;
 
@@ -65,7 +70,8 @@ export class EventDetailComponent implements OnInit {
     private authService: AuthService,
     private snackBarService: SnackBarService,
     private confirm: DialogService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private weatherSer: WeatherService
   ) { }
 
   datasource = new Datasource({
@@ -83,10 +89,12 @@ export class EventDetailComponent implements OnInit {
 
         });
     },
-    devSettings: {
-      // debug: true,
-      // immediateLog: false
-    }
+    // devSettings: {
+    //   // debug: true,
+    //   // immediateLog: false
+    // }
+
+
   });
 
   ngOnInit() {
@@ -125,7 +133,36 @@ export class EventDetailComponent implements OnInit {
     });
     this.creatorId = this.eventService.getCreatorId();
     this.eventCreatorName = this.eventService.getCreatorName();
+
+    this.weatherSer.getWeatherForecast("44.2117", "43.1239").subscribe((weather: any) => {
+     
+      this.currentWeather = {
+        temp_c: weather.current.temp_c,
+        condition: {
+          text: weather.current.condition.text,
+          icon: weather.current.condition.icon,  
+        }
+      }
+
+       weather.forecast.forecastday.forEach(element => {
+
+        this.weatherForecast.push({
+          date: element.date,
+          temp_c: element.day.avgtemp_c,
+          condition: {
+            text: element.day.condition.text,
+            icon: element.day.condition.icon,  
+          }
+        });
+      });
+      
+      
+    })
   }
+
+  // loadWeather() {
+
+  // }
 
   onEventEdit() {
 

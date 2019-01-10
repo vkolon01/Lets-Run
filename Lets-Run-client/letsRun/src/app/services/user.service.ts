@@ -103,7 +103,6 @@ export class UserService {
         changePassword(resetToken: string, userId: string, password: string) {
           const data = { resetToken: resetToken,  userId: userId, password: password }
           return this.http.post(BACKEND_URL + '/users/change_password', data)
-
         }
 
     }
