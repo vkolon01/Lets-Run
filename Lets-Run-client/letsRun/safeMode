@@ -39,6 +39,8 @@ export class EventDetailComponent implements OnInit {
   eventLocation: string;
   private eventSub: Subscription;
 
+  latLngCoordinats: string;
+
   eventCreatorName: string;
   creatorId: string;
   private creatorNameAndIdSub: Subscription;
@@ -106,17 +108,6 @@ export class EventDetailComponent implements OnInit {
       this.eventId = paramMap.get('event_id');
       this.eventService.getEventById(this.eventId);
 
-      this.eventLikeSubscribe = this.eventService.getLikesUpdate()
-      .subscribe((value: { likes: string[] }) => {
-        this.eventLikes = value.likes
-      });
-
-      this.creatorNameAndIdSub = this.eventService.getCreatorNameAndId()
-      .subscribe((value: { creatorName: string, creatorId: string }) => {
-        this.creatorId = value.creatorId;
-        this.eventCreatorName = value.creatorName;
-      });
-
       this.eventSub = this.eventService.getEventUpdate()
         .subscribe((value: { event: EventModule }) => {
           this.event = value.event;
@@ -129,25 +120,36 @@ export class EventDetailComponent implements OnInit {
           this.geocodeAddress(this.geocoder, value.event.location);
         });
 
-    });
-  }
 
-  private weatherDataCololect(latLngCoordinats: string) {
-    
-   this.weatherSer.getWeatherForecast(latLngCoordinats).subscribe((weather: any) => {
-      weather.forecast.forecastday.forEach(element => {
-        this.weatherForecast.push({
-          date: element.date,
-          temp_c: element.day.avgtemp_c,
-          condition: {
-            text: element.day.condition.text,
-            icon: element.day.condition.icon,
-          }
+      this.eventLikeSubscribe = this.eventService.getLikesUpdate()
+        .subscribe((value: { likes: string[] }) => {
+          this.eventLikes = value.likes
         });
 
-      });
-      
+      this.creatorNameAndIdSub = this.eventService.getCreatorNameAndId()
+        .subscribe((value: { creatorName: string, creatorId: string }) => {
+          this.creatorId = value.creatorId;
+          this.eventCreatorName = value.creatorName;
+        });
+
+
+
+    });
+    this.creatorId = this.eventService.getCreatorId();
+    this.eventCreatorName = this.eventService.getCreatorName();
+
+
+    setTimeout(() => {
+      this.weatherDataCololect(this.latLngCoordinats);
+    }, 1500);
+
+    setTimeout(() => {
+
       this.weatherForecast.forEach(data => {
+        
+        console.log('data.date === this.formatedEventDate');
+        console.log(data.date === this.formatedEventDate);
+
         if(data.date === this.formatedEventDate) {
           this.currentWeather = {
             temp_c: data.temp_c,
@@ -157,19 +159,40 @@ export class EventDetailComponent implements OnInit {
             }
           }
         }
+
+        
       })
 
-      if(!this.currentWeather && moment(this.event.eventDate).isAfter(moment())) {
+      if(!this.currentWeather && moment(this.event.eventDate).isSameOrBefore(moment())) {
        this.willShowWeatherIn = moment(this.event.eventDate).subtract(6, 'days').fromNow();
       }
 
+    }, 1000);
+
+  }
+
+  private weatherDataCololect(latLngCoordinats: string) {
+    
+    this.weatherSer.getWeatherForecast(latLngCoordinats).subscribe((weather: any) => {
+      weather.forecast.forecastday.forEach(element => {
+        this.weatherForecast.push({
+          date: element.date,
+          temp_c: element.day.avgtemp_c,
+          condition: {
+            text: element.day.condition.text,
+            icon: element.day.condition.icon,
+          }
+        });
+      });
     });
   }
 
   geocodeAddress(geocoder, location) {
     geocoder.geocode({ 'address': location },  (results, status) => {
       if (status === 'OK') {
-        this.weatherDataCololect(results[0].geometry.location.lat() + "," + results[0].geometry.location.lng());
+        
+        this.latLngCoordinats = results[0].geometry.location.lat() + "," + results[0].geometry.location.lng();
+        
       } else {
         this.snackBarService.showMessage('Map location could not be found', 'ok');
       }

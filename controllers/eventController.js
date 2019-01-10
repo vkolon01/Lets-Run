@@ -31,7 +31,15 @@ exports.getEvents = function (req, res, next) {
 
 
   let currentDate = Date.now();
-  var isoCurrentDate = new Date(currentDate).toISOString();
+
+  console.log('currentDate');
+  console.log(new Date(currentDate).toISOString());
+  
+  let modDate = new Date(currentDate).setDate(new Date(currentDate).getDate() - 1);
+  var isoCurrentDate = new Date(modDate).toISOString();
+
+  console.log('modDate');
+  console.log(new Date(modDate).toISOString());
 
   let eventCounted;
   let fetchedEvent;

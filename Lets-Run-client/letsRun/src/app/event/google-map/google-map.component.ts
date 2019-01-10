@@ -58,9 +58,7 @@ ngOnChanges() {
       } else {
         this.snackBarService.showMessage('Map location could not be found', 'ok');
       }
-
     });
-
   }
 
   toggle_animation_state(){

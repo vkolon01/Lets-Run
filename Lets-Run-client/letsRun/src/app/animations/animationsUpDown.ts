@@ -23,7 +23,7 @@ export const shrinkUpAndDownAnimation = [
             style({ height: '0', offset: 0 }),
             style({ height: '100px', offset: 0.4 }),
             style({ height: '200px', offset: 0.7 }),
-            style({ height: '3  00px', offset: 0.85 }),
+            style({ height: '300px', offset: 0.85 }),
             style({ height: '400px' , offset: 1 })
         ]))
         )

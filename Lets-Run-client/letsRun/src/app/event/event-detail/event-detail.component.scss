@@ -4,224 +4,232 @@
 
 
 
-.event-back-edit-delete-container{
+.event-back-edit-delete-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: white;
+
+  .event-back-photoChange {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    background: white;
-    .event-back-photoChange {
-        display: flex;
-        flex-direction: row;
-    }
+  }
 }
 
-    .event-detail--setings {  
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-    }
+.event-detail--setings {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
 
-    .back_icon {
-        color: $darkBlue;
-        top: 2%;
-        left: 2%;
-    }
+.back_icon {
+  color: $darkBlue;
+  top: 2%;
+  left: 2%;
+}
 
-    .event_detail--mat-icon-setings {
-        color: $darkBlue ;
-    }
+.event_detail--mat-icon-setings {
+  color: $darkBlue;
+}
 
-    .event_detail--mat-icon-delete {
-        color:  rgb(236, 38, 38);
-    }
+.event_detail--mat-icon-delete {
+  color: rgb(236, 38, 38);
+}
 
-    .event-detail--likes-and-attempts {
+.event-detail--likes-and-attempts {
 
-        height: 2rem;
-        width: 5rem;
-        position: absolute;
-        right: 2%;
-        bottom: 2%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-    }
+  height: 2rem;
+  width: 5rem;
+  position: absolute;
+  right: 2%;
+  bottom: 2%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
 
-    .event-detail--author {
-        position: absolute;
-        width: 100%;
-        bottom: -10%;
-        left: 0;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        color: blueviolet;
-        font-family: 'Arvo', serif;
-    }
-
-
-
-    .event_detail--mat-icon {
-        color: rgb(241, 228, 228);
-    }
-
-    .event_detail--mat-icon.contains {
-        color: rgb(231, 17, 17);
-    }
-
-    .event-description {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 95%;
-    }
-
-    .event-description--content{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        width: 100%;
-        justify-content: center;
-
-        p {
-            font-family: 'Arvo', serif;
-            font-size: 2rem;
-        }
-    }
-
-    .event-description--desc {
-        white-space: pre-wrap;
-    }
-
-
-    .event-description-commentSection {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        width: 95%;
-        background: white;
-    }
-
-    .event-ditail-list {
-        border-top: 3px solid $darkBlue;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        width: 100%;
-        background: #e9ebee;
-
-
-        div {
-            width: 33%;
-            text-align: center;
-            p {
-                color: $darkBlue;
-                margin: 0.2rem 0rem;
-            }
-        }
-
-        div:nth-child(1) {
-            border-right: 1px solid  $grey;
-        }
-
-        div:nth-child(3) {
-            border-left: 1px solid $grey;
-          }
-    }
-
-
-
-
-    .event_detail--image-container {
-        position: relative;
-        width: 100%;
-        img {
-            width: 100%;
-        }
-
-        .event_detail--weather {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(to bottom, rgba(125,185,232,0.8) 0%,rgba(41,137,216,0.8) 40%,rgba(32,124,202,8) 59%,rgba(30,87,153,8) 100%);
-           
-            .event_detail--weather-icon {
-
-                transform: translateY(-14px);
-
-                .event_detail--weather-info {
-                    position: absolute;
-                    display: block;
-                    text-align: -webkit-center;
-                    bottom: 0;
-                    width: 100%;
-                    height: 22px;
-                    transform: translateY(-38px);
-                    span {
-                        font-size: 2rem;
-                        color: #100054;
-                        text-shadow: -2px 0px 2px #00b1ff;
-                    }
-                }
-            }
-
-
-        }
-
-
-    }
-
-    .event-description--creator-when {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    form {
-        background: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-  ////////////////////////////////////
-  /////     COMMENTS SECTION
-  ///////////////////////////////////
-
-
-  .comments_main {
-      width: 95%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-  }
-
-  .event_detail--comments {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-
-
-  .viewport {
-    height: 300px;
-    width: 100%;
-    overflow-y: auto;
-    overflow-anchor: none;
+.event-detail--author {
+  position: absolute;
+  width: 100%;
+  bottom: -10%;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  color: blueviolet;
+  font-family: 'Arvo', serif;
 }
 
 
 
-       
+.event_detail--mat-icon {
+  color: rgb(241, 228, 228);
+}
+
+.event_detail--mat-icon.contains {
+  color: rgb(231, 17, 17);
+}
+
+.event-description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 95%;
+}
+
+.event-description--content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+
+  p {
+    font-family: 'Arvo', serif;
+    font-size: 2rem;
+  }
+}
+
+.event-description--desc {
+  white-space: pre-wrap;
+}
+
+
+.event-description-commentSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 95%;
+  background: white;
+}
+
+.event-ditail-list {
+  border-top: 3px solid $darkBlue;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  background: #e9ebee;
+
+
+  div {
+    width: 33%;
+    text-align: center;
+
+    p {
+      color: $darkBlue;
+      margin: 0.2rem 0rem;
+    }
+  }
+
+  div:nth-child(1) {
+    border-right: 1px solid $grey;
+  }
+
+  div:nth-child(3) {
+    border-left: 1px solid $grey;
+  }
+}
+
+
+
+
+.event_detail--image-container {
+  position: relative;
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+
+  .event_detail--weather {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(125, 185, 232, 0.8) 0%, rgba(41, 137, 216, 0.8) 40%, rgba(32, 124, 202, 8) 59%, rgba(30, 87, 153, 8) 100%);
+
+    .event_detail--weather-icon {
+
+      transform: translateY(-14px);
+
+      p {
+        font-size: 1.2rem;
+        text-align: center;
+        padding-top: 5%;
+      }
+
+      .event_detail--weather-info {
+        position: absolute;
+        display: block;
+        text-align: -webkit-center;
+        bottom: 0;
+        width: 100%;
+        height: 22px;
+        transform: translateY(-38px);
+
+        span {
+          font-size: 100%;
+          color: #100054;
+          font-family: cursive;
+          text-shadow: -2px 0px 2px rgb(69, 173, 172);
+
+        }
+      }
+    }
+
+
+  }
+
+
+}
+
+.event-description--creator-when {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  width: 100%;
+  justify-content: space-between;
+}
+
+form {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+////////////////////////////////////
+/////     COMMENTS SECTION
+///////////////////////////////////
+
+
+.comments_main {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.event_detail--comments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+
+.viewport {
+  height: 300px;
+  width: 100%;
+  overflow-y: auto;
+  overflow-anchor: none;
+}

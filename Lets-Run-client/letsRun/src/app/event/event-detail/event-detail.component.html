@@ -20,10 +20,12 @@
   <div class="event_detail--image-container"> 
     <img src="{{ event?.picture }}" alt="">
     <div class="event_detail--weather">
-      <div class="event_detail--weather-icon"><img src="{{ currentWeather?.condition.icon }}" alt="">
+      <div class="event_detail--weather-icon" *ngIf="currentWeather"><img src="{{ currentWeather?.condition.icon }}" alt="">
         <div class="event_detail--weather-info"> <span> {{ currentWeather?.condition.text }}</span>  <span> {{ currentWeather?.temp_c}}</span> </div>
       </div>
-      
+      <div *ngIf="!currentWeather" class="event_detail--weather-icon">
+        <p>Weather will be available in {{ willShowWeatherIn }}</p>
+      </div>
     </div>
     <div class="event-detail--likes-and-attempts">
       <mat-icon [class.contains]="containsLike" class="event_detail--mat-icon" matBadge="{{ event?.likes.length }}"

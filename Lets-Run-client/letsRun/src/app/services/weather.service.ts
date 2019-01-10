@@ -10,8 +10,8 @@ export class WeatherService {
 
     constructor(private http: HttpClient) {}
 
-    getWeatherForecast(latitude: string, longitude: string) {
-        const queryParams = `q=${latitude},${longitude}&days=7`
+    getWeatherForecast(latLong: string) {
+        const queryParams = `q=${latLong}&days=7`
         
        return this.http.get<{weather: {current: any, forecast: [any]}}>(WEATHER_URL + queryParams);
     }
