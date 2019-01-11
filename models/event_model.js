@@ -6,6 +6,7 @@
   var Comment = require('./comment_model');
   var User = require('./user_model');
 
+
   var eventSchema = new Schema({
     picture: {
       type: String,
@@ -13,6 +14,10 @@
     },
     eventDate: {
       type: Date
+    },
+    eventTime: {
+      type: String,
+      default: "12:00"
     },
     description: {
       type: String,

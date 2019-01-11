@@ -1,10 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { mimeType } from 'src/app/validators/mime-type.validator';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { EventService } from '../../services/event.service';
 import { MatDialogRef } from '@angular/material';
 import {MAT_DIALOG_DATA} from '@angular/material';
+import * as moment from 'moment';
 
 @Component({ 
   selector: 'app-add-event',
@@ -14,6 +15,7 @@ import {MAT_DIALOG_DATA} from '@angular/material';
              ]
 })
 export class AddEventComponent implements OnInit {
+
   eventForm: FormGroup;
   imagePreview: string;
   distances = [
@@ -36,6 +38,7 @@ export class AddEventComponent implements OnInit {
      @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+
     this.eventLocation = "New York";
 
     this.eventForm = new FormGroup({
@@ -45,6 +48,7 @@ export class AddEventComponent implements OnInit {
       'pace': new FormControl(null, { validators: [Validators.required] }),
       'image': new FormControl(null, { asyncValidators: [mimeType] }),
       'eventDate': new FormControl(null, { validators: [Validators.required] }),
+      'eventTime': new FormControl(null, { validators: [Validators.required] }),
       'description': new FormControl(null),
     });
 
@@ -56,16 +60,12 @@ export class AddEventComponent implements OnInit {
       pace: this.data.pace,
       image: this.data.image,
       eventDate: this.data.eventDate,
+      eventTime: this.data.eventTime,
       description: this.data.description
     })
 
     }
 
-  }
-
-  showInfo(event) {
-    console.log(this.eventForm.get('location').value);
-    
   }
 
   onChanges(event) {
@@ -88,6 +88,9 @@ export class AddEventComponent implements OnInit {
   }
 
   addEvent() {
+    // console.log(this.eventForm.get('time').value);
+    // let time = moment().format("HH:mm")
+    // this.eventForm.get('time').setValue(time)
 
     if(!this.data) {
       if (this.eventForm.invalid) {
@@ -101,6 +104,7 @@ export class AddEventComponent implements OnInit {
         this.eventForm.value.distance,
         this.eventForm.value.pace,
         this.eventForm.value.eventDate,
+        this.eventForm.value.eventTime,
         this.eventForm.value.description,
         this.eventForm.value.image
       )
@@ -123,6 +127,7 @@ export class AddEventComponent implements OnInit {
         this.eventForm.value.distance,
         this.eventForm.value.pace,
         this.eventForm.value.eventDate,
+        this.eventForm.value.eventTime,
         this.eventForm.value.author,
         this.eventForm.value.description,
         imageToSend

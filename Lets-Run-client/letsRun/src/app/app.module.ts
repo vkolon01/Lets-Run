@@ -18,7 +18,6 @@ import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dial
 import { LoginComponent } from './auth/login/login.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { AddEventComponent } from './event/add-event/add-event.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +25,7 @@ import { AddEventComponent } from './event/add-event/add-event.component';
     MatConfirmDialogComponent,
     LoginComponent,
     SigninComponent,
-    AddEventComponent
+    AddEventComponent,
   ],
   imports: [
     BrowserModule,

@@ -109,6 +109,7 @@ exports.getEvents = function (req, res, next) {
           picture: event.picture,
           author: event.author,
           eventDate: event.eventDate,
+          eventTime: req.body.eventTime,
           pace: event.pace,
           title:  event.title,
           distance: event.distance
@@ -148,6 +149,7 @@ exports.addEvent = function (req, res, next) {
     distance: req.body.distance,
     pace: req.body.pace,
     eventDate: req.body.eventDate,
+    eventTime: req.body.eventTime.toString(),
     author: req.userData.userId,
     picture: imagePath,
     title:  req.body.title,
@@ -282,6 +284,7 @@ exports.updateEvent = function (req, res, next) {
     distance: req.body.distance,
     pace: req.body.pace,
     eventDate: req.body.eventDate,
+    eventTime: req.body.eventTime.toString(),
     description: req.body.description,
     title:  req.body.title,
     picture: imagePath
@@ -299,6 +302,7 @@ exports.updateEvent = function (req, res, next) {
         pace: event.pace,
         title:  event.title,
         eventDate: event.eventDate,
+        eventTime: event.eventTime,
         picture: event.picture
       }
     })

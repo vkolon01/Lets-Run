@@ -52,6 +52,13 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
+ 
+      <mat-form-field>
+        <input type="time" matInput placeholder="Time of the event" formControlName="eventTime">
+        <mat-hint></mat-hint>
+        <mat-error *ngIf="eventForm.get('eventTime').errors">Pace is requied</mat-error>
+      </mat-form-field>
+ 
 
     <div class="formButtons">
       <button type="submit" *ngIf="!data">Add event</button>

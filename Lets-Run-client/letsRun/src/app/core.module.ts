@@ -24,7 +24,7 @@ import { GooglePlacesDirective } from "./directives/google-palces.directive";
         RouterModule,
         ReactiveFormsModule,
         UiScrollModule,
-        AngularMaterialModule,
+        AngularMaterialModule
     ],
     exports: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component,GoogleMapComponent, GooglePlacesDirective]
 })

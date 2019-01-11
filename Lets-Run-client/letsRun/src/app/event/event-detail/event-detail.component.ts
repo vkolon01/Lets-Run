@@ -186,6 +186,7 @@ export class EventDetailComponent implements OnInit {
       pace: this.event.pace,
       image: this.event.picture,
       eventDate: this.event.eventDate,
+      eventTime: this.event.eventTime,
       description: this.event.description
     });
 

@@ -35,13 +35,14 @@ export class EventService {
         return this.events;
     }
 
-    createEvent(title: string, location: string, distance, pace: string, eventDate, desc: string, image: File) {
+    createEvent(title: string, location: string, distance, pace: string, eventDate, eventTime, desc: string, image: File) {
 
         const newEvent = new FormData();
         newEvent.append("title", title);
         newEvent.append("location", location);
         newEvent.append("pace", pace);
         newEvent.append("eventDate", eventDate);
+        newEvent.append("eventTime", eventTime)
         newEvent.append("distance", distance);
         newEvent.append("image", image, location);
         newEvent.append('description', desc);
@@ -143,7 +144,7 @@ export class EventService {
             });
     }
 
-    updateEvent(id: string, title: string, location: string,distance ,pace: string,eventDate: Date ,author: string, description: string, image: File | string){
+    updateEvent(id: string, title: string, location: string,distance ,pace: string,eventDate: Date, eventTime: Date ,author: string, description: string, image: File | string){
         let updatedEvent:  EventModule | FormData;
 
         if(typeof image === "object") {
@@ -153,6 +154,7 @@ export class EventService {
             updatedEvent.append("location", location);
             updatedEvent.append("pace", pace);
             updatedEvent.append("eventDate", eventDate.toString());
+            updatedEvent.append("eventTime", eventTime.toString());
             updatedEvent.append("distance", distance);
             updatedEvent.append("description", description);
             updatedEvent.append("image", image, location);
@@ -167,6 +169,7 @@ export class EventService {
                 location: location,
                 pace: pace,
                 eventDate: eventDate,
+                eventTime: eventTime,
                 distance: distance,
                 description: description,
                 picture: image

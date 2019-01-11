@@ -6,6 +6,7 @@ export class EventModule {
     distance: number;
     pace: string;
     eventDate: Date;
+    eventTime: Date;
     author?: string;
     createdAt?: string;
     comments?: [string];

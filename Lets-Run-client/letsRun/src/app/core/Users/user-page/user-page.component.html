@@ -7,7 +7,7 @@
   </div>
 
   <!-- <div class="add_avatar-button" > -->
-
+<div class="avatar-container">
   <form [formGroup]="form" (submit)="uploadAvatar()">
 
     <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
@@ -21,6 +21,8 @@
     <button *ngIf="form.get('image').valid" type="submit">Upload avatar</button>
 
   </form>
+</div>
+  
 
   <!-- </div> -->
 

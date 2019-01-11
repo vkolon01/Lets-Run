@@ -53,7 +53,6 @@ input:-webkit-autofill:focus {
 
 .image-preview {
   width: 100%;
-  z-index: 1;
 
   img {
     width: 100%;
@@ -63,7 +62,6 @@ input:-webkit-autofill:focus {
 button {
   font-family: 'Bungee Inline', cursive;
   font-size: 1rem;
-  z-index: 1;
   width: 150px;
   height: 3rem;
   margin-top: 0.5rem;

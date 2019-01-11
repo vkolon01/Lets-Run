@@ -12,6 +12,13 @@
   width: 100%;
   background: white;
 
+  .event-title {
+      h1 {
+        margin: 0;
+
+      }
+  }
+
   .event-back-photoChange {
     display: flex;
     flex-direction: row;

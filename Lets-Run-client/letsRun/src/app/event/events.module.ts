@@ -15,6 +15,7 @@ import { GoogleMapComponent } from "./google-map/google-map.component";
         EventsRouterModule,
         ReactiveFormsModule,
         AngularMaterialModule,
+        
     ],
     exports: [EventsListComponent]
 })
