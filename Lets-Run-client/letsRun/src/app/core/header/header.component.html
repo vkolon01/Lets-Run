@@ -1,16 +1,42 @@
-<header class="header">
+<header>
+    <div class="header_menu--logo">
+      <img src="../../../assets/LogoLetsRun.png" alt="">
+      </div>
+  <div class="header_menu--switch" (click)="toggle_animation_state()">
+    <span class="bra_1" [@horizontalToRight]="animation_state_1st"></span>
+    <span class="bra_2"></span>
+    <span class="bra_3" [@horizontalToLeft]="animation_state_3d"></span> 
+  </div>
+</header> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <header class="header">
   <div>
       <a routerLink="/">Main</a>
       <a routerLink="/events">Events</a>
       <a *ngIf="userIsAuthenticated" (click)="onAddEvent()">Add event</a>
   </div>
-  <div class="header-auth">
-    <!-- <a *ngIf="!userIsAuthenticated" routerLink="/auth/login">Login</a> -->
-    <a *ngIf="!userIsAuthenticated" (click)="onLogin()">Login</a>
 
+  <div class="header-auth">
+    <a *ngIf="!userIsAuthenticated" (click)="onLogin()">Login</a>
     <a *ngIf="userIsAuthenticated" (click)="onLogOut()">Logout</a>
     <a *ngIf="!userIsAuthenticated" (click)="onRegister()">Register</a>
     <a *ngIf="userIsAuthenticated" [routerLink]="['/userpage', userId , 'info']">{{ username }}</a> 
   </div>
-</header> 
+</header>  -->
  

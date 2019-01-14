@@ -29,3 +29,60 @@ export const shrinkUpAndDownAnimation = [
         )
     ])
 ];
+
+export const navBarAnimationFromLeft = [
+    trigger('horizontalToRight', [
+        state('horizontal', style({
+            'transform': 'rotateZ(0deg) translateY(0px) translateX(0px)'
+        })),
+        state('atAngel', style({
+            'transform': 'rotateZ(-403deg) translateY(8px) translateX(-7px)'
+        })),
+        transition('horizontal => atAngel', animate('.5s', keyframes([
+            style({ transform: 'rotateZ(0deg) translateY(0px) translateX(0px)', offset: 0 }),
+            style({ transform: 'rotateZ(-147deg) translateY(-4px) translateX(18px)', offset: 0.2 }),
+            style({ transform: 'rotateZ(-228deg) translateY(-6px) translateX(34px)', offset: 0.4 }),
+            style({ transform: 'rotateZ(-316deg) translateY(9px) translateX(34px)', offset: 0.6 }),
+            style({ transform: 'rotateZ(-403deg) translateY(8px) translateX(15px)', offset: 0.8 }),
+            style({ transform: 'rotateZ(-403deg) translateY(8px) translateX(-7px)', offset: 1 }),
+        ]))
+
+        ),
+        transition('atAngel => horizontal', animate('.5s', keyframes([
+            style({ transform: 'rotateZ(-403deg) translateY(8px) translateX(-7px)', offset: 0 }),
+            style({ transform: 'rotateZ(-403deg) translateY(8px) translateX(15px)', offset: 0.2 }),
+            style({ transform: 'rotateZ(-316deg) translateY(9px) translateX(34px)', offset: 0.4 }),
+            style({ transform: 'rotateZ(-228deg) translateY(-6px) translateX(34px)', offset: 0.6 }),
+            style({ transform: 'rotateZ(-147deg) translateY(-4px) translateX(18px)', offset: 0.8 }),
+            style({ transform: 'rotateZ(0deg) translateY(0px) translateX(0px)', offset: 1 }),
+        ]))
+        )
+    ]),
+    trigger('horizontalToLeft', [
+        state('horizontal', style({
+            'transform': 'rotateZ(0deg) translateY(0px) translateX(0px)'
+        })),
+        state('atAngel', style({
+            'transform': 'rotateZ(223deg) translateY(9px) translateX(8px)'
+        })),
+        transition('horizontal => atAngel', animate('.5s', keyframes([
+            style({ transform: 'rotateZ(0deg) translateY(0px) translateX(0px)', offset: 0 }),
+            style({ transform: 'rotateZ(44deg) translateY(-8px) translateX(19px)', offset: 0.2 }),
+            style({ transform: 'rotateZ(136deg) translateY(9px) translateX(19px)', offset: 0.4 }),
+            style({ transform: 'rotateZ(223deg) translateY(9px) translateX(31px)', offset: 0.6 }),
+            style({ transform: 'rotateZ(223deg) translateY(9px) translateX(31px)', offset: 0.8 }),
+            style({ transform: 'rotateZ(223deg) translateY(9px) translateX(8px)', offset: 1 }),
+        ]))
+
+        ),
+        transition('atAngel => horizontal', animate('.5s', keyframes([
+            style({ transform: 'rotateZ(223deg) translateY(9px) translateX(8px)', offset: 0 }),
+            style({ transform: 'rotateZ(223deg) translateY(9px) translateX(31px)', offset: 0.2 }),
+            style({ transform: 'rotateZ(223deg) translateY(9px) translateX(31px)', offset: 0.4 }),
+            style({ transform: 'rotateZ(136deg) translateY(9px) translateX(19px)', offset: 0.6 }),
+            style({ transform: 'rotateZ(44deg) translateY(-8px) translateX(19px)', offset: 0.8 }),
+            style({ transform: 'rotateZ(0deg) translateY(0px) translateX(0px)', offset: 1 }),
+        ]))
+        )
+    ])
+];
