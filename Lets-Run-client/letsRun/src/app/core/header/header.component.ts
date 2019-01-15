@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, HostListener } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog, MatDialogConfig } from '@angular/material'
+import { ScrollDispatchModule, ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
 
 import { LoginComponent } from 'src/app/auth/login/login.component';
 import { SigninComponent } from 'src/app/auth/signin/signin.component';
@@ -23,11 +24,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private usernameSub:      Subscription;
   private userIdSub:        Subscription;
   animation_state_1st = 'horizontal';
+  animation_state_middle  = 'horizontal';
   animation_state_3d  = 'horizontal';
+  animation_menu   = 'invisible';
+  animation_links  = 'invisible';
 
   constructor(private authService: AuthService,
-              private dialog: MatDialog)
+              private dialog: MatDialog,
+              private scrollDispatcher: ScrollDispatcher)
               {
+
                 this.usernameSub = this.authService.getUserNameListener().subscribe(result => {
                   this.username = result;
                 });
@@ -51,9 +57,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
+  lastPageYscroll = 0;
+  pageYscroll = 0;
+  showNavbar = false;
+  @HostListener('window:scroll', ['$event']) onScrollEvent($event){
+
+    if(this.animation_menu === 'fullWidhth') {
+      return;
+    }
+
+    this.pageYscroll = window.pageYOffset;
+
+    if(this.pageYscroll > this.lastPageYscroll) {
+      this.showNavbar = true;
+      this.lastPageYscroll = this.pageYscroll;
+    } else {
+      
+      this.showNavbar = false;
+      this.lastPageYscroll = this.pageYscroll;
+    }
+  }
+
   toggle_animation_state(){
     this.animation_state_1st = this.animation_state_1st === 'atAngel' ? 'horizontal' : 'atAngel';
-    this.animation_state_3d = this.animation_state_3d   === 'atAngel' ? 'horizontal' : 'atAngel';   
+    this.animation_state_3d = this.animation_state_3d   === 'atAngel' ? 'horizontal' : 'atAngel';
+    this.animation_state_middle = this.animation_state_middle === 'invisible' ? 'horizontal' : 'invisible';
+    this.animation_menu = this.animation_menu === 'fullWidhth' ? 'invisible' : 'fullWidhth';
+
+    setTimeout(() => {
+      if(this.animation_menu === 'fullWidhth') {
+        this.animation_links = 'showed'
+      } else {
+        this.animation_links = 'invisible';
+      }
+    }, 1100);
   }
 
 

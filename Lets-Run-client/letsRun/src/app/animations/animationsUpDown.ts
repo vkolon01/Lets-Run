@@ -1,6 +1,7 @@
 import { trigger, state, style, transition,
     animate, group, query, stagger, keyframes
 } from '@angular/animations';
+import { delay } from 'rxjs/operators';
 
 export const shrinkUpAndDownAnimation = [
     trigger('dropDownUp', [
@@ -82,6 +83,89 @@ export const navBarAnimationFromLeft = [
             style({ transform: 'rotateZ(136deg) translateY(9px) translateX(19px)', offset: 0.6 }),
             style({ transform: 'rotateZ(44deg) translateY(-8px) translateX(19px)', offset: 0.8 }),
             style({ transform: 'rotateZ(0deg) translateY(0px) translateX(0px)', offset: 1 }),
+        ]))
+        )
+    ]),
+    trigger('middle_bar', [
+        state('horizontal', style({
+            'opacity': '1'
+        })),
+        state('invisible', style({
+            'opacity': '0'
+        })),
+        transition('horizontal => invisible', animate('.1s', keyframes([
+            style({ opacity: 1,  offset: 0 }),
+            style({ opacity: 0.8, offset: 0.2 }),
+            style({ opacity: 0.6, offset: 0.4 }),
+            style({ opacity: 0.4, offset: 0.6 }),
+            style({ opacity: 0.2, offset: 0.8 }),
+            style({ opacity: 0, offset: 1 }),
+        ]))
+
+        ),
+        transition('invisible => horizontal', animate('.3s', keyframes([
+            style({ opacity: 0, offset: 0 }),
+            style({ opacity: 0.2, offset: 0.2 }),
+            style({ opacity: 0.4, offset: 0.4 }),
+            style({ opacity: 0.6, offset: 0.6 }),
+            style({ opacity: 0.8, offset: 0.8 }),
+            style({ opacity: 1, offset: 1 }),
+        ]))
+        )
+    ]),
+    trigger('menu', [
+        state('invisible', style({
+            opacity: '0',
+            width: '0',
+            transform: 'translateX(50vw)'
+        })),
+        state('fullWidhth', style({
+            opacity: '0.9',
+            width: '100%',
+            transform: 'translateX(0vw)'
+        })),
+        transition('invisible => fullWidhth', animate('.3s', keyframes([
+            style({ opacity: 0, width: '0', transform: 'translateX(50vw)',  offset: 0 }),
+            style({ opacity: 0.2, width: '20%', transform: 'translateX(40vw)', offset: 0.2 }),
+            style({ opacity: 0.4, width: '40%', transform: 'translateX(30vw)', offset: 0.4 }),
+            style({ opacity: 0.6, width: '60%', transform: 'translateX(20vw)', offset: 0.6 }),
+            style({ opacity: 0.8, width: '80%', transform: 'translateX(10vw)', offset: 0.8 }),
+            style({ opacity: 0.9, width: '100%', transform: 'translateX(0vw)', offset: 1 }),
+        ]))
+
+        ),
+        transition('fullWidhth => invisible', animate('.3s', keyframes([
+            style({ opacity: 0.9, width: '100%', transform: 'translateX(0vw)', offset: 0 }),
+            style({ opacity: 0.8, width: '80%', transform: 'translateX(10vw)', offset: 0.2 }),
+            style({ opacity: 0.6, width: '60%', transform: 'translateX(20vw)', offset: 0.4 }),
+            style({ opacity: 0.4, width: '40%', transform: 'translateX(30vw)', offset: 0.6 }),
+            style({ opacity: 0.2, width: '20%', transform: 'translateX(40vw)', offset: 0.8 }),
+            style({ opacity: 0, width: '0', transform: 'translateX(50vw)', offset: 1 }),
+        ]))
+        )
+    ]),
+    trigger('links', [
+        state('invisible', style({
+            transform: 'translateY(-10000px)'
+        })),
+        state('showed', style({
+            transform: 'translateY(0px)'
+        })),
+        transition('invisible => showed', animate('1s', keyframes([
+            style({ transform: 'translateY(-10000px)',  offset: 0 }),
+            style({ transform: 'translateY(0)', offset: 0.38 }),
+            style({ transform: 'translateY(-65px)', offset: 0.55 }),
+            style({ transform: 'translateY(0px)', offset: 0.72 }),
+            style({ transform: 'translateY(-28px)', offset: 0.81 }),
+            style({ transform: 'translateY(-0px)', offset: 0.90 }),
+            style({ transform: 'translateY(-8px)', offset: 0.95 }),
+            style({ transform: 'translateY(0px)', offset: 1 }),
+        ]))
+
+        ),
+        transition('showed => invisible', animate('.1s', keyframes([
+            style({ transform: 'translateY(0px)',  offset: 0 }),
+            style({ transform: 'translateY(-10000px)', offset: 1 }),
         ]))
         )
     ])

@@ -1,13 +1,33 @@
-<header>
+<header (scroll)="onScroll($event)" [ngClass]="{'hide': showNavbar === true, 'show': showNavbar === false }">
     <div class="header_menu--logo">
       <img src="../../../assets/LogoLetsRun.png" alt="">
       </div>
   <div class="header_menu--switch" (click)="toggle_animation_state()">
     <span class="bra_1" [@horizontalToRight]="animation_state_1st"></span>
-    <span class="bra_2"></span>
+    <span class="bra_2" [@middle_bar]="animation_state_middle"></span>
     <span class="bra_3" [@horizontalToLeft]="animation_state_3d"></span> 
   </div>
 </header> 
+
+<div class="menu" [@menu]="animation_menu" >
+
+    <div [@links]="animation_links" class="menu_nav--routes">
+        <a routerLink="/" [@links]="animation_links" (click)="toggle_animation_state()">Main</a>
+        <a routerLink="/events" [@links]="animation_links" (click)="toggle_animation_state()">Events</a>
+        
+    </div>
+    <div [@links]="animation_links" class="menu_nav--routes">
+        <a *ngIf="userIsAuthenticated" [@links]="animation_links" (click)="onAddEvent()" (click)="toggle_animation_state()">Add event</a>
+    </div>
+
+    <div class="header-auth" [@links]="animation_links" class="menu_nav--auth">
+        <a *ngIf="!userIsAuthenticated" [@links]="animation_links" (click)="onLogin()" (click)="toggle_animation_state()">Login</a>
+        <a *ngIf="userIsAuthenticated" [@links]="animation_links" (click)="onLogOut()" (click)="toggle_animation_state()">Logout</a>
+        <a *ngIf="!userIsAuthenticated" [@links]="animation_links" (click)="onRegister()" (click)="toggle_animation_state()">Register</a>
+        <a *ngIf="userIsAuthenticated" [@links]="animation_links" [routerLink]="['/userpage', userId , 'info']" (click)="toggle_animation_state()">{{ username }}</a> 
+      </div>
+</div>
+
 
 
 
