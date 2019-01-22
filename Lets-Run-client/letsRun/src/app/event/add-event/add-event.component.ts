@@ -16,6 +16,8 @@ import * as moment from 'moment';
 })
 export class AddEventComponent implements OnInit {
 
+  checked = false;
+
   eventForm: FormGroup;
   imagePreview: string;
   distances = [
@@ -50,9 +52,16 @@ export class AddEventComponent implements OnInit {
       'eventDate': new FormControl(null, { validators: [Validators.required] }),
       'eventTime': new FormControl(null, { validators: [Validators.required] }),
       'description': new FormControl(null),
+      'privateEvent': new FormControl(false)
     });
+    
 
     if(this.data) {
+      if(this.data.privateEvent === true) {
+        this.checked = true;
+      } else {
+        this.checked = false;
+      }
       this.eventForm.setValue({
       title: this.data.title,
       location: this.data.location,
@@ -61,11 +70,22 @@ export class AddEventComponent implements OnInit {
       image: this.data.image,
       eventDate: this.data.eventDate,
       eventTime: this.data.eventTime,
-      description: this.data.description
-    })
+      description: this.data.description,
+      privateEvent: this.data.privateEvent
+    });
 
     }
 
+  }
+
+  changed(){
+    this.checked = !this.checked;
+    if(this.checked) {
+      this.eventForm.get('privateEvent').setValue(true);
+    } else {
+      this.eventForm.get('privateEvent').setValue(false);
+    }
+    
   }
 
   onChanges(event) {
@@ -88,9 +108,6 @@ export class AddEventComponent implements OnInit {
   }
 
   addEvent() {
-    // console.log(this.eventForm.get('time').value);
-    // let time = moment().format("HH:mm")
-    // this.eventForm.get('time').setValue(time)
 
     if(!this.data) {
       if (this.eventForm.invalid) {
@@ -106,8 +123,9 @@ export class AddEventComponent implements OnInit {
         this.eventForm.value.eventDate,
         this.eventForm.value.eventTime,
         this.eventForm.value.description,
-        this.eventForm.value.image
-      )
+        this.eventForm.value.image,
+        this.eventForm.value.privateEvent
+      );
   
       this.eventForm.reset();
       this.onClose();
@@ -130,7 +148,8 @@ export class AddEventComponent implements OnInit {
         this.eventForm.value.eventTime,
         this.eventForm.value.author,
         this.eventForm.value.description,
-        imageToSend
+        imageToSend,
+        this.eventForm.value.privateEvent
       );
       this.onClose();
 

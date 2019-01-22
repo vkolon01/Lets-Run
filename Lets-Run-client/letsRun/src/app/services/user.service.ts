@@ -57,6 +57,13 @@ export class UserService {
 
     }
 
+    getPrivateUserInfo(user_id: string){
+      const userId = user_id;
+       return  this.http
+      .get<{user: UserModel }>(BACKEND_URL + '/users/privateEvents/' + userId)
+
+  }
+
     friendManipulating(user_id: string) {
       return this.http.get(BACKEND_URL + "/users/" + user_id + '/friend_manipulation')
                  .subscribe(result => {

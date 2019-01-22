@@ -10,6 +10,7 @@ var methodOverride = require('method-override');
 var User = require('./models/user_model');
 var jsonwebtoken = require("jsonwebtoken");
 var cors = require('cors');
+var Event = require('./models/event_model');
 
 
 var app = express();

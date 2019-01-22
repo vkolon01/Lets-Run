@@ -35,7 +35,7 @@ export class EventService {
         return this.events;
     }
 
-    createEvent(title: string, location: string, distance, pace: string, eventDate, eventTime, desc: string, image: File) {
+    createEvent(title: string, location: string, distance, pace: string, eventDate, eventTime, desc: string, image: File, privateEvent: string) {
 
         const newEvent = new FormData();
         newEvent.append("title", title);
@@ -46,6 +46,7 @@ export class EventService {
         newEvent.append("distance", distance);
         newEvent.append("image", image, location);
         newEvent.append('description', desc);
+        newEvent.append('privateEvent', privateEvent);
          this.http.post(BACKEND_URL + '/events/add-event', newEvent).subscribe(
             result => {
                 this.snackBarService.showMessageWithDuration('Event added', 'OK', 3000);
@@ -89,6 +90,7 @@ export class EventService {
                 })
             });
     }
+
 
     getEventUpdateListener() {
         return this.eventUpdated.asObservable();
@@ -144,7 +146,7 @@ export class EventService {
             });
     }
 
-    updateEvent(id: string, title: string, location: string,distance ,pace: string,eventDate: Date, eventTime: Date ,author: string, description: string, image: File | string){
+    updateEvent(id: string, title: string, location: string,distance ,pace: string,eventDate: Date, eventTime: Date ,author: string, description: string, image: File | string, privateEvent: boolean){
         let updatedEvent:  EventModule | FormData;
 
         if(typeof image === "object") {
@@ -158,6 +160,7 @@ export class EventService {
             updatedEvent.append("distance", distance);
             updatedEvent.append("description", description);
             updatedEvent.append("image", image, location);
+            updatedEvent.append("privateEvent", privateEvent.toString());
 
             console.log('image to send like object');
             console.log(updatedEvent);
@@ -172,7 +175,8 @@ export class EventService {
                 eventTime: eventTime,
                 distance: distance,
                 description: description,
-                picture: image
+                picture: image,
+                privateEvent: privateEvent
             }
             console.log('image to send like string');
             console.log(updatedEvent);

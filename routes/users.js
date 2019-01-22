@@ -55,6 +55,8 @@ router.post('/sign_in', [
 
 router.get('/:user_id', authCheck,  userHandler.getUserProfile);
 
+router.get('/privateEvents/:user_id', authCheck,  userHandler.getPrivateUserProfile);
+
 router.delete('/:user_id/delete_user', authCheck, userHandler.deleteUser);
 
 router.get('/:user_id/friend_manipulation',authCheck,  userHandler.followPersonController);

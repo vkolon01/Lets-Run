@@ -7,6 +7,7 @@ export class EventModule {
     pace: string;
     eventDate: Date;
     eventTime: Date;
+    privateEvent: boolean;
     author?: string;
     createdAt?: string;
     comments?: [string];

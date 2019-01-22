@@ -20,7 +20,9 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-
+///////////////////////////////////////////////////////
+//              REGISTER USER
+///////////////////////////////////////////////////////
 exports.register = function (req, res, next) {
   let token;
 
@@ -102,6 +104,10 @@ exports.register = function (req, res, next) {
   
 };
 
+///////////////////////////////////////////////////////
+//              ACTIVATE USER
+///////////////////////////////////////////////////////
+
 exports.activetUser = async function (req, res, next) {
   const errors = validationResult(req);
   userToken = req.params.authToken;
@@ -148,6 +154,10 @@ exports.activetUser = async function (req, res, next) {
     next(error);
   }
 };
+
+///////////////////////////////////////////////////////
+//              SIGN IN USER
+///////////////////////////////////////////////////////
 
 exports.sign_in = function (req, res, next) {
 
@@ -206,9 +216,9 @@ exports.sign_in = function (req, res, next) {
     });
 };
 
-/*
-  Returns user with the given id.
-*/
+///////////////////////////////////////////////////////
+//             PUBLIC EVENTS FOR USER
+///////////////////////////////////////////////////////
 
 exports.getUserProfile = function (req, res, next) {
 
@@ -236,10 +246,13 @@ exports.getUserProfile = function (req, res, next) {
     throw error;
   }
 
+  let match;
+   match = {privateEvent: false};
+
   if (queryParams === 'friends') {
     followingPopulation = 'following';
     followingPopulationDetails = '_id imagePath username';
-
+    
     followersPopulation = 'followers';
     followersPopulationDetails = '_id imagePath username';
   } else if (queryParams === 'eventHistory') {
@@ -250,11 +263,12 @@ exports.getUserProfile = function (req, res, next) {
     eventsWillAttemptPopulationDetails = '_id title picture eventDate';
   }
 
+
   User.findById(userId)
-    .populate(followersPopulation, followersPopulationDetails)
-    .populate(followingPopulation, followingPopulationDetails)
-    .populate(createdEventsPopulation, createdEventsPopulationDetails)
-    .populate(eventsWillAttemptPopulation, eventsWillAttemptPopulationDetails)
+    .populate({path: followersPopulation, select: followersPopulationDetails, match:  match})
+    .populate({path: followingPopulation, select: followingPopulationDetails,match:  match})
+    .populate({path: createdEventsPopulation, select: createdEventsPopulationDetails,match:  match})
+    .populate({path: eventsWillAttemptPopulation, select: eventsWillAttemptPopulationDetails,match:  match})
     .then(user => {
       if (!user) {
         const error = new Error("No user find.");
@@ -284,7 +298,7 @@ exports.getUserProfile = function (req, res, next) {
           following: user.following,
           imagePath: user.imagePath
         });
-      } else if (queryParams === 'eventHistory') {
+      } else if (queryParams === 'eventHistory' || queryParams === 'privateEvents') {
         modifiedUser = new User({
           _id: user._id,
           firstName: user.firstName,
@@ -308,6 +322,88 @@ exports.getUserProfile = function (req, res, next) {
 
 };
 
+///////////////////////////////////////////////////////
+//              PRIVATE EVENTS FOR USER
+///////////////////////////////////////////////////////
+
+exports.getPrivateUserProfile = function (req, res, next) {
+
+  const errors = validationResult(req);
+  const userId = req.params.user_id;
+
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
+  if(userId !== req.userData.userId.toString()) {
+    const error = new Error("You are not authorized to do so.");
+    error.statusCode = 401;
+    error.data = "You are not authorized to do so.";
+    throw error;
+  }
+
+  const match = {privateEvent: true};
+
+  let createdEventsPopulation = 'createdEvent';
+  let createdEventsPopulationDetails = '_id title picture eventDate privateEvent';
+
+  let eventsWillAttemptPopulation = 'eventWillAttempt';
+  let eventsWillAttemptPopulationDetails = '_id title picture eventDate privateEvent';
+
+  User.findById(userId)
+  .populate({path: createdEventsPopulation, select: createdEventsPopulationDetails,match:  match})
+  .populate({path: eventsWillAttemptPopulation, select: eventsWillAttemptPopulationDetails,match:  match})
+    .then(user => {
+      if (!user) {
+        const error = new Error("No user find.");
+        error.statusCode = 404;
+        error.data = "No user find.";
+        throw error;
+      }
+      console.log('user');
+      console.log(user);
+      
+
+      let modifiedUser;
+
+      modifiedUser = new User({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        imagePath: user.imagePath,
+        dob: user.dob,
+        createdAt: user.createdAt
+      });
+
+        modifiedUser = new User({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          imagePath: user.imagePath,
+          eventWillAttempt: user.eventWillAttempt,
+          createdEvent: user.createdEvent
+        });
+      
+
+      res.status(200).json({
+        user: modifiedUser
+      });
+    })
+    .catch(error => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+
+};
+///////////////////////////////////////////////////////
+//              DELETE USER
+///////////////////////////////////////////////////////
 exports.deleteUser = function (req, res, next) {
 
   const errors = validationResult(req);
@@ -380,7 +476,9 @@ exports.deleteUser = function (req, res, next) {
 
 };
 
-
+///////////////////////////////////////////////////////
+//              FOLLOW MANIPULATOR
+///////////////////////////////////////////////////////
 exports.followPersonController = function (req, res, next) {
 
   const userId = req.params.user_id;
@@ -506,6 +604,9 @@ exports.followPersonController = function (req, res, next) {
 
 };
 
+///////////////////////////////////////////////////////
+//              ADD AVATAR FOR THE USER
+///////////////////////////////////////////////////////
 
 exports.add_avatar = function (req, res, next) {
   let imagePath = req.body.imagePath;
@@ -536,7 +637,9 @@ exports.add_avatar = function (req, res, next) {
   });
 
 };
-
+///////////////////////////////////////////////////////
+//              RESET PASSWORD FOR THE USER
+///////////////////////////////////////////////////////
 exports.resetPasswordGetToken = async function (req, res, next) {
   console.log('RESETE');
   
@@ -598,6 +701,9 @@ exports.resetPasswordGetToken = async function (req, res, next) {
   }
 };
 
+///////////////////////////////////////////////////////
+//              GATHER INFORMATION FOR PASSWORD CHANGE
+///////////////////////////////////////////////////////
 
 exports.getChangePassword = async function (req, res, next) {
   const token = req.params.token;
@@ -617,7 +723,9 @@ exports.getChangePassword = async function (req, res, next) {
   }
 
 };
-
+///////////////////////////////////////////////////////
+//              PASSWORD CHANGE
+///////////////////////////////////////////////////////
 exports.changePassword = async function(req, res, next) {
   const resetToken =  req.body.resetToken;
   const userId =      req.body.userId;

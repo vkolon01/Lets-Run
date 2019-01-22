@@ -127,6 +127,9 @@ export class EventDetailComponent implements OnInit {
           const eventDate = value.event.eventDate;
           this.formatedEventDate = moment(eventDate).format('YYYY-MM-DD').toString();
           this.geocodeAddress(this.geocoder, value.event.location);
+          console.log('value.event.privateEvent');
+          console.log(value.event.privateEvent);
+          
         });
 
     });
@@ -187,7 +190,8 @@ export class EventDetailComponent implements OnInit {
       image: this.event.picture,
       eventDate: this.event.eventDate,
       eventTime: this.event.eventTime,
-      description: this.event.description
+      description: this.event.description,
+      privateEvent: this.event.privateEvent
     });
 
     const dialogConfig = new MatDialogConfig();

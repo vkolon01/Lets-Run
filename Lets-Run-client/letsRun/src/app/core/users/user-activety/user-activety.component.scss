@@ -6,11 +6,43 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-
 }
+
+.private {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+li {
+    width: 70%;
+    text-align: center;
+    height: 100%;
+    padding: 10px;
+    margin: 1rem;
+    background: $darkBlue;
+    color: white;
+    list-style-type: none;
+
+    &.active {
+      background: #42528b;
+    }
+
+  }
+
+hr { 
+    background: #0e2369;
+    width: 83%;
+    height: 1px;
+  } 
 
 .events {
     width: 60%;
+}
+
+.list {
+    color: yellow;
 }
 
 .events_container {

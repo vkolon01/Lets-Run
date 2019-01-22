@@ -4,25 +4,24 @@ import {
   MatCardModule,
   MatButtonModule,
   MatToolbarModule,
-  MatExpansionModule,
   MatProgressSpinnerModule,
   MatPaginatorModule,
   MatDialogModule,
   MatSelectModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatSlideToggleModule
 } from "@angular/material";
 import {MatIconModule} from '@angular/material/icon';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-
+import {MatExpansionModule} from '@angular/material/expansion';
 @NgModule({
   exports: [
     MatInputModule,
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
-    MatExpansionModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatDialogModule,
@@ -32,7 +31,10 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatDialogModule,
     MatSelectModule,
     MatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatSlideToggleModule,
+    MatExpansionModule,
+
   ]
 })
 export class AngularMaterialModule {}

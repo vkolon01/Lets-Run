@@ -7,6 +7,8 @@ import { DialogService } from 'src/app/services/dialogService';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { AddEventComponent } from 'src/app/event/add-event/add-event.component';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
@@ -28,6 +30,7 @@ export class UserInfoComponent implements OnInit {
   constructor(public userService: UserService,
     private activeRoute: ActivatedRoute,
     private authService: AuthService,
+    private dialog: MatDialog,
     private confirm: DialogService,
     private snackBarService: SnackBarService
   ) { }

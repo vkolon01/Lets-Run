@@ -1,5 +1,7 @@
 'use strict';
-
+///////////////////////////////////////////////////////
+//              LOGIN USER
+///////////////////////////////////////////////////////
 exports.loginRequired = function(req, res, next){
   if(req.user){
     next();
@@ -8,7 +10,9 @@ exports.loginRequired = function(req, res, next){
     
   }
 }
-
+///////////////////////////////////////////////////////
+//              CHECK OWNERSHIP
+///////////////////////////////////////////////////////
 exports.checkOwnership = function (req, res, next){
   if(req.user){
     next();

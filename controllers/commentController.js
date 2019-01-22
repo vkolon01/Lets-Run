@@ -7,7 +7,9 @@ var User = require('../models/user_model');
 var Event = require('../models/event_model');
 var Comment = require('../models/comment_model');
 
-
+///////////////////////////////////////////////////////
+//              ADD COMMENT FOR THE EVENT
+///////////////////////////////////////////////////////
 exports.addCommentToEvent = function (req, res, next) {
 
 
@@ -68,7 +70,9 @@ exports.addCommentToEvent = function (req, res, next) {
             next(error);
         });
 }
-
+///////////////////////////////////////////////////////
+//              GET COMMENT FOR THE EVENT
+///////////////////////////////////////////////////////
 exports.getCommnentsForEvent = function (req, res, next) {
 
 
@@ -150,7 +154,9 @@ exports.getCommnentsForEvent = function (req, res, next) {
         });
 
 }
-
+///////////////////////////////////////////////////////
+//              EDIT COMMENT FOR THE EVENT
+///////////////////////////////////////////////////////
 exports.editComment = function (req, res, next) {
 
     const errors = validationResult(req);
@@ -202,7 +208,9 @@ exports.editComment = function (req, res, next) {
         });
 }
 
-
+///////////////////////////////////////////////////////
+//              DELETE EVENT
+///////////////////////////////////////////////////////
 exports.DeleteEventComment = function (req, res, next) {
 
     const errors = validationResult(req);

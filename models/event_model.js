@@ -45,6 +45,14 @@
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
+    privateEvent : {
+      type: Boolean,
+      default: false
+    },
+    invitedUsers: {
+      type: Schema.Types.ObjectId,
+      ref: 'User', 
+    },
     likes: [{
       type: Schema.Types.ObjectId,
       ref: 'User', 

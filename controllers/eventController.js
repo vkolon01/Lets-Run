@@ -18,8 +18,10 @@ var transporter = nodemailer.createTransport({
   }
 });
 
+///////////////////////////////////////////////////////
+//              GET EVENTS
+///////////////////////////////////////////////////////
 
-// console.log(new Date(searchedEventDate).toISOString());
 
 exports.getEvents = function (req, res, next) {
 
@@ -27,19 +29,12 @@ exports.getEvents = function (req, res, next) {
   const currentPage = +req.query.page;
   const searchedEventDate = req.query.filterDate;
   const searchedEventDistance = req.query.eventDistance;
-  console.log(searchedEventDistance);
 
 
   let currentDate = Date.now();
-
-  console.log('currentDate');
-  console.log(new Date(currentDate).toISOString());
   
   let modDate = new Date(currentDate).setDate(new Date(currentDate).getDate() - 1);
   var isoCurrentDate = new Date(modDate).toISOString();
-
-  console.log('modDate');
-  console.log(new Date(modDate).toISOString());
 
   let eventCounted;
   let fetchedEvent;
@@ -50,41 +45,49 @@ exports.getEvents = function (req, res, next) {
     eventQuery = Event.find({
       eventDate: {
         $gt: isoCurrentDate
-      }
+      },
+      privateEvent: false
     });
     Event.find({
       eventDate: {
         $gt: isoCurrentDate
-      }
+      },
+      privateEvent: false
     }).countDocuments().then(countedDocuments => {
       eventCounted = countedDocuments
     });
   } else if (searchedEventDate && searchedEventDistance) {
     eventQuery = Event.find({
       distance: searchedEventDistance,
-      eventDate: searchedEventDate
+      eventDate: searchedEventDate,
+      privateEvent: false
     });
     Event.find({
       distance: searchedEventDistance,
-      eventDate: searchedEventDate
+      eventDate: searchedEventDate,
+      privateEvent: false
     }).countDocuments().then(countedDocuments => {
       eventCounted = countedDocuments
     });
   } else if (searchedEventDate) {
     eventQuery = Event.find({
-      eventDate: searchedEventDate
+      eventDate: searchedEventDate,
+      privateEvent: false
     });
     Event.find({
-      eventDate: searchedEventDate
+      eventDate: searchedEventDate,
+      privateEvent: false
     }).countDocuments().then(countedDocuments => {
       eventCounted = countedDocuments
     });
   } else if (searchedEventDistance) {
     eventQuery = Event.find({
-      distance: searchedEventDistance
+      distance: searchedEventDistance,
+      privateEvent: false
     });
     Event.find({
-      distance: searchedEventDistance
+      distance: searchedEventDistance,
+      privateEvent: false
     }).countDocuments().then(countedDocuments => {
       eventCounted = countedDocuments
     });
@@ -112,7 +115,8 @@ exports.getEvents = function (req, res, next) {
           eventTime: req.body.eventTime,
           pace: event.pace,
           title:  event.title,
-          distance: event.distance
+          distance: event.distance,
+          privateEvent: event.privateEvent
         }
       })
       return Event.count();
@@ -133,7 +137,9 @@ exports.getEvents = function (req, res, next) {
       next(error);
     });
 }
-
+///////////////////////////////////////////////////////
+//              ADD EVENT
+///////////////////////////////////////////////////////
 exports.addEvent = function (req, res, next) {
 
   let imagePath = req.body.imagePath;
@@ -142,7 +148,6 @@ exports.addEvent = function (req, res, next) {
     const url = req.protocol + "://" + req.get("host");
     imagePath = url + "/images/" + req.file.filename;
   }
-
 
   const event = new Event({
     location: req.body.location,
@@ -153,7 +158,8 @@ exports.addEvent = function (req, res, next) {
     author: req.userData.userId,
     picture: imagePath,
     title:  req.body.title,
-    description: req.body.description
+    description: req.body.description,
+    privateEvent: req.body.privateEvent
   });
 
   event.save()
@@ -172,16 +178,29 @@ exports.addEvent = function (req, res, next) {
       User.findById(req.userData.userId)
         .then(user => {
 
+          let html;
+
+          if(!req.body.privateEvent) {
+            html = `
+            <p>You have added new Event</p>
+            <p> You can visit it from your profile and by finding it on main page or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>
+            <p>You'r Lets Run team!</p>
+          `
+          } else {
+            html = `
+            <p>You have added new <span style="color=red">private</span> Event</p>
+            <p> You can visit it from your profile in private events or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>
+            <p>You'r Lets Run team!</p>
+          `
+          }
+
+
           const emailToSend = {
             from: '"LetsRun" <events@letsrun.com>',
             to: user.email,
             subject: "You have added new event",
             text: "New event",
-            html: `
-            <p>You have added new Event</p>
-            <p> You can visit it from your profile and by finding it on main page or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>
-            <p>You'r Lets Run team!</p>
-          `
+            html: html
           };
 
           transporter.sendMail(emailToSend, function (err, info) {
@@ -212,7 +231,9 @@ exports.addEvent = function (req, res, next) {
 }
 
 
-
+///////////////////////////////////////////////////////
+//              GET EVENT BY ID
+///////////////////////////////////////////////////////
 exports.getEvent = function (req, res, next) {
 
   const errors = validationResult(req);
@@ -259,7 +280,9 @@ exports.getEvent = function (req, res, next) {
       next(error);
     });
 }
-
+///////////////////////////////////////////////////////
+//              UPDATE EVENT
+///////////////////////////////////////////////////////
 exports.updateEvent = function (req, res, next) {
 
   let imagePath = req.body.picture;
@@ -287,7 +310,8 @@ exports.updateEvent = function (req, res, next) {
     eventTime: req.body.eventTime.toString(),
     description: req.body.description,
     title:  req.body.title,
-    picture: imagePath
+    picture: imagePath,
+    privateEvent: req.body.privateEvent
   })
 
   Event.updateOne({
@@ -303,7 +327,8 @@ exports.updateEvent = function (req, res, next) {
         title:  event.title,
         eventDate: event.eventDate,
         eventTime: event.eventTime,
-        picture: event.picture
+        picture: event.picture,
+        privateEvent: event.privateEvent
       }
     })
 
@@ -327,7 +352,9 @@ exports.updateEvent = function (req, res, next) {
     });
 }
 
-
+///////////////////////////////////////////////////////
+//              DELETE EVENT
+///////////////////////////////////////////////////////
 exports.deleteEvent = function (req, res, next) {
 
 
@@ -415,7 +442,9 @@ exports.deleteEvent = function (req, res, next) {
       next(error);
     });
 }
-
+///////////////////////////////////////////////////////
+//              EVENT LIKE MANIPULATION
+///////////////////////////////////////////////////////
 exports.eventLikeSwitcher = function (req, res, next) {
 
   const errors = validationResult(req);
@@ -511,7 +540,9 @@ exports.eventLikeSwitcher = function (req, res, next) {
     });
 }
 
-
+///////////////////////////////////////////////////////
+//              EVENT ATTEMPT MANIPULATION
+///////////////////////////////////////////////////////
 exports.participateAtEvent = function (req, res, next) {
 
   const errors = validationResult(req);
