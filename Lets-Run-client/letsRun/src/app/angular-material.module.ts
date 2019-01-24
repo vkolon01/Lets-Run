@@ -16,6 +16,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 @NgModule({
   exports: [
     MatInputModule,
@@ -34,7 +35,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatDatepickerModule,
     MatSlideToggleModule,
     MatExpansionModule,
-
+    MatCheckboxModule
   ]
 })
 export class AngularMaterialModule {}

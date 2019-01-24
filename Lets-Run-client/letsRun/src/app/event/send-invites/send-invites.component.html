@@ -1,0 +1,37 @@
+<div class="main">
+  send-invites works!
+  {{eventOwnerId}}
+
+  <!-- <form  [formGroup]="FreindsInviteForm" (ngSubmit)="onlognin()">
+
+
+
+  </form> -->
+
+  <form class="main" [formGroup]="freindsInviteForm" (ngSubmit)="submit()">
+         <div class="users" *ngFor="let following of user?.following; let i = index" >
+            <div class="user_container">
+                <div class="user_container--image"><img src="{{following.imagePath}}" alt=""></div>
+               <div><a [routerLink]="['/userpage', following._id, 'info']" routerLinkActive="router-link-active" >{{following.username}}</a></div>
+               
+              </div>
+            <mat-checkbox class="example-margin" (change)="onChange($event)" [value]="following._id">
+              Send Invite
+            </mat-checkbox>
+         </div>
+      <button type="submit">Submit</button>
+   </form>
+
+
+  <!-- <p>Following</p>
+  <p *ngIf="user?.following.length <= 0 "> You are not following anyone</p>
+  <div class="users" *ngFor="let following of user?.following">
+    <div class="user_container">
+      <div class="user_container--image"><img src="{{following.imagePath}}" alt=""></div>
+     <div><a [routerLink]="['/userpage', following._id, 'info']" routerLinkActive="router-link-active" >{{following.username}}</a></div>
+     
+    </div>
+    <mat-checkbox value="following._id">Check me!</mat-checkbox> 
+  </div> -->
+
+</div>

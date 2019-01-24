@@ -7,14 +7,18 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { AngularMaterialModule } from "../angular-material.module";
 import { UiScrollModule } from 'ngx-ui-scroll';
 import { GoogleMapComponent } from "./google-map/google-map.component";
+import { SendInvitesComponent } from "./send-invites/send-invites.component";
 
 @NgModule({
-    declarations: [EventsListComponent],
+    declarations: [EventsListComponent
+        ,
+    ],
     imports: [
         CommonModule,
         EventsRouterModule,
         ReactiveFormsModule,
         AngularMaterialModule,
+        
         
     ],
     exports: [EventsListComponent]

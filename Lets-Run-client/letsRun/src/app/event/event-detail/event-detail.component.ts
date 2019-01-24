@@ -127,8 +127,6 @@ export class EventDetailComponent implements OnInit {
           const eventDate = value.event.eventDate;
           this.formatedEventDate = moment(eventDate).format('YYYY-MM-DD').toString();
           this.geocodeAddress(this.geocoder, value.event.location);
-          console.log('value.event.privateEvent');
-          console.log(value.event.privateEvent);
           
         });
 

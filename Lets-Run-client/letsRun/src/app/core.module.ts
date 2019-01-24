@@ -15,10 +15,20 @@ import { MatNativeDateModule } from "@angular/material";
 import { Page404Component } from "./core/page404/page404.component";
 import { GoogleMapComponent } from "./event/google-map/google-map.component";
 import { GooglePlacesDirective } from "./directives/google-palces.directive";
+import { SendInvitesComponent } from "./event/send-invites/send-invites.component";
 
 
 @NgModule({
-    declarations: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component,GoogleMapComponent, GooglePlacesDirective],
+    declarations: [
+        FooterComponent,
+        HeaderComponent,
+        HomeComponent,
+        EventDetailComponent,
+        CommentComponent,
+        Page404Component,
+        GoogleMapComponent,
+        GooglePlacesDirective,
+        SendInvitesComponent],
     imports: [
         CommonModule,
         RouterModule,
@@ -26,7 +36,15 @@ import { GooglePlacesDirective } from "./directives/google-palces.directive";
         UiScrollModule,
         AngularMaterialModule
     ],
-    exports: [FooterComponent, HeaderComponent, HomeComponent, EventDetailComponent, CommentComponent, Page404Component,GoogleMapComponent, GooglePlacesDirective]
+    exports: [FooterComponent,
+        HeaderComponent,
+        HomeComponent,
+        EventDetailComponent,
+        CommentComponent,
+        Page404Component,
+        GoogleMapComponent,
+        GooglePlacesDirective,
+        SendInvitesComponent]
 })
 
-export class CoreModule {}
+export class CoreModule { }

@@ -46,6 +46,8 @@ router.post('/add-event',[
 
 router.delete('/:event_id', authCheck, EventController.deleteEvent);
 
+router.post('/:event_id/invitesToEvent', authCheck, EventController.sendInvitesToTheFriends);
+
 //////////////////////// CONTROLLERS FOR EVENT LIKES AND FOLLOWING
 
 

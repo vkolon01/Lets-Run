@@ -16,18 +16,23 @@ import { navBarAnimationFromLeft } from 'src/app/animations/animationsUpDown';
   styleUrls: ['./header.component.scss'],
   animations: [navBarAnimationFromLeft]
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
   userId:                   string;
   username:                 string;
   private usernameSub:      Subscription;
   private userIdSub:        Subscription;
+
   animation_state_1st = 'horizontal';
   animation_state_middle  = 'horizontal';
   animation_state_3d  = 'horizontal';
   animation_menu   = 'invisible';
   animation_links  = 'invisible';
+
+  lastPageYscroll = 0;
+  pageYscroll = 0;
+  showNavbar = false;
 
   constructor(private authService: AuthService,
               private dialog: MatDialog,
@@ -56,10 +61,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.username = result;
     });
   }
+  
+ngOnChanges() {
+  this.userIdSub = this.authService.getUserIdListener().subscribe(result => {
+    this.userId = result;
+  })  
 
-  lastPageYscroll = 0;
-  pageYscroll = 0;
-  showNavbar = false;
+  console.log('changes');
+  
+}
+
   @HostListener('window:scroll', ['$event']) onScrollEvent($event){
 
     if(this.animation_menu === 'fullWidhth') {
@@ -90,7 +101,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       } else {
         this.animation_links = 'invisible';
       }
-    }, 1100);
+    }, 100);
   }
 
 

@@ -39,8 +39,16 @@ export class UserService {
       }
 
       getUserInfo(user_id: string, queryPage: string){
+
         const queryParams = `?info=${queryPage}`
         const userId = user_id;
+
+        console.log('queryParams');
+        console.log(queryParams);
+
+        console.log('userId');
+        console.log(userId);
+
          return  this.http
         .get<{user: UserModel }>(BACKEND_URL + '/users/' + userId + queryParams)
         .subscribe(user => {
@@ -61,7 +69,6 @@ export class UserService {
       const userId = user_id;
        return  this.http
       .get<{user: UserModel }>(BACKEND_URL + '/users/privateEvents/' + userId)
-
   }
 
     friendManipulating(user_id: string) {

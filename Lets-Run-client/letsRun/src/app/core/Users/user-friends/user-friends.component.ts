@@ -32,12 +32,11 @@ export class UserFriendsComponent implements OnInit {
 
 
 
-        this.userService.getUserInfo(this.user_id, '');
+        this.userService.getUserInfo(this.user_id, 'friends');
 
         this.userSubscription = this.userService.getUserListener()
             .subscribe((value: {user: UserModel}) => {
               this.user = value.user;
-              // console.log(this.user);
             })
     })
   }

@@ -19,6 +19,10 @@ var app = express();
 var users = require('./routes/users');
 var events = require('./routes/events');
 
+//var url = "mongodb://localhost/yelp_camp";
+
+//mongoose.connect(url)  //DATABASE URL CONNECTOR         process.env.DATABASEURL ||
+
 mongoose
   .connect(
 

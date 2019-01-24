@@ -206,6 +206,12 @@ export class EventService {
 
           }
 
+
+    sendFriendsInvitesToPrivateEvent(eventId: string, friendsIds: string[]) {
+        
+           return this.http.post(BACKEND_URL+ "/events/" + eventId + "/invitesToEvent", friendsIds)
+          }
+
     deleteEvent(id: string) {
         console.log('delete ' + id);
         return this.http.delete(BACKEND_URL + '/events/' + id)

@@ -442,6 +442,66 @@ exports.deleteEvent = function (req, res, next) {
       next(error);
     });
 }
+
+
+///////////////////////////////////////////////////////
+//              INVITE TO THE EVENT
+///////////////////////////////////////////////////////
+
+exports.sendInvitesToTheFriends = async function (req, res, next) {
+  const errors = validationResult(req);
+
+
+  eventId = req.params.event_id;
+  friendsArray = req.body.friendsToInvite;
+  
+
+  try {
+    var event = await Event.findById(eventId);
+
+    if (!event) {
+      const error = new Error('Event not found');
+      error.statusCode = 404;
+      error.data = errors.array();
+      throw error;
+    }
+
+    friendsArray.forEach(userId => {
+      // User.findById(userId)
+      console.log(userId);
+      
+    })
+    
+
+    // const emailToSend = {
+    //   from: '"LetsRun" <events@letsrun.com>',
+    //   to: user.email,
+    //   subject: "You have Authenticated",
+    //   text: "You have Authenticated",
+    //   html: `
+    //   <p>You have Authenticated</p>
+    //   <p>You can now post new events and comments and be the one of our community!</p>
+    //   <p>You'r Lets Run team!</p>
+    // `
+    // };
+
+    // transporter.sendMail(emailToSend, function (err, info) {
+    //   if (err)
+    //     console.log(err)
+    //   else
+    //     console.log(info);
+    // });
+
+
+
+    res.status(200).json({
+      message: 'Users invited!'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 ///////////////////////////////////////////////////////
 //              EVENT LIKE MANIPULATION
 ///////////////////////////////////////////////////////

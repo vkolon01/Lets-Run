@@ -49,6 +49,10 @@
       type: Boolean,
       default: false
     },
+    userInvited: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
     invitedUsers: {
       type: Schema.Types.ObjectId,
       ref: 'User', 

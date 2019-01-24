@@ -10,12 +10,12 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input google-places matInput (onSelect)="onChanges($event)" placeholder="Starting location" formControlName="location"> 
+      <input  matInput (onSelect)="onChanges($event)" placeholder="Starting location" formControlName="location"> 
       <mat-hint>The starting location of the event!</mat-hint> 
       <mat-error *ngIf="eventForm.get('location').errors">Starting location is requied</mat-error>
     </mat-form-field>
 
-    <app-google-map [location]="eventLocation" class="google_map"></app-google-map>
+    <!-- <app-google-map [location]="eventLocation" class="google_map"></app-google-map> google-places --> 
 
     <mat-form-field>
       <textarea matInput placeholder="Description" formControlName="description"></textarea>

@@ -9,7 +9,7 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 @Component({
   selector: 'app-google-map',
   templateUrl: './google-map.component.html',
-  styleUrls: ['./google-map.component.scss'],
+  styleUrls: ['./google-map.component.scss', '../../global-css/global-input.scss'],
   animations: [shrinkUpAndDownAnimation]
 })
 

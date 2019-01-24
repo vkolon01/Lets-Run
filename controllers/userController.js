@@ -217,7 +217,7 @@ exports.sign_in = function (req, res, next) {
 };
 
 ///////////////////////////////////////////////////////
-//             PUBLIC EVENTS FOR USER
+//             PUBLIC EVENTS AND FRIENDS FOR USER
 ///////////////////////////////////////////////////////
 
 exports.getUserProfile = function (req, res, next) {
@@ -265,8 +265,8 @@ exports.getUserProfile = function (req, res, next) {
 
 
   User.findById(userId)
-    .populate({path: followersPopulation, select: followersPopulationDetails, match:  match})
-    .populate({path: followingPopulation, select: followingPopulationDetails,match:  match})
+    .populate({path: followersPopulation, select: followersPopulationDetails})
+    .populate({path: followingPopulation, select: followingPopulationDetails})
     .populate({path: createdEventsPopulation, select: createdEventsPopulationDetails,match:  match})
     .populate({path: eventsWillAttemptPopulation, select: eventsWillAttemptPopulationDetails,match:  match})
     .then(user => {
@@ -337,8 +337,13 @@ exports.getPrivateUserProfile = function (req, res, next) {
     error.data = errors.array();
     throw error;
   }
+  console.log('userId.toString()');
+  console.log(userId.toString());
+  
+  console.log('req.userData.userId.toString()');
+  console.log(req.userData.userId.toString());
 
-  if(userId !== req.userData.userId.toString()) {
+  if(userId.toString() !== req.userData.userId.toString()) {
     const error = new Error("You are not authorized to do so.");
     error.statusCode = 401;
     error.data = "You are not authorized to do so.";
