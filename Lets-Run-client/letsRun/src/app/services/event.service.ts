@@ -91,6 +91,10 @@ export class EventService {
             });
     }
 
+    getUsersForPrivateEvent(eventId: string) {
+        return this.http.get<{invitedUsers: string[]}>(BACKEND_URL + "/events/" + eventId + "/invitedUsers");
+    }
+
 
     getEventUpdateListener() {
         return this.eventUpdated.asObservable();
@@ -208,7 +212,7 @@ export class EventService {
 
 
     sendFriendsInvitesToPrivateEvent(eventId: string, friendsIds: string[]) {
-        
+
            return this.http.post(BACKEND_URL+ "/events/" + eventId + "/invitesToEvent", friendsIds)
           }
 

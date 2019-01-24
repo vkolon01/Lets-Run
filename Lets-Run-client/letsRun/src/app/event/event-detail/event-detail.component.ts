@@ -43,7 +43,7 @@ export class EventDetailComponent implements OnInit {
   creatorId: string;
   private creatorNameAndIdSub: Subscription;
 
-  // comments: CommentModule[] = [];
+  invite: false;
   eventId: string;
 
   eventLikes: string[] = [];

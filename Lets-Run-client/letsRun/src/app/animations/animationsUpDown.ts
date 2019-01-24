@@ -35,13 +35,13 @@ export const shrinkUpAndDownAnimationField = [
     trigger('shrinkDownUp', [
         state('down', style({
             'max-height': '100%',
-            'display': 'block'
+            'display': 'flex'
         })),
         state('up', style({
             'max-height': '0px',
             'display': 'none'
         })),
-        transition('down => up', animate('1s', keyframes([
+        transition('down => up', animate('.2s', keyframes([
             style({ 'max-height': '100%', offset: 0 }),
             style({ 'max-height': '80px',offset: 0.2 }),
             style({ 'max-height': '60px',offset: 0.5 }),
@@ -50,9 +50,9 @@ export const shrinkUpAndDownAnimationField = [
         ]))
 
         ),
-        transition('up => down', animate('1s', keyframes([
+        transition('up => down', animate('.2s', keyframes([
             style({ 'max-height': '0px', 'display': 'none', offset: 0 }),
-            style({ 'max-height': '40px','display': 'block',offset: 0.2 }),
+            style({ 'max-height': '40px','display': 'flex',offset: 0.2 }),
             style({ 'max-height': '80px',offset: 0.5 }),
             style({ 'max-height': '100px',offset: 0.9 }),
             style({ 'max-height': '2000px' , offset: 1 })

@@ -457,7 +457,7 @@ exports.sendInvitesToTheFriends = async function (req, res, next) {
   
 
   try {
-    var event = await Event.findById(eventId);
+    var   event     = await Event.findById(eventId);
 
     if (!event) {
       const error = new Error('Event not found');
@@ -466,13 +466,19 @@ exports.sendInvitesToTheFriends = async function (req, res, next) {
       throw error;
     }
 
-    friendsArray.forEach(userId => {
-      // User.findById(userId)
-      console.log(userId);
-      
-    })
-    
+   await Promise.all(friendsArray.map(async friendId => {
+      const foundUser = await User.findById(friendId);
 
+       if(foundUser.invitesToPrivateEvent.indexOf(eventId) > -1) {
+        return;
+     } else {
+      foundUser.invitesToPrivateEvent.push(eventId);
+      event.userInvited.push(friendId);
+      foundUser.save();
+     }
+    }))
+    event.save();
+    
     // const emailToSend = {
     //   from: '"LetsRun" <events@letsrun.com>',
     //   to: user.email,
@@ -496,6 +502,38 @@ exports.sendInvitesToTheFriends = async function (req, res, next) {
 
     res.status(200).json({
       message: 'Users invited!'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+///////////////////////////////////////////////////////
+//       GET USER INVITED TO THE PRIVATE EVENT
+///////////////////////////////////////////////////////
+
+exports.getInvitedUsersForPrivateEvent = async function (req, res, next) {
+  const errors = validationResult(req);
+
+
+  eventId = req.params.event_id;
+  
+
+  try {
+    var   event     = await Event.findById(eventId);
+
+    if (!event) {
+      const error = new Error('Event not found');
+      error.statusCode = 404;
+      error.data = errors.array();
+      throw error;
+    }
+
+    const invitedUsers = event.userInvited;
+    
+    res.status(200).json({
+      message: 'List of the invited users!',
+      invitedUsers: invitedUsers
     });
   } catch (error) {
     next(error);

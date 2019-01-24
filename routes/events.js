@@ -48,6 +48,8 @@ router.delete('/:event_id', authCheck, EventController.deleteEvent);
 
 router.post('/:event_id/invitesToEvent', authCheck, EventController.sendInvitesToTheFriends);
 
+router.get('/:event_id/invitedUsers', authCheck, EventController.getInvitedUsersForPrivateEvent);
+
 //////////////////////// CONTROLLERS FOR EVENT LIKES AND FOLLOWING
 
 

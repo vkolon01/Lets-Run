@@ -49,14 +49,10 @@
       type: Boolean,
       default: false
     },
-    userInvited: {
+    userInvited: [{
       type: Schema.Types.ObjectId,
       ref: 'User'
-    },
-    invitedUsers: {
-      type: Schema.Types.ObjectId,
-      ref: 'User', 
-    },
+    }],
     likes: [{
       type: Schema.Types.ObjectId,
       ref: 'User', 
