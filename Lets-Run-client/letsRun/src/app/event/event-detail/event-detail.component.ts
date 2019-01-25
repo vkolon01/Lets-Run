@@ -16,6 +16,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material'
 import { AddEventComponent } from '../add-event/add-event.component';
 import { WeatherService } from 'src/app/services/weather.service';
 import { Weather } from 'src/app/models/weather.model';
+import {Router} from "@angular/router"
 declare var google: any;
 import { } from 'googlemaps';
 
@@ -72,7 +73,8 @@ export class EventDetailComponent implements OnInit {
     private snackBarService: SnackBarService,
     private confirm: DialogService,
     private dialog: MatDialog,
-    private weatherSer: WeatherService
+    private weatherSer: WeatherService,
+    private router: Router
   ) { }
 
   datasource = new Datasource({
@@ -83,9 +85,6 @@ export class EventDetailComponent implements OnInit {
 
       return this.commentService.getCommentListFormNgxUiScroll(this.eventId, index, count)
         .subscribe(result => {
-          console.log('result');
-
-          console.log(result);
           success(result.comments);
 
         });
@@ -128,6 +127,7 @@ export class EventDetailComponent implements OnInit {
           this.formatedEventDate = moment(eventDate).format('YYYY-MM-DD').toString();
           this.geocodeAddress(this.geocoder, value.event.location);
           
+
         });
 
     });

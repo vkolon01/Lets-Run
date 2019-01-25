@@ -254,6 +254,12 @@ exports.getEvent = function (req, res, next) {
         throw error;
       }
 
+      if(foundEvent.privateEvent && !(foundEvent.userInvited.indexOf(req.userData.userId.toString()) > -1) && (foundEvent.author.toString() !== req.userData.userId.toString()) ) {
+          const error = new Error("Sorry, this event marked for invited person's only");
+          error.statusCode = 403;
+          throw error;
+         }
+
       const creator = foundEvent.author;
 
       const user = User.findById(foundEvent.author)
@@ -280,6 +286,8 @@ exports.getEvent = function (req, res, next) {
       next(error);
     });
 }
+
+
 ///////////////////////////////////////////////////////
 //              UPDATE EVENT
 ///////////////////////////////////////////////////////
@@ -457,7 +465,7 @@ exports.sendInvitesToTheFriends = async function (req, res, next) {
   
 
   try {
-    var   event     = await Event.findById(eventId);
+    var event = await Event.findById(eventId);
 
     if (!event) {
       const error = new Error('Event not found');
@@ -468,35 +476,40 @@ exports.sendInvitesToTheFriends = async function (req, res, next) {
 
    await Promise.all(friendsArray.map(async friendId => {
       const foundUser = await User.findById(friendId);
+      const inviterInfo = await User.findById(req.userData.userId.toString());
 
        if(foundUser.invitesToPrivateEvent.indexOf(eventId) > -1) {
         return;
      } else {
       foundUser.invitesToPrivateEvent.push(eventId);
       event.userInvited.push(friendId);
+
+      const emailToSend = {
+        from: '"LetsRun" <events@letsrun.com>',
+        to: foundUser.email,
+        subject: "You have been invited to the private event!",
+        text: "You have been invited to join the private event!",
+        html: `
+        <h1 style="background: #0e2369; margin: 0; padding: 20px; color: #cee222; text-align: center;">You have been invited to join the private event!</h1>
+        <p style="text-align: center; font-size: 2rem;">You have been invited to the private event by ${foundUser.username}</p> 
+        <p style="text-align: center; font-size: 2rem;">You can find it simply by clicking at this <a href="http://localhost:4200/events/${event._id}">link</a>!</p>
+        <p style="text-align: center; font-size: 2rem; background: #0e2369; color: #cee222;">You'r Lets Run team!</p>
+      `
+      };
+  
+      transporter.sendMail(emailToSend, function (err, info) {
+        if (err)
+          console.log(err)
+        else
+          console.log(info);
+      });
+
       foundUser.save();
      }
     }))
     event.save();
     
-    // const emailToSend = {
-    //   from: '"LetsRun" <events@letsrun.com>',
-    //   to: user.email,
-    //   subject: "You have Authenticated",
-    //   text: "You have Authenticated",
-    //   html: `
-    //   <p>You have Authenticated</p>
-    //   <p>You can now post new events and comments and be the one of our community!</p>
-    //   <p>You'r Lets Run team!</p>
-    // `
-    // };
 
-    // transporter.sendMail(emailToSend, function (err, info) {
-    //   if (err)
-    //     console.log(err)
-    //   else
-    //     console.log(info);
-    // });
 
 
 

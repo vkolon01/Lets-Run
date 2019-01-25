@@ -29,12 +29,16 @@
               <div class="users" *ngFor="let followers of user?.followers; let i = index" [@shrinkDownUp]="followers_animation_state">
                  <div class="user_container">
                      <div class="user_container--image"><img src="{{followers.imagePath}}" alt=""></div>
-                    <div><a [routerLink]="['/userpage', followers._id, 'info']" routerLinkActive="router-link-active" >{{followers.username}}</a></div>
-                   </div>
-                 <mat-checkbox [checked]="checkIfIdincludedInInvites(followers._id)" class="example-margin" (change)="onChange($event)" [value]="followers._id">
-                   <p *ngIf="!checkIfIdincludedInInvites(followers._id)">Invite to Event</p>
-                   <p *ngIf="checkIfIdincludedInInvites(followers._id)">Already invited</p>
-                 </mat-checkbox>
+                     <div class="user_container--check">
+                        <div><a [routerLink]="['/userpage', followers._id, 'info']" routerLinkActive="router-link-active" >{{followers.username}}</a></div>
+                        <mat-checkbox [checked]="checkIfIdincludedInInvites(followers._id)" class="example-margin" (change)="onChange($event)" [value]="followers._id">
+                           <p *ngIf="!checkIfIdincludedInInvites(followers._id)">Invite to Event</p>
+                           <p *ngIf="checkIfIdincludedInInvites(followers._id)">Already invited</p>
+                         </mat-checkbox>
+                     </div>
+
+                    </div>
+
               </div>
       <button type="submit">Submit</button>
    </form>

@@ -130,13 +130,10 @@ export class EventService {
 
         }>(BACKEND_URL + '/events/' + id)
             .subscribe(event => {
-                console.log('event.eventById');
 
                 this.event = event.eventById;
                 this.creatorName = event.creatorName;
                 this.creatorId = event.creatorId;
-
-                console.log(event.eventById.likes);
 
                 this.creatorNameAndId.next({
                     creatorName: this.creatorName,
@@ -147,7 +144,10 @@ export class EventService {
                     event: this.event
                 });
 
-            });
+            }, error => {
+                this.router.navigate(['/events']);
+                
+              });
     }
 
     updateEvent(id: string, title: string, location: string,distance ,pace: string,eventDate: Date, eventTime: Date ,author: string, description: string, image: File | string, privateEvent: boolean){

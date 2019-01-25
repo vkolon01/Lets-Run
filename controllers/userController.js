@@ -71,10 +71,10 @@ exports.register = function (req, res, next) {
               subject: "You have to Authenticate",
               text: "You have to Authenticate",
               html: `
-            <p>You have to Authenticate</p>
-            <p> You need to authenticate your self</p>
-            <p> simply by clicking on this <a href="http://localhost:4200/auth/${token}">link</a></p>
-            <p>You'r Lets Run team!</p>
+              <h1 style="background: #0e2369; margin: 0; padding: 20px; color: #cee222; text-align: center;">You have to Authenticate!</h1>
+              <p style="text-align: center; font-size: 2rem;"> You need to authenticate your self</p>
+              <p style="text-align: center; font-size: 2rem;"> simply by clicking on this <a href="http://localhost:4200/auth/${token}">link</a></p>
+              <p style="text-align: center; font-size: 2rem; background: #0e2369; color: #cee222;">You'r Lets Run team!</p>
           `
             };
 
@@ -358,9 +358,17 @@ exports.getPrivateUserProfile = function (req, res, next) {
   let eventsWillAttemptPopulation = 'eventWillAttempt';
   let eventsWillAttemptPopulationDetails = '_id title picture eventDate privateEvent';
 
+  let privateEventsInvitedPopulation = 'invitesToPrivateEvent';
+  let privateEventsInvitedPopulationDetails = '_id title picture eventDate privateEvent';
+
+  let privateEventsAttemptsPopulation = 'invitesToPrivateEvent';
+  let privateEventsAttemptsInvitedPopulationDetails = '_id title picture eventDate privateEvent';
+
   User.findById(userId)
   .populate({path: createdEventsPopulation, select: createdEventsPopulationDetails,match:  match})
   .populate({path: eventsWillAttemptPopulation, select: eventsWillAttemptPopulationDetails,match:  match})
+  .populate({path: privateEventsInvitedPopulation, select: privateEventsInvitedPopulationDetails,match:  match})
+  .populate({path: privateEventsAttemptsPopulation, select: privateEventsAttemptsInvitedPopulationDetails,match:  match})
     .then(user => {
       if (!user) {
         const error = new Error("No user find.");
@@ -390,7 +398,8 @@ exports.getPrivateUserProfile = function (req, res, next) {
           lastName: user.lastName,
           imagePath: user.imagePath,
           eventWillAttempt: user.eventWillAttempt,
-          createdEvent: user.createdEvent
+          createdEvent: user.createdEvent,
+          invitesToPrivateEvent: user.invitesToPrivateEvent
         });
       
 

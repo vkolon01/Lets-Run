@@ -27,6 +27,7 @@ export class UserActivetyComponent implements OnInit {
   createdEvents_animation_state = 'up';
   attemptEvents_animation_state = 'up';
   privateCreatedEvents_animation_state = 'up';
+  privateEventsInvited_animation_state = 'up';
 
   privateCreatedEvents: Event[] = [];
 
@@ -64,6 +65,10 @@ export class UserActivetyComponent implements OnInit {
       this.userService.getPrivateUserInfo(this.user_id)
       .subscribe(privatInfo => {
         this.privatUserInfo = privatInfo.user;
+
+        console.log('this.privatUserInfo');
+        console.log(this.privatUserInfo);
+        
       });
     }
 
@@ -86,6 +91,8 @@ export class UserActivetyComponent implements OnInit {
         this.attemptEvents_animation_state = this.attemptEvents_animation_state === 'down' ? 'up' : 'down';
       } else if(field === 'privateCreatedEvents') {
         this.privateCreatedEvents_animation_state = this.privateCreatedEvents_animation_state === 'down' ? 'up' : 'down';
+      } else if(field === 'privateEventsInvites') {
+        this.privateEventsInvited_animation_state = this.privateEventsInvited_animation_state === 'down' ? 'up' : 'down';
       }
       
     }

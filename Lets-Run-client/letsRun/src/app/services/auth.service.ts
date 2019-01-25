@@ -126,8 +126,6 @@ export class AuthService {
           this.authStatusListener.next(true);
           this.userIdListener.next(authInformation.userId);
           this.usernameListener.next(authInformation.username);
-          console.log('authInformation.username  service');
-          console.log(authInformation.username);
         }
       }
     

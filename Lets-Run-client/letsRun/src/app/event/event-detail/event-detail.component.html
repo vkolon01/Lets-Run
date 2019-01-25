@@ -42,9 +42,9 @@
  
   <div class="event-description-commentSection">
 
-    <button (click)="invite = !invite">Send invites</button>
+    <button *ngIf="userId === creatorId && event?.privateEvent" (click)="invite = !invite">Send invites</button>
 
-      <app-send-invites *ngIf="invite" [eventId]="eventId" [eventOwnerId]="creatorId" ></app-send-invites>
+      <app-send-invites *ngIf="invite && userId === creatorId && event?.privateEvent" [eventId]="eventId" [eventOwnerId]="creatorId" ></app-send-invites>
 
       <app-google-map [location]="eventLocation" class="google_map"></app-google-map>
 
