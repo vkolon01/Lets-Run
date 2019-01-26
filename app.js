@@ -53,10 +53,9 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(cookieParser());
 app.use(methodOverride());
 app.use(morgan('dev'));
-// app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/images", express.static(path.join("images")));
-
+app.use('/public', express.static(path.join('public/images')));
 
 app.use((req, res, next) => {
   
