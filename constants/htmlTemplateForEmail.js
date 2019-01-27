@@ -47,7 +47,6 @@ exports.htmlEmailTemplate = {
                             </tr>
                         </tbody>
                     </table>
-
                 </td>
             </tr>
             <tr>
@@ -56,13 +55,29 @@ exports.htmlEmailTemplate = {
                         <tbody>
                             <tr>
                                 <td align="center" bgcolor="#ffffff" style="padding: 10px 0 10px 0; font-size: 2rem;">`,
-    footer: `                   </td>
+
+                                quoter: `                   </td>
                             </tr>
-                        </tbody>
+                         </tbody>
                     </table>
 
                 </td>
-            </tr>
+        </tr>
+        <tr>
+            <td>
+                <table width="95%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse; margin-top: 40px;">
+                    <tbody>
+                        <tr>
+                            <td align="center" bgcolor="#0e2369" style="color: #a0a914;  padding: 10px 10px 10px 0; font-size: 1.5rem;">`,
+
+    footer: `               </td>
+                        </tr>
+                    </tbody>
+                 </table>
+
+            </td>
+        </tr>
+            
             <tr>
                 <td>
                     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse">
@@ -113,5 +128,18 @@ exports.htmlEmailTemplate = {
 
 </tbody>
 
-</table>`
+</table>`,
+    attachmentsTemplate: [{
+        filename: 'flogo-HexRBG-Wht-58.png',
+        path: 'public/images/flogo-HexRBG-Wht-58.png',
+        cid: 'facebook@logo'
+    }, {
+        filename: 'glyph-logo_May20162.png',
+        path: 'public/images/glyph-logo_May20162.png',
+        cid: 'instagram@logo'
+    }, {
+        filename: 'Twitter_Logo_WhiteOnBlue.png',
+        path: 'public/images/Twitter_Logo_WhiteOnBlue.png',
+        cid: 'twitter@logo'
+    }]
 }

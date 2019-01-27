@@ -61,15 +61,27 @@ export class UserActivetyComponent implements OnInit {
     })
     }
 
-    loadPrivateInfo() {
-      this.userService.getPrivateUserInfo(this.user_id)
-      .subscribe(privatInfo => {
-        this.privatUserInfo = privatInfo.user;
-
-        console.log('this.privatUserInfo');
-        console.log(this.privatUserInfo);
+    ngOnChanges() {
+      this.activeRoute.parent.paramMap.subscribe((paramMap: ParamMap) => {
         
-      });
+        this.user_id = paramMap.get('user_id');
+             
+        this.current_user_id = this.authService.getUserId()
+    })
+    }
+
+    loadPrivateInfo() {
+      console.log('this.user_id');
+      console.log(this.user_id);
+      
+
+      if(this.user_id) {
+        this.userService.getPrivateUserInfo(this.user_id)
+        .subscribe(privatInfo => {
+          this.privatUserInfo = privatInfo.user;
+        });
+      }
+
     }
 
     checkForEndedStatus(date) {

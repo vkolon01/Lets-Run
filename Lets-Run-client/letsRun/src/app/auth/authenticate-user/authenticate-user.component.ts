@@ -18,10 +18,13 @@ export class AuthenticateUserComponent implements OnInit {
     this.activeRoute.params.subscribe(params => {
 
       this.authService.authenticateUser(params.authToken)
+      .subscribe(result => { 
+        setTimeout(timeout => {
+          this.router.navigate(["/events"]);        
+        }, 3000);
+       });;
 
-      setTimeout(result => {
-        this.router.navigate(["/events"]);        
-      }, 3000)
+
     })
   }
 

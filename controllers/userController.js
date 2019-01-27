@@ -9,6 +9,8 @@ var jwt = require('jsonwebtoken');
 var Comment = require('../models/comment_model');
 var Event = require('../models/event_model');
 var nodemailer = require('nodemailer');
+var htmlTemplates = require('../constants/htmlTemplateForEmail');
+const quotes = require('../constants/emailQuotesArray');
 
 
 var transporter = nodemailer.createTransport({
@@ -65,17 +67,24 @@ exports.register = function (req, res, next) {
         user.save()
           .then(result => {
 
+            const randNumber = Math.floor((Math.random() * 45));
+
             const emailToSend = {
               from: '"LetsRun" <events@letsrun.com>',
               to: user.email,
               subject: "You have to Authenticate",
               text: "You have to Authenticate",
-              html: `
-              <h1 style="background: #0e2369; margin: 0; padding: 20px; color: #cee222; text-align: center;">You have to Authenticate!</h1>
-              <p style="text-align: center; font-size: 2rem;"> You need to authenticate your self</p>
-              <p style="text-align: center; font-size: 2rem;"> simply by clicking on this <a href="http://localhost:4200/auth/${token}">link</a></p>
-              <p style="text-align: center; font-size: 2rem; background: #0e2369; color: #cee222;">You'r Lets Run team!</p>
-          `
+              attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+              html: htmlTemplates.htmlEmailTemplate.header  +
+              `<h4>You have to Authenticate!</h4>`    + 
+              htmlTemplates.htmlEmailTemplate.middle + 
+             `<p style="text-align: center; font-size: 2rem;"> You need to authenticate your self</p>
+             <p style="text-align: center; font-size: 2rem;"> simply by clicking on this <a href="http://localhost:4200/auth/${token}">link</a></p>` +
+             htmlTemplates.htmlEmailTemplate.quoter +
+             `<p style=" color: #2dc394;">Random quote!</p>
+             <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+              <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+             htmlTemplates.htmlEmailTemplate.footer 
             };
 
             transporter.sendMail(emailToSend, function (err, info) {
@@ -128,16 +137,23 @@ exports.activetUser = async function (req, res, next) {
 
     user.save();
 
+    const randNumber = Math.floor((Math.random() * 45));
+
     const emailToSend = {
       from: '"LetsRun" <events@letsrun.com>',
       to: user.email,
       subject: "You have Authenticated",
       text: "You have Authenticated",
-      html: `
-      <p>You have Authenticated</p>
-      <p>You can now post new events and comments and be the one of our community!</p>
-      <p>You'r Lets Run team!</p>
-    `
+      attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+      html: htmlTemplates.htmlEmailTemplate.header  +
+      `<h4>You have Activeted you profile!</h4>`    + 
+      htmlTemplates.htmlEmailTemplate.middle + 
+     `<p style="text-align: center; font-size: 2rem;">You can now post new events and comments and be the one of our community!</p>` +
+     htmlTemplates.htmlEmailTemplate.quoter +
+     `<p style=" color: #2dc394;">Random quote!</p>
+     <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+      <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+     htmlTemplates.htmlEmailTemplate.footer 
     };
 
     transporter.sendMail(emailToSend, function (err, info) {
@@ -686,17 +702,24 @@ exports.resetPasswordGetToken = async function (req, res, next) {
     user.resetTokenExpiration = Date.now() + 36000000;
     user.save();
 
+    const randNumber = Math.floor((Math.random() * 45));
+
     const emailToSend = {
       from: '"LetsRun" <events@letsrun.com>',
       to: user.email,
       subject: "You have requested to change your password",
       text: "You have requested to change your password",
-      html: `
-    <p>You have received this email because you have requested to change your password</p>
-    <p> If it was not you, please don't click on this link, and your password will not change!</p>
-    <p> If it was you, simply click on this <a href="http://localhost:4200/auth/resetPassword/${token}">link to change your password</a></p>
-    <p>You'r Lets Run team!</p>
-  `
+      attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+      html: htmlTemplates.htmlEmailTemplate.header  +
+      `<h4>You have received this email because you have requested to change your password!</h4>`    + 
+      htmlTemplates.htmlEmailTemplate.middle + 
+     `<p style="text-align: center; font-size: 2rem;">If it was not you, please don't click on this link, and your password will not change!</p>
+     <p style="text-align: center; font-size: 2rem;">If it was you, simply click on this <a href="http://localhost:4200/auth/resetPassword/${token}">link to change your password</a></p>` +
+     htmlTemplates.htmlEmailTemplate.quoter +
+     `<p style=" color: #2dc394;">Random quote!</p>
+     <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+      <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+     htmlTemplates.htmlEmailTemplate.footer
     };
 
     transporter.sendMail(emailToSend, function (err, info) {

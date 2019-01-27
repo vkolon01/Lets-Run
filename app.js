@@ -54,6 +54,8 @@ app.use(cookieParser());
 app.use(methodOverride());
 app.use(morgan('dev'));
 
+// const randNumber = Math.floor((Math.random() * 45));
+
 app.use("/images", express.static(path.join("images")));
 app.use('/public', express.static(path.join('public/images')));
 

@@ -59,10 +59,6 @@ export class UserPageComponent implements OnInit {
 
 onImagePicked(event: Event){
 
-  console.log("File picked");
-  
-console.log(this.user_id === this.current_user_id);
-
   if(this.user_id !== this.current_user_id) {
     return;
   }

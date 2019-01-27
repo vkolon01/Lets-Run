@@ -3,6 +3,7 @@ const {
 } = require('express-validator/check');
 var constants = require('../constants/messages');
 var htmlTemplates = require('../constants/htmlTemplateForEmail');
+const quotes = require('../constants/emailQuotesArray');
 var User = require('../models/user_model');
 var Event = require('../models/event_model');
 var Comment = require('../models/comment_model');
@@ -181,17 +182,29 @@ exports.addEvent = function (req, res, next) {
 
           let html;
 
-          if(!req.body.privateEvent) {
+          var boolValue = JSON.parse(req.body.privateEvent);
+
+          const randNumber = Math.floor((Math.random() * 45));
+
+          if(!boolValue) {
             html = htmlTemplates.htmlEmailTemplate.header  +
-             `<h1>You have added new Event</h1>`    + 
+             `<h4>You have added new Event</h4>`    + 
              htmlTemplates.htmlEmailTemplate.middle + 
-            `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile and by finding it on main page or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
+            `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile, by finding it on main page or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
+            htmlTemplates.htmlEmailTemplate.quoter +
+            `<p style=" color: #2dc394;">Random quote!</p>
+            <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+             <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
             htmlTemplates.htmlEmailTemplate.footer
-          } else {
+          } else if(req.body.privateEvent) {
             html = htmlTemplates.htmlEmailTemplate.header  +
-            `<h1>You have added new <span style="color=red">private</span> Event</h1>`    + 
+            `<h4>You have added new <span style="color: red">private</span> Event</h4>`    + 
             htmlTemplates.htmlEmailTemplate.middle + 
            `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile in private events or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
+           htmlTemplates.htmlEmailTemplate.quoter +
+           `<p style=" color: #2dc394;">Random quote!</p>
+           <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+            <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
            htmlTemplates.htmlEmailTemplate.footer
           }
 
@@ -202,20 +215,7 @@ exports.addEvent = function (req, res, next) {
             subject: "You have added new event",
             text: "New event",
             html: html,
-            attachments: [{
-              filename: 'flogo-HexRBG-Wht-58.png',
-              path: 'public/images',
-              cid: 'facebook@logo'
-          },{
-            filename: 'glyph-logo_May20162.png',
-            path: 'public/images',
-            cid: 'instagram@logo'
-        },{
-          filename: 'Twitter_Logo_WhiteOnBlue.png',
-          path: 'public/images',
-          cid: 'twitter@logo'
-      },
-        ]
+            attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate
           };
 
           transporter.sendMail(emailToSend, function (err, info) {
@@ -431,16 +431,23 @@ exports.deleteEvent = function (req, res, next) {
         })
         .then(user => {
 
+          const randNumber = Math.floor((Math.random() * 45));
+
           const emailToSend = {
             from: '"LetsRun" <events@letsrun.com>',
             to: user.email,
             subject: "You have deleted event",
             text: "Delete event",
-            html: `
-              <p>You have <span style="color: red"> deleted </span> event</p>
-              <p>We are waiting more events from you</p>
-              <p>You'r Lets Run team!</p>
-            `
+            attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+            html: htmlTemplates.htmlEmailTemplate.header  +
+            `<h4>You have <span style="color: red"> deleted </span> your event!</h4>`    + 
+            htmlTemplates.htmlEmailTemplate.middle + 
+           `<p style="text-align: center; font-size: 1.5rem;">We are waiting more events from you!</p>` +
+           htmlTemplates.htmlEmailTemplate.quoter +
+           `<p style=" color: #2dc394;">Random quote!</p>
+           <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+            <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+           htmlTemplates.htmlEmailTemplate.footer
           };
 
           transporter.sendMail(emailToSend, function (err, info) {
@@ -499,32 +506,24 @@ exports.sendInvitesToTheFriends = async function (req, res, next) {
       foundUser.invitesToPrivateEvent.push(eventId);
       event.userInvited.push(friendId);
 
+      const randNumber = Math.floor((Math.random() * 45));
+
       const emailToSend = {
         from: '"LetsRun" <events@letsrun.com>',
         to: foundUser.email,
         subject: "You have been invited to the private event!",
         text: "You have been invited to join the private event!",
-        attachments: [{
-          filename: 'flogo-HexRBG-Wht-58.png',
-          path: 'public/images',
-          cid: 'facebook@logo'
-      },{
-        filename: 'glyph-logo_May20162.png',
-        path: 'public/images',
-        cid: 'instagram@logo'
-    },{
-      filename: 'Twitter_Logo_WhiteOnBlue.png',
-      path: 'public/images',
-      cid: 'twitter@logo'
-  },
-    ],
-        html: `
-        <h1 style="background: #0e2369; margin: 0; padding: 20px; color: #cee222; text-align: center;">You have been invited to join the private event!</h1>
-        <img style="width: 40px; margin: 0 10px 0 10px;" src="cid:twitter@logo" alt="cid:facebook@logo">
-        <p style="text-align: center; font-size: 2rem;">You have been invited to the private event by ${foundUser.username}</p> 
-        <p style="text-align: center; font-size: 2rem;">You can find it simply by clicking at this <a href="http://localhost:4200/events/${event._id}">link</a>!</p>
-        <p style="text-align: center; font-size: 2rem; background: #0e2369; color: #cee222;">You'r Lets Run team!</p>
-      `
+        attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+            html: htmlTemplates.htmlEmailTemplate.header  +
+            `<h4>You have been invited to join the private event!</h4>`    + 
+            htmlTemplates.htmlEmailTemplate.middle + 
+           `<p style="text-align: center; font-size: 1.5rem;">You have been invited to the private event by ${foundUser.username}</p>
+           <p style="text-align: center; font-size: 1.5rem;">You can find it simply by clicking at this <a href="http://localhost:4200/events/${event._id}">link</a>! or by finding it in your profile page under privite invites menu!</p>` +
+           htmlTemplates.htmlEmailTemplate.quoter +
+           `<p style=" color: #2dc394;">Random quote!</p>
+           <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+            <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+           htmlTemplates.htmlEmailTemplate.footer
       };
   
       transporter.sendMail(emailToSend, function (err, info) {
@@ -624,35 +623,23 @@ exports.eventLikeSwitcher = function (req, res, next) {
 
         if (!contains) {
           User.findById(event.author)
-            .then(user => {
-
-              const path = 'public/';
+            .then(user => {  
+              
+              const randNumber = Math.floor((Math.random() * 45));
 
               const emailToSend = {
                 from: '"LetsRun" <events@letsrun.com>',
                 to: user.email,
                 subject: "You'r event liked",
                 text: "Liked event",
-                attachments: [
-                  {
-                  filename: 'flogo-HexRBG-Wht-58.png',
-                  path: 'public/images/flogo-HexRBG-Wht-58.png',
-                  cid: 'facebook@logo'
-              },{
-                filename: 'glyph-logo_May20162.png',
-                path: 'public/images/glyph-logo_May20162.png',
-                cid: 'instagram@logo'
-            },
-            {
-              filename: 'Twitter_Logo_WhiteOnBlue.png',
-              // path: __dirname + '/../public/images/Twitter_Logo_WhiteOnBlue.png',
-              path: 'public/images/Twitter_Logo_WhiteOnBlue.png',
-              cid: 'twitter@logo'
-          }
-            ],
+                attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
                 html: htmlTemplates.htmlEmailTemplate.header +
                       `<h4  style="text-align: center;">You'r event have been liked, you can find it by clicking this <a style="color: #67e634; text-decoration: none;" href="http://localhost:4200/events/${eventId}">link!</a></h4>` +
                       htmlTemplates.htmlEmailTemplate.middle + 
+                      htmlTemplates.htmlEmailTemplate.quoter +
+                      `<p style=" color: #2dc394;">Random quote!</p>
+                      <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+                       <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
                       htmlTemplates.htmlEmailTemplate.footer
               };
 
@@ -742,16 +729,22 @@ exports.participateAtEvent = function (req, res, next) {
           User.findById(event.author)
             .then(user => {
 
+              const randNumber = Math.floor((Math.random() * 45));
+
               const emailToSend = {
                 from: '"LetsRun" <events@letsrun.com>',
                 to: user.email,
                 subject: "You'r event heve new attempt",
                 text: "New attempt event",
-                html: `
-                      <h1 style="text-align: center">You'r <a href="http://localhost:4200/events/${eventId}">event</a> have new attempt</h1>
-                      <p></p>
-                      <p>You'r Lets Run team!</p>
-                      `
+                attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+                html: htmlTemplates.htmlEmailTemplate.header +
+                      `<h4  style="text-align: center;">You'r <a href="http://localhost:4200/events/${eventId}">event</a> have new attempt</h4>` +
+                      htmlTemplates.htmlEmailTemplate.middle + 
+                      htmlTemplates.htmlEmailTemplate.quoter +
+                      `<p style=" color: #2dc394;">Random quote!</p>
+                      <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+                       <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+                      htmlTemplates.htmlEmailTemplate.footer
               };
 
               transporter.sendMail(emailToSend, function (err, info) {

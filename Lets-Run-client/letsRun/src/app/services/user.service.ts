@@ -43,12 +43,6 @@ export class UserService {
         const queryParams = `?info=${queryPage}`
         const userId = user_id;
 
-        console.log('queryParams');
-        console.log(queryParams);
-
-        console.log('userId');
-        console.log(userId);
-
          return  this.http
         .get<{user: UserModel }>(BACKEND_URL + '/users/' + userId + queryParams)
         .subscribe(user => {

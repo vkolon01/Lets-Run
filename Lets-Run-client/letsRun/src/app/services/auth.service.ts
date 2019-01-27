@@ -106,7 +106,7 @@ export class AuthService {
 
 
       authenticateUser(userToken: string) {
-        this.http.get(BACKEND_URL + "/users/authenticate/" + userToken);
+      return  this.http.get(BACKEND_URL + "/users/authenticate/" + userToken);
       }
 
 
