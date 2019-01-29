@@ -10,6 +10,7 @@ import { AuthGuard } from "./auth/auth.guard";
 const routes: Routes = [
     {path: "", component: HomeComponent},
     {path: 'events', loadChildren: './event/events.module#EventsModule'},
+    {path: 'forum', loadChildren: './forum/forum.module#ForumModule'},
     {path: "auth", loadChildren: "./auth/auth.module#AuthModule"},
     {path: "userpage",  loadChildren: './core/users/user.module#UserModule', canActivate: [AuthGuard]},
     {path: "events/:event_id", component: EventDetailComponent, canActivate: [AuthGuard]},

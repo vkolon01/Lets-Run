@@ -1,0 +1,74 @@
+@import "./variables";
+
+.main {
+    width: 98%;
+}
+
+.general-category--main {
+    width: 100%;
+    text-align: center;
+    background: $darkBlue;
+    color: white;
+}
+
+.general-component--item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    background: #7289d652;
+
+    &:nth-child(even) {
+        background: #a8b9e0;
+    }
+
+    .general-component--item-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100px;
+    }
+}    
+
+.general-component--item-icon {
+    width: 20%;
+}
+
+
+.general-component--item-desc {
+    width: 80%;
+    border-left: 2px solid white;
+}
+
+.general-component--item-topicsCount{
+    display: none;
+}
+
+.general-component--item-postCount {
+    display: none;
+}
+
+.general-component--item-lastPost {
+    display: none;
+    max-width: 10%;
+    
+}
+
+
+@media (min-width: 620px) {
+    .general-component--item-topicsCount{
+        display: block;
+        flex-direction: column;
+
+    }
+    
+    .general-component--item-postCount {
+        display: block;
+        flex-direction: column;
+    }
+
+    .general-component--item-lastPost {
+        display: block;
+        max-width: 40%;
+    }
+  }

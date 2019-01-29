@@ -15,7 +15,7 @@ exports.quotesArray = [
     {qoute: 'Pain is temporary. Quitting lasts forever.', author: "Lance Armstrong"},
     {qoute: 'Your body will argue that there is no justifiable reason to continue. Your only recourse is to call on your spirit, which fortunately functions independently of logic.', author: "Tim Noakes"},
     {qoute: 'All I do is keep on running in my own cozy, homemade void, my own nostalgic silence. And this is a pretty wonderful thing. No matter what anybody else says.', author: "Haruki Murakami"},
-    {qoute: 'There is something magical about running; after a certain distance, it transcends the body. Then a bit further, it transcends the mind. A bit further yet, and what you have before you, laid bare, is the soul.', author: "Kristin Armstrong"},
+    {qoute: 'There is something magical about running. after a certain distance, it transcends the body. Then a bit further, it transcends the mind. A bit further yet, and what you have before you, laid bare, is the soul.', author: "Kristin Armstrong"},
     {qoute: 'If you are losing faith in human nature, go out and watch a marathon.', author: "Kathrine Switzer"},
     {qoute: 'There is nothing so momentary as a sporting achievement, and nothing so lasting as the memory of it.', author: "Greg Dening"},
     {qoute: 'Running is real and relatively simple… but it ain’t easy.', author: "Mark Will-Weber"},

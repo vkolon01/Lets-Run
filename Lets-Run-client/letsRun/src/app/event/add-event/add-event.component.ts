@@ -130,8 +130,6 @@ export class AddEventComponent implements OnInit {
       this.eventForm.reset();
       this.onClose();
     } else {
-      console.log('this.data.image in edit form');
-      console.log(this.data.image);
       let imageToSend = this.eventForm.value.image;
 
       if(!this.eventForm.get('image').valueChanges) {

@@ -28,7 +28,8 @@ import { SendInvitesComponent } from "./event/send-invites/send-invites.componen
         Page404Component,
         GoogleMapComponent,
         GooglePlacesDirective,
-        SendInvitesComponent],
+        SendInvitesComponent,
+    ],
     imports: [
         CommonModule,
         RouterModule,

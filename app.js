@@ -18,6 +18,7 @@ var app = express();
 //Route initialization
 var users = require('./routes/users');
 var events = require('./routes/events');
+var forum = require('./routes/forum');
 
 //var url = "mongodb://localhost/yelp_camp";
 
@@ -75,6 +76,7 @@ app.use((req, res, next) => {
 
 app.use('/api/users', users);
 app.use('/api/events', events);
+app.use('/api/forum', forum);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

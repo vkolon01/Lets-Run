@@ -1,0 +1,97 @@
+<div class="main">
+<div class="general-category--main">
+  <h1>General Category</h1>
+</div>
+<form class="general-add" [formGroup]="generalFormAdd" (ngSubmit)="addGeneralForumSection()">
+
+        <mat-form-field>
+                <input matInput placeholder="Icon" formControlName="icon"> 
+                <mat-hint>The icon of the folder ("Must be taken from angular material icons")!</mat-hint> 
+                <mat-error *ngIf="generalFormAdd.get('icon').errors">Icon is requied</mat-error>
+              </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Title" formControlName="title"> 
+        <mat-hint>The title of the section!</mat-hint> 
+        <mat-error *ngIf="generalFormAdd.get('title').errors">Title is requied</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+            <textarea matInput cols="30" rows="10"  placeholder="Description" formControlName="description"></textarea> 
+            <mat-hint>The description of the section!</mat-hint> 
+            <mat-error *ngIf="generalFormAdd.get('description').errors">Description is requied</mat-error>
+          </mat-form-field>
+
+    <button type="submit">Add to section</button>
+</form>
+<div class="general-component--list">
+  <div class="general-component--item">
+    <div class="general-component--item-icon">
+        <i class="material-icons">
+            contacts
+            </i>
+            views: 20
+      </div>
+      <div class="general-component--item-desc">
+        <h2>Announcements</h2>
+        <p>All the latest news about a website, what we plan to do, and everything what we want to have in the future</p>
+      </div>
+      <div class="general-component--item-topicsCount">
+        <h2>45</h2>
+        <p>topics</p>
+      </div>
+      <div class="general-component--item-postCount">
+          <h2>45</h2>
+          <p>posts</p>
+      </div>
+      <div class="general-component--item-lastPost">
+          <p>Last post by < name > in < postName > on < post date ></p>
+      </div>
+  </div>
+   <div class="general-component--item">
+      <div class="general-component--item-icon">
+          <i class="material-icons">
+              pan_tool
+              </i>
+        </div>
+        <div class="general-component--item-desc">
+          <h2>Let's know each other!</h2>
+          <p>Find people to talk and run together!</p>
+        </div>
+        <div class="general-component--item-topicsCount">
+          <h2>45</h2>
+          <p>topics</p>
+        </div>
+        <div class="general-component--item-postCount">
+            <h2>45</h2>
+            <p>posts</p>
+        </div>
+        <div class="general-component--item-lastPost">
+            <p>Last post by < name > in < postName > on < post date ></p>
+        </div>
+      
+    </div>
+    <div class="general-component--item">
+        <div class="general-component--item-icon">
+            <i class="material-icons">
+                code
+                </i>
+          </div>
+          <div class="general-component--item-desc">
+            <h2>Comments and Feedback</h2>
+            <p> Write us what you think about our web site and what we could do to make our website better!</p>
+          </div>
+          <div class="general-component--item-topicsCount">
+            <h2>45</h2>
+            <p>topics</p>
+          </div>
+          <div class="general-component--item-postCount">
+              <h2>45</h2>
+              <p>posts</p>
+          </div>
+          <div class="general-component--item-lastPost">
+              <p>Last post by < name > in < postName > on < post date ></p>
+          </div>
+      </div>
+</div>
+</div>
