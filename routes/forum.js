@@ -20,13 +20,18 @@ router.put('/update/:category_id', authCheck, forumHandler.updateForumInCategory
 
 router.delete('/deleteSection/:category_id', authCheck, forumHandler.deleteForumInCategoryById );
 
+router.get('/get_topic_by_id/:topic_id', forumHandler.getTopicForCategoryById);
 
+//////////////////////////////////////////////////////////////////////////////////////////////  get_posts_list
+///                         POST INFORMATION
 //////////////////////////////////////////////////////////////////////////////////////////////
-///     MAIN POSTS SECTION WITH LITTLE INFORMATION FOR CERTAIN CATEGORY OF FORUM
-//////////////////////////////////////////////////////////////////////////////////////////////
+
+router.get('/get_posts_list/:topic_id', forumHandler.getPostPreviewToTopicList);
+
+router.post('/add_post', authCheck, forumHandler.addPostToTopic);
 
 
-router.get('/get_posts/:category_id')
+
 
 
 

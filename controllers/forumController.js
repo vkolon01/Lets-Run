@@ -8,6 +8,7 @@ const {
   var Event = require('../models/event_model');
   var Comment = require('../models/comment_model');
   var ForumCategory = require('../models/forum_category_model');
+  var TopicPost = require('../models/ForumPost_model')
   
   var nodemailer = require('nodemailer');
   
@@ -49,7 +50,7 @@ exports.getForumList = async function (req, res, next) {
 }
 
 ///////////////////////////////////////////////////////
-//              POST FORUM IN GIVEN CATEGORY LIST
+//              POST TOPIC IN GIVEN CATEGORY LIST
 ///////////////////////////////////////////////////////
 
 exports.postForumInGivenCategoryList = async function (req, res, next) {
@@ -157,17 +158,17 @@ exports.deleteForumInCategoryById = async function(req, res, next) {
 //////////////////////////////////////   *************  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-////                    GET POSTS LIST FROM CATEGORY
+////                    GET POSTS LIST FOR TOPIC
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-exports.getPostsForCategoryById = async function(req, res, next) {
+exports.getTopicForCategoryById = async function(req, res, next) {
 
-  const category_id = req.params.category_id;
+  const topic_id = req.params.topic_id;
 
   try {
-    var forumCategory = await ForumCategory.find({forumCategory: queryCategoryName});
+    var foundTopic = await ForumCategory.findById(topic_id);
 
-    if (!forumCategory) {
+    if (!foundTopic) {
       const error = new Error('Forum category not found');
       error.statusCode = 404;
       error.data = errors.array();
@@ -176,8 +177,77 @@ exports.getPostsForCategoryById = async function(req, res, next) {
 
     
     res.status(200).json({
-      message: 'List of forums for given category!',
-      forumCategory: forumCategory
+      message: 'Topic with posts send!',
+      foundTopic: foundTopic
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    ADD POST TO TOPIC
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+exports.addPostToTopic = async function(req, res, next) {
+
+  const topic_id = req.body.topic_id;
+
+  try {
+
+    var newPost = new TopicPost({
+      icon: req.body.icon,
+      title: req.body.title,
+      description: req.body.description,
+      content: req.body.content,
+      author: req.userData.userId,
+      topic: topic_id
+    });
+
+    await newPost.save();
+
+    await ForumCategory.update({
+      _id: topic_id
+    }, {
+      $push: {
+        posts: newPost._id
+      }
+    });
+
+    var foundTopic = await ForumCategory.findById(topic_id);
+
+    var allPosts = await TopicPost.find();
+
+    res.status(200).json({
+      message: 'Topic with posts send!',
+      updatedTopic: foundTopic,
+      postsList: allPosts
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    GET POST PREVIEW TO TOPIC LIST
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.getPostPreviewToTopicList = async function(req, res, next) {
+
+  const topic_id = req.params.topic_id;
+
+  try {
+
+    var foundPosts = await TopicPost.find({ topic: topic_id});  
+
+    res.status(200).json({
+      message: 'Topic with posts send!',
+      postsForTopic: foundPosts
     });
   } catch (error) {
     next(error);

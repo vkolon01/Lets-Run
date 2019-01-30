@@ -1,5 +1,6 @@
 import { Title } from "@angular/platform-browser";
 import { Identifiers } from "@angular/compiler";
+import { PostModel } from "./post.model";
 
 export interface TopicCategoryModel {
     _id: string,
@@ -10,7 +11,7 @@ export interface TopicCategoryModel {
     forumCategory: string,
     author?: string,
     visitsCount?: number,
-    posts?: [],
+    posts?: PostModel[],
     username?: string,
     comment?: string,
     createdAt?: Date,

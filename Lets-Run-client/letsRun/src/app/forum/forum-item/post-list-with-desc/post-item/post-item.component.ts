@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PostModel } from 'src/app/models/post.model';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-post-item',
@@ -7,9 +9,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PostItemComponent implements OnInit {
 
+  updatePostToTopic: FormGroup;
+
+  @Input() post: PostModel;
+  editMode = false;
+
   constructor() { }
 
   ngOnInit() {
+    this.updatePostToTopic = new FormGroup({
+      'title': new FormControl(null, { validators: [Validators.required] }),
+      'description': new FormControl(null, { validators: [Validators.required] }),
+      'content': new FormControl(null, { validators: [Validators.required] })
+    });
+  }
+
+  updatePost() {
+
+  }
+
+  updateModeToggle() {
+    this.editMode = !this.editMode;
   }
 
 }

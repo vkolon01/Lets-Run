@@ -1,10 +1,9 @@
 export interface PostModel {
-    icon: string,
+      icon: string,
       title: string,
       description: string,
-      text_area: string,
-      category: string,
+      content: string,
       visitsCount: number,
-      postComments: string[],
-      username: string,
+      postComments?: string[],
+      username?: string,
 }

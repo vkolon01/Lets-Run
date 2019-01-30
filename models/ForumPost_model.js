@@ -18,12 +18,7 @@ var userSchema = new Schema({
     trim: true,
     required: true
   },
-  text_area: {
-    type: String,
-    trim: true,
-    required: true
-  },
-  category: {
+  content: {
     type: String,
     trim: true,
     required: true
@@ -33,12 +28,16 @@ var userSchema = new Schema({
     default: 0
   },
   postComments: [{
-    type: chema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'ForumComments'
   }],
-  username: {
-    type: chema.Types.ObjectId,
+  author: {
+    type: Schema.Types.ObjectId,
     ref: 'User'
+  },
+  topic: {
+    type: Schema.Types.ObjectId,
+    ref: 'ForumCategory'
   }
   },{
   timestamps: true
