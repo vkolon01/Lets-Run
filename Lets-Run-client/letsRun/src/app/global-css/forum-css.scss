@@ -4,12 +4,18 @@
     width: 98%;
 }
 
+.general-component--list {
+    // min-width: 95%;
+    // max-width: 95%;
+    width: 95%;
+}
+
 .general-category--main {
     width: 100%;
     text-align: center;
     background: $darkBlue;
     color: white;
-}
+}   
 
 .general-component--item {
     display: flex;
@@ -28,7 +34,7 @@
     justify-content: space-around;
     height: 100px;
     }
-}    
+} 
 
 .general-component--item-icon {
     width: 20%;

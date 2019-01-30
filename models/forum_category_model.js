@@ -26,10 +26,18 @@ var userSchema = new Schema({
     type: String,
     required: true
   },
-  username: {
-    type: chema.Types.ObjectId,
+  forOwnersOnly: {
+    type: Boolean,
+    default: false
+  },
+  author: {
+    type: Schema.Types.ObjectId,
     ref: 'User'
-  }
+  },
+  posts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'ForumPost'
+  }]
   },{
   timestamps: true
 });

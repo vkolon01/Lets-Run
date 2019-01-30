@@ -85,7 +85,6 @@ export class AddEventComponent implements OnInit {
     } else {
       this.eventForm.get('privateEvent').setValue(false);
     }
-    
   }
 
   onChanges(event) {

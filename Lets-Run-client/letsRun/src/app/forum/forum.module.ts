@@ -7,11 +7,13 @@ import { GeneralCategoryComponent } from "./general-category/general-category.co
 import { UsersCategoryComponent } from "./users-category/users-category.component";
 import { MainListComponent } from "./main-list/main-list.component";
 import { ForumRouterModule } from "./forum-router.module";
+import { ForumItemComponent } from "./forum-item/forum-item.component";
 
 @NgModule({
     declarations: [MainListComponent,
         GeneralCategoryComponent,
-        UsersCategoryComponent
+        UsersCategoryComponent,
+        ForumItemComponent
     ],
     imports: [
         CommonModule,
@@ -21,7 +23,8 @@ import { ForumRouterModule } from "./forum-router.module";
     ],
     exports: [MainListComponent,
         GeneralCategoryComponent,
-        UsersCategoryComponent]
+        UsersCategoryComponent,
+        ForumItemComponent]
 })
 
 export class ForumModule {}

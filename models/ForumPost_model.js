@@ -23,6 +23,11 @@ var userSchema = new Schema({
     trim: true,
     required: true
   },
+  category: {
+    type: String,
+    trim: true,
+    required: true
+  },
   visitsCount: {
     type: Number,
     default: 0
