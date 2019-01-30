@@ -1,3 +1,4 @@
+@import '../../global-css/variables';
 
 :host-context(.evenStyle) .general-component--item {
     background: #7289d652;
@@ -10,4 +11,13 @@
 .general-add {
     display: flex;
     flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+    color: $darkBlue;
+
+    &:hover {
+        cursor: pointer;
+    }
 }

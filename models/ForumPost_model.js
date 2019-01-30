@@ -32,14 +32,10 @@ var userSchema = new Schema({
     type: Number,
     default: 0
   },
-  postComment: {
+  postComments: [{
     type: chema.Types.ObjectId,
     ref: 'ForumComments'
-  },
-  username: {
-    type: chema.Types.ObjectId,
-    ref: 'ForumPost'
-  },
+  }],
   username: {
     type: chema.Types.ObjectId,
     ref: 'User'

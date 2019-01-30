@@ -4,7 +4,7 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { ForumService } from 'src/app/services/forum-main.service';
 import { Subscription } from 'rxjs';
 import { ForumModule } from '../forum.module';
-import { ForumCategoryModel } from 'src/app/models/forum_category.module';
+import { TopicCategoryModel } from 'src/app/models/forum_category.module';
 
 @Component({
   selector: 'app-general-category',
@@ -20,7 +20,7 @@ export class GeneralCategoryComponent implements OnInit {
 
   private forumSub: Subscription;
 
-  generalCategory: ForumCategoryModel[];
+  generalCategory: TopicCategoryModel[];
 
   constructor(private snackBarService: SnackBarService,
               private forumService: ForumService        
@@ -35,7 +35,7 @@ export class GeneralCategoryComponent implements OnInit {
     });
 
     this.forumSub = this.forumService.getCategory('General')
-        .subscribe((result: {forumCategory: ForumCategoryModel[]}) => {
+        .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.generalCategory = result.forumCategory;
 
           console.log('result.forumList');
@@ -58,7 +58,7 @@ export class GeneralCategoryComponent implements OnInit {
                                     this.generalFormAdd.get('description').value,
                                     'General',
                                     this.generalFormAdd.get('forOwnersOnly').value)
-          .subscribe((result: {forumCategory: ForumCategoryModel[]}) => {
+          .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.generalCategory = result.forumCategory;
           });;
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ForumCategoryModel } from 'src/app/models/forum_category.module';
+import { TopicCategoryModel } from 'src/app/models/forum_category.module';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { ForumService } from 'src/app/services/forum-main.service';
 
@@ -19,7 +19,7 @@ export class UsersCategoryComponent implements OnInit {
 
   private forumSub: Subscription;
 
-  commonCategory: ForumCategoryModel[];
+  commonCategory: TopicCategoryModel[];
 
   constructor(private snackBarService: SnackBarService,
               private forumService: ForumService        
@@ -34,7 +34,7 @@ export class UsersCategoryComponent implements OnInit {
     });
 
     this.forumSub = this.forumService.getCategory('Common')
-        .subscribe((result: {forumCategory: ForumCategoryModel[]}) => {
+        .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.commonCategory = result.forumCategory;
 
           console.log('result.forumList');
@@ -57,7 +57,7 @@ export class UsersCategoryComponent implements OnInit {
                                     this.commonFormAdd.get('description').value,
                                     'Common',
                                     this.commonFormAdd.get('forOwnersOnly').value)
-          .subscribe((result: {forumCategory: ForumCategoryModel[]}) => {
+          .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.commonCategory = result.forumCategory;
           });;
 

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment"
 import { HttpClient } from "@angular/common/http";
 import { ForumModule } from "../forum/forum.module";
-import { ForumCategoryModel } from "../models/forum_category.module";
+import { TopicCategoryModel } from "../models/forum_category.module";
 
 const BACKEND_URL = environment.apiUrl;
 
@@ -13,12 +13,12 @@ export class ForumService {
 
     addInCategory(icon: string, title: string, description: string, forumCategory: string, forOwnersOnly: boolean) {
         const dataToSend = {icon: icon, title: title, description: description, forumCategory: forumCategory, forOwnersOnly: forOwnersOnly}
-      return  this.http.post<{forumCategory: ForumCategoryModel[]}>(BACKEND_URL + "/forum/add_section", dataToSend);
+      return  this.http.post<{forumCategory: TopicCategoryModel[]}>(BACKEND_URL + "/forum/add_section", dataToSend);
     }
 
     getCategory(category: string) {
         const queryParams = `?categoryName=${category}`;
-       return this.http.get<{forumCategory: ForumCategoryModel[]}>(BACKEND_URL + "/forum/get_sections" + queryParams);
+       return this.http.get<{forumCategory: TopicCategoryModel[]}>(BACKEND_URL + "/forum/get_sections" + queryParams);
     }
 
     updateForum(id: string, icon: string, title: string, description: string, forumCategory: string, forOwnersOnly: boolean) {
@@ -31,7 +31,7 @@ export class ForumService {
             forumCategory: forumCategory
         }
 
-      return  this.http.put<{updatedForum: ForumCategoryModel}>(BACKEND_URL + "/forum/update/" + id, updateForum);
+      return  this.http.put<{updatedTopic: TopicCategoryModel}>(BACKEND_URL + "/forum/update/" + id, updateForum);
     }
 
 

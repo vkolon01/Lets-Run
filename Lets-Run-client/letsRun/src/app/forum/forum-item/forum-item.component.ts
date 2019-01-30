@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ForumCategoryModel } from 'src/app/models/forum_category.module';
+import { TopicCategoryModel } from 'src/app/models/forum_category.module';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { ForumService } from 'src/app/services/forum-main.service';
 import { DialogService } from 'src/app/services/dialogService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forum-item',
@@ -13,7 +14,7 @@ import { DialogService } from 'src/app/services/dialogService';
 export class ForumItemComponent implements OnInit {
 
   editMode = false;
-  @Input() forumCategory: ForumCategoryModel;
+  @Input() forumCategory: TopicCategoryModel;
   generalFormUpdate: FormGroup;
   checked = false;
   deleted = false;
@@ -21,6 +22,7 @@ export class ForumItemComponent implements OnInit {
   constructor(private snackBarService: SnackBarService,
               private forumService: ForumService,
               private confirm: DialogService,
+              private route: Router
               ){ }
 
 
@@ -34,6 +36,10 @@ export class ForumItemComponent implements OnInit {
 
     this.prepareFieldsForUpdate();
     
+  }
+
+  openForumList(id: string) {
+    this.route.navigate(['/forum/' + id]);
   }
 
   prepareFieldsForUpdate() {
@@ -64,9 +70,9 @@ export class ForumItemComponent implements OnInit {
     const forOwnersOnly = this.generalFormUpdate.get('forOwnersOnly').value;
 
     this.forumService.updateForum(this.forumCategory._id, icon, title, description, this.forumCategory.forumCategory, forOwnersOnly)
-        .subscribe((result: {updatedForum: ForumCategoryModel}) => {
+        .subscribe((result: {updatedTopic: TopicCategoryModel}) => {
 
-         this.forumCategory = result.updatedForum;
+         this.forumCategory = result.updatedTopic;
           
           this.snackBarService.showMessage("updated", "Yay");
 

@@ -105,7 +105,7 @@ exports.updateForumInCategoryById = async function(req, res, next) {
         if (result.n > 0) {
             res.status(201).json({
               message: 'Update successful!',
-              updatedForum: updatedForum
+              updatedTopic: updatedForum
             });
           } else {
             const error = new Error('Not authorized!');
@@ -150,4 +150,37 @@ exports.deleteForumInCategoryById = async function(req, res, next) {
   } catch(error) {
       next(error);
   }
+}
+
+
+
+//////////////////////////////////////   *************  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    GET POSTS LIST FROM CATEGORY
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.getPostsForCategoryById = async function(req, res, next) {
+
+  const category_id = req.params.category_id;
+
+  try {
+    var forumCategory = await ForumCategory.find({forumCategory: queryCategoryName});
+
+    if (!forumCategory) {
+      const error = new Error('Forum category not found');
+      error.statusCode = 404;
+      error.data = errors.array();
+      throw error;
+    }
+
+    
+    res.status(200).json({
+      message: 'List of forums for given category!',
+      forumCategory: forumCategory
+    });
+  } catch (error) {
+    next(error);
+  }
+
 }

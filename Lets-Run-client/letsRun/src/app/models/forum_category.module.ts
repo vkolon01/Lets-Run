@@ -1,7 +1,7 @@
 import { Title } from "@angular/platform-browser";
 import { Identifiers } from "@angular/compiler";
 
-export interface ForumCategoryModel {
+export interface TopicCategoryModel {
     _id: string,
     icon: string,
     title: string,

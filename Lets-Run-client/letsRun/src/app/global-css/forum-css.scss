@@ -1,9 +1,5 @@
 @import "./variables";
 
-.main {
-    width: 98%;
-}
-
 .general-component--list {
     // min-width: 95%;
     // max-width: 95%;
@@ -33,7 +29,13 @@
     flex-direction: column;
     justify-content: space-around;
     height: 100px;
+
+    i , p, .settings{
+        text-align: center;
     }
+    }
+
+
 } 
 
 .general-component--item-icon {

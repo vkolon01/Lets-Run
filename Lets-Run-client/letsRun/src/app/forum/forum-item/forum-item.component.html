@@ -47,7 +47,7 @@
               </div>
         </div>
         <div class="general-component--item-desc">
-          <h2>{{forumCategory.title}}</h2>
+          <h2> <a (click)="openForumList(forumCategory._id)">{{forumCategory.title}}</a></h2>
           <p>{{forumCategory.description}}</p>
         </div>
         <div class="general-component--item-topicsCount">
