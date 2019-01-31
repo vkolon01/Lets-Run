@@ -1,0 +1,33 @@
+
+
+.comment-main {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.comment-main-header {
+    display: flex;
+    flex-direction: row;
+    width: 98%;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.comment-main-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 98%;
+}
+
+
+
+:host-context(.evenStyle) .main {
+    background: #7289d652;
+}
+
+:host-context(.oddStyle) .main {
+    background:  #a8b9e0;
+}

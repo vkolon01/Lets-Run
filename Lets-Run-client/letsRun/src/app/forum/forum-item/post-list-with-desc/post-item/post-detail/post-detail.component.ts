@@ -5,6 +5,7 @@ import { ForumService } from 'src/app/services/forum-main.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { DialogService } from 'src/app/services/dialogService';
+import { PostCommentModule } from 'src/app/models/postComment.model';
 
 @Component({
   selector: 'app-post-detail',
@@ -14,9 +15,12 @@ import { DialogService } from 'src/app/services/dialogService';
 export class PostDetailComponent implements OnInit {
 
   updatePostForm: FormGroup;
+  addCommentForm: FormGroup;
+
   editMode = false;
   post: PostModel;
   post_id: string;
+  postComments: PostCommentModule[];
   
   constructor(private forumService: ForumService,
               private activeRoute: ActivatedRoute,
@@ -32,20 +36,25 @@ export class PostDetailComponent implements OnInit {
       'content': new FormControl(null, { validators: [Validators.required] })
     });
 
+    this.addCommentForm = new FormGroup({
+      'content': new FormControl(null, { validators: [Validators.required] })
+    })
+
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
 
       this.post_id = paramMap.get('post_id');
 
       this.forumService.getPostById(this.post_id).subscribe((result: {post: PostModel}) => {
         this.post = result.post;
+      });
 
-        console.log(' this.post');
-        console.log( this.post);
-      })
+      this.forumService.getCommentToThePost(this.post_id).subscribe((result: {comments: PostCommentModule[]}) => {
+        this.postComments = result.comments;
+        console.log('this.postComments');
+        console.log(this.postComments);
+        
+      });
     });
-
-    
-
   }
 
   updateModeToggle() {
@@ -72,18 +81,32 @@ export class PostDetailComponent implements OnInit {
   }
 
   deletePost() {
-    this.confirm.openConfirmDialog('Are you sure want to delete the forum section?')
+    this.confirm.openConfirmDialog('Are you sure want to delete the post?')
     .afterClosed().subscribe(result => {
       if (result) {
-
-
-        // this.forumService.deleteForumSection(this.forumCategory._id).subscribe(result=> {
-        //   this.snackBarService.showMessageWithDuration('Section deleted', '', 3000);
-        //   this.deleted = true;
-        // });
-        
+        this.forumService.deletePost(this.post_id).subscribe(result => {
+          this.snackBarService.showMessageWithDuration('Post deleted', '', 3000);
+          this.route.navigate(['/forum']);
+        })
       }
     })
+  }
+
+  addCommentToThePost() {
+
+    if(this.addCommentForm.invalid) {
+      this.snackBarService.showMessageWithDuration("Can't post empty content", '', 3000);
+      return;
+    }
+
+    this.forumService.addCommentToThePost(this.post_id, this.addCommentForm.get('content').value)
+        .subscribe((result: {comments: PostCommentModule[]}) => {
+          this.postComments = result.comments;
+          this.addCommentForm.reset();
+          console.log('this.postComments');
+          console.log(this.postComments);
+          
+        })
   }
 
 }

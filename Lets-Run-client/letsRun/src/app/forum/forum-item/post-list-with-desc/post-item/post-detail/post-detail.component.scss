@@ -33,3 +33,10 @@ form {
 .general-component--item{
     border-bottom: 2px solid $darkBlue;
 }
+
+.add-comment {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    box-shadow: 4px 4px 12px black;
+}

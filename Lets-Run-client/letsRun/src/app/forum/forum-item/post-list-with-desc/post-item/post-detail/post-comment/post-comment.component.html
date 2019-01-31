@@ -1,0 +1,25 @@
+<div class="main" *ngIf="!deleted">
+  <div class="comment-main">
+
+  </div>
+  <div class="comment-main-header">
+    <h3>{{comment?.author.username}}</h3>createdAt
+    <span>Created:  {{createdDate}}</span>
+    <span>Modified {{modifiedDate}}</span>
+  </div>
+  <div class="comment-main-content" *ngIf="!updateField">
+    <p>{{comment?.content}}</p>
+    <div>
+        <i class="material-icons" (click)="updateCommentToggle()">settings</i>
+        <i class="material-icons" (click)="deleteComment()">delete_sweep</i> 
+      </div>
+  </div>
+      <form *ngIf="updateField" class="comment-main-content" [formGroup]="updateCommentForm" (ngSubmit)="updateCommentToThePost()">
+          <mat-form-field>
+              <input matInput placeholder="Content" formControlName="content">
+              <mat-error *ngIf="updateCommentForm.get('content').errors">Content is required</mat-error>
+            </mat-form-field>
+            <button type="submit">Update comment!</button>
+            <i class="material-icons" (click)="updateCommentToggle()">clear</i> 
+      </form>
+</div>

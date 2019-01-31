@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { ForumModule } from "../forum/forum.module";
 import { TopicCategoryModel } from "../models/forum_category.module";
 import { PostModel } from "../models/post.model";
+import { PostCommentModule } from "../models/postComment.model";
 
 const BACKEND_URL = environment.apiUrl;
 
@@ -77,6 +78,24 @@ export class ForumService {
 
     deletePost(post_id) {
         return this.http.delete(BACKEND_URL + "/forum/delete_post/" + post_id);
+    }
+
+    getCommentToThePost(post_id: string) {
+        return this.http.get<{comments: PostCommentModule[]}>(BACKEND_URL + "/forum/get_comment_to_post/" + post_id);
+    }
+
+    addCommentToThePost(post_id: string, content: string) {
+        var body = { content: content}
+       return this.http.post<{comments: PostCommentModule[]}>(BACKEND_URL + "/forum/add_comment/" + post_id, body);
+    }
+
+    updateCommentToThePost(comment_id: string, content: string) {
+
+        return this.http.put<{comment: PostCommentModule}>(BACKEND_URL + "/forum/update_comment_to_post", { comment_id, content});
+    }
+
+    deleteCommentToThePost(comment_id) {
+        return this.http.delete(BACKEND_URL + "/forum/delete_comment_to_post/" + comment_id);
     }
 
 }

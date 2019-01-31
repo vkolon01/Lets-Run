@@ -9,6 +9,7 @@ const {
   var Comment = require('../models/comment_model');
   var ForumCategory = require('../models/forum_category_model');
   var TopicPost = require('../models/ForumPost_model')
+  var PostComment = require('../models/forumPost_comment_module');
   
   var nodemailer = require('nodemailer');
   
@@ -315,9 +316,11 @@ exports.updatePost = async function(req, res, next) {
 
 exports.deletePostById = async function(req, res, next) {
 
+  const errors = validationResult(req);
+
   try {
 
-    let postToBeDeleted = await TopicPost.findById(req.params.post_id);
+    let postToBeDeleted = await TopicPost.findOne({_id: req.params.post_id, author: req.userData.userId});
 
     if(!postToBeDeleted) {
       const error = new Error('Post could not be found!');
@@ -326,7 +329,13 @@ exports.deletePostById = async function(req, res, next) {
       throw error;
     }
 
-    postToBeDeleted.remove();
+    await postToBeDeleted.remove();
+
+    var commentToDelete = await PostComment.find({forumPost: req.params.post_id});
+
+    await commentToDelete.forEach(comment => {
+      comment.remove();
+    });
 
     res.status(200).json({
       message: 'Forum deleted successfully!'
@@ -338,3 +347,125 @@ exports.deletePostById = async function(req, res, next) {
   }
 }
 
+
+/////////////////////  ** COMMENT FOR POST ** \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    GET COMMENT BY POST_ID
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.getCommentsByPostId = async function(req, res, next) {
+
+  const post_id = req.params.post_id;
+
+  try {
+
+    var foundComment = await PostComment.find({forumPost: post_id}).populate({path: "author", select: "username"});
+
+    res.status(200).json({
+      message: 'post was send!',
+      comments: foundComment
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    ADD COMMENT TO POST BY POST_ID
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.addCommentToPost = async function(req, res, next) {
+
+  const post_id = req.params.post_id;
+
+  try {
+
+    var newComment = new PostComment({
+      content: req.body.content,
+      author: req.userData.userId,
+      forumPost: post_id
+    });
+
+    await newComment.save();
+
+    await TopicPost.update({
+      _id: post_id
+    }, {
+      $push: {
+        postComments: newComment._id
+      }
+    });
+
+    var allComments = await PostComment.find({forumPost: post_id});
+
+    res.status(200).json({
+      message: 'Topic with posts send!',
+      comments: allComments
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    UPDATE COMMENT TO POST
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.updateCommentToPost = async function(req, res, next) {
+
+  const comment_id = req.body.comment_id;
+
+  try {
+
+    await PostComment.findOneAndUpdate({_id: comment_id, author: req.userData.userId },
+      {
+        _id: comment_id,
+        content: req.body.content
+      });
+
+      var updatedComment = await PostComment.findById(comment_id);
+
+    res.status(200).json({
+      message: 'post was send!',
+      comment: updatedComment
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+///////////////////////////////////////////////////////
+//              DELETE COMMENT BY ID
+///////////////////////////////////////////////////////
+
+exports.deleteCommentById = async function(req, res, next) {
+
+  const errors = validationResult(req);
+
+  try {
+
+    let commentToBeDeleted = await PostComment.findOne({_id: req.params.comment_id, author: req.userData.userId});
+
+    if(!commentToBeDeleted) {
+      const error = new Error('Post could not be found!');
+      error.statusCode = 404;
+      error.data = errors.array();
+      throw error;
+    }
+
+    await commentToBeDeleted.remove();
+
+    res.status(200).json({
+      message: 'Comment deleted successfully!'
+    });
+
+
+  } catch(error) {
+      next(error);
+  }
+}

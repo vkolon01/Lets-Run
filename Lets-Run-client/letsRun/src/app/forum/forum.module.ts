@@ -9,6 +9,7 @@ import { MainListComponent } from "./main-list/main-list.component";
 import { ForumRouterModule } from "./forum-router.module";
 import { ForumItemComponent } from "./forum-item/forum-item.component";
 import { PostItemComponent } from "./forum-item/post-list-with-desc/post-item/post-item.component";
+import { PostCommentComponent } from "./forum-item/post-list-with-desc/post-item/post-detail/post-comment/post-comment.component";
 
 @NgModule({
     declarations: [MainListComponent,

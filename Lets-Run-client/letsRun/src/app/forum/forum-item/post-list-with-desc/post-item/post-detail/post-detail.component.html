@@ -1,4 +1,4 @@
-<div>
+<div class="main">
 
     <form class="general-add" *ngIf="editMode" [formGroup]="updatePostForm" (ngSubmit)="updatePost()">
 
@@ -34,7 +34,7 @@
             <p>views: {{post?.visitsCount}}</p>
             <div class="settings">
              <i class="material-icons" (click)="updateModeToggle()">settings</i> 
-             <i class="material-icons" (click)="deleteSection()">delete_sweep</i> 
+             <i class="material-icons" (click)="deletePost()">delete_sweep</i> 
             </div>
       </div>
       <div class="general-component--item-desc">
@@ -49,4 +49,16 @@
           <p>Last comment by < name > on < post date ></p>
       </div>
   </div>
+
+  <form class="add-comment" [formGroup]="addCommentForm" (ngSubmit)="addCommentToThePost()">
+      <mat-form-field>
+          <input matInput placeholder="Content" formControlName="content">
+          <mat-error *ngIf="addCommentForm.get('content').errors">Content is required</mat-error>
+        </mat-form-field>
+        <button type="submit">Leave a comment!</button>
+  </form>
+  <div [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" *ngFor="let comment of postComments; index as i"> 
+      <app-post-comment [comment]="comment"></app-post-comment>
+  </div>
+  
 </div>

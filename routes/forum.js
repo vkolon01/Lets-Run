@@ -22,7 +22,7 @@ router.delete('/deleteSection/:category_id', authCheck, forumHandler.deleteForum
 
 router.get('/get_topic_by_id/:topic_id', forumHandler.getTopicForCategoryById);
 
-//////////////////////////////////////////////////////////////////////////////////////////////  get_posts_list
+////////////////////////////////////////////////////////////////////////////////////////////// 
 ///                         POST INFORMATION
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +36,17 @@ router.delete('/delete_post/:post_id', authCheck, forumHandler.deletePostById );
 
 router.put('/updatePost', authCheck, forumHandler.updatePost);
 
+////////////////////////////////////////////////////////////////////////////////////////////// 
+///                         POST COMMENT INFORMATION
+//////////////////////////////////////////////////////////////////////////////////////////////
 
+router.get('/get_comment_to_post/:post_id', forumHandler.getCommentsByPostId);
+
+router.post('/add_comment/:post_id', authCheck, forumHandler.addCommentToPost); 
+
+router.put('/update_comment_to_post', authCheck, forumHandler.updateCommentToPost);
+
+router.delete('/delete_comment_to_post/:comment_id', authCheck,  forumHandler.deleteCommentById);
 
 
 
