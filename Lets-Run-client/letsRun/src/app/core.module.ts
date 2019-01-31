@@ -18,6 +18,7 @@ import { GooglePlacesDirective } from "./directives/google-palces.directive";
 import { SendInvitesComponent } from "./event/send-invites/send-invites.component";
 import { PostListWithDescComponent } from "./forum/forum-item/post-list-with-desc/post-list-with-desc.component";
 import { PostItemComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-item.component";
+import { PostDetailComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-detail.component";
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { PostItemComponent } from "./forum/forum-item/post-list-with-desc/post-i
         GoogleMapComponent,
         GooglePlacesDirective,
         SendInvitesComponent,
-        PostItemComponent
+        PostItemComponent,
+        PostDetailComponent
     ],
     imports: [
         CommonModule,
@@ -51,7 +53,8 @@ import { PostItemComponent } from "./forum/forum-item/post-list-with-desc/post-i
         GoogleMapComponent,
         GooglePlacesDirective,
         SendInvitesComponent,
-        PostItemComponent]
+        PostItemComponent,
+        PostDetailComponent]
 })
 
 export class CoreModule { }

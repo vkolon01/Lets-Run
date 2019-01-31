@@ -70,6 +70,10 @@ var userSchema = new Schema({
   comment: [{
     type: Schema.Types.ObjectId,
     ref: 'Comment'
+  }],
+  createdPosts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'ForumPost'
   }]
 }, {
   timestamps: true

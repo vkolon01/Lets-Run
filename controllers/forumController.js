@@ -254,3 +254,87 @@ exports.getPostPreviewToTopicList = async function(req, res, next) {
   }
 
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    GET POST BY ID
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.getPostById = async function(req, res, next) {
+
+  const post_id = req.params.post_id;
+
+  try {
+
+    var foundPost = await TopicPost.findById(post_id)
+                     .populate({path: "author", select: "username _id imagePath"})
+                     .populate({path: "topic", select: "title _id"});  
+
+    res.status(200).json({
+      message: 'post was send!',
+      post: foundPost
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    UPDATE POST
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.updatePost = async function(req, res, next) {
+
+  const post_id = req.body._id;
+
+  try {
+
+    await TopicPost.findOneAndUpdate({_id: post_id, author: req.userData.userId },
+      {
+        _id: post_id,
+        title: req.body.title,
+        description: req.body.description,
+        content: req.body.content
+      });
+
+      var updatedPost = await TopicPost.findById(post_id);
+
+    res.status(200).json({
+      message: 'post was send!',
+      updatedPost: updatedPost
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+///////////////////////////////////////////////////////
+//              DELETE POST BY ID
+///////////////////////////////////////////////////////
+
+exports.deletePostById = async function(req, res, next) {
+
+  try {
+
+    let postToBeDeleted = await TopicPost.findById(req.params.post_id);
+
+    if(!postToBeDeleted) {
+      const error = new Error('Post could not be found!');
+      error.statusCode = 404;
+      error.data = errors.array();
+      throw error;
+    }
+
+    postToBeDeleted.remove();
+
+    res.status(200).json({
+      message: 'Forum deleted successfully!'
+    });
+
+
+  } catch(error) {
+      next(error);
+  }
+}
+

@@ -1,5 +1,13 @@
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+@import '../../../../global-css/variables';
+
+
+
+
+
+:host-context(.evenStyle) .general-component--item {
+    background: #7289d652;
+}
+
+:host-context(.oddStyle) .general-component--item {
+    background:  #a8b9e0;
 }

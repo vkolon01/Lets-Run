@@ -28,8 +28,13 @@ router.get('/get_topic_by_id/:topic_id', forumHandler.getTopicForCategoryById);
 
 router.get('/get_posts_list/:topic_id', forumHandler.getPostPreviewToTopicList);
 
-router.post('/add_post', authCheck, forumHandler.addPostToTopic);
+router.get('/get_post/:post_id', forumHandler.getPostById);
 
+router.post('/add_post', authCheck, forumHandler.addPostToTopic); 
+
+router.delete('/delete_post/:post_id', authCheck, forumHandler.deletePostById );
+
+router.put('/updatePost', authCheck, forumHandler.updatePost);
 
 
 

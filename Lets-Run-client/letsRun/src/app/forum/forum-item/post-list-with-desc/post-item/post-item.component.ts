@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PostModel } from 'src/app/models/post.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-item',
@@ -9,27 +10,23 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class PostItemComponent implements OnInit {
 
-  updatePostToTopic: FormGroup;
+
 
   @Input() post: PostModel;
-  editMode = false;
+  @Input() topicId: string;
+  
 
-  constructor() { }
+  constructor(private route: Router) { }
 
   ngOnInit() {
-    this.updatePostToTopic = new FormGroup({
-      'title': new FormControl(null, { validators: [Validators.required] }),
-      'description': new FormControl(null, { validators: [Validators.required] }),
-      'content': new FormControl(null, { validators: [Validators.required] })
-    });
   }
 
-  updatePost() {
 
+
+  openPostDetail(post_id: string) {
+    this.route.navigate(['/forum/' + this.topicId  + "/" + post_id]);
   }
 
-  updateModeToggle() {
-    this.editMode = !this.editMode;
-  }
+
 
 }

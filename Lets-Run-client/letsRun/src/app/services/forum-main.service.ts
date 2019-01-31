@@ -60,4 +60,23 @@ export class ForumService {
         return this.http.post<{ postsList: PostModel[] }>(BACKEND_URL + "/forum/add_post", post);
     }
 
+    getPostById(post_id: string) {
+        return this.http.get<{post: PostModel}>(BACKEND_URL + "/forum/get_post/" + post_id);
+    }
+
+    updatePostById(post_id: string, title: string, description: string, content: string) {
+        const updatedPost = {
+            _id: post_id,
+            title: title,
+            description: description,
+            content: content
+        };
+
+        return this.http.put<{updatedPost: PostModel}>(BACKEND_URL + "/forum/updatePost", updatedPost);
+    }
+
+    deletePost(post_id) {
+        return this.http.delete(BACKEND_URL + "/forum/delete_post/" + post_id);
+    }
+
 }

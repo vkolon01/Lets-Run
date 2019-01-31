@@ -77,8 +77,6 @@ export class GeneralCategoryComponent implements OnInit {
     } else {
       this.generalFormAdd.get('forOwnersOnly').setValue(false);
     }
-    console.log("this.generalFormAdd.get('forOwnersOnly').value");
-    console.log(this.generalFormAdd.get('forOwnersOnly').value);
   }
 
   showAddField() {
