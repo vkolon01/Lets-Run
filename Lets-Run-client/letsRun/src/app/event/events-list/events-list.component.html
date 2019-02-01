@@ -61,12 +61,11 @@
       </div>
     </div>
 
-    <mat-paginator [length]="totalEvents" [pageSize]="eventsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
-      *ngIf="events.length > 0"></mat-paginator>
-
-
-
-
+    <!-- <mat-paginator [length]="totalEvents" [pageSize]="eventsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+      *ngIf="events.length > 0"></mat-paginator> -->
 
   </div>
+
+  <app-paginator [pager]="pager" (page)="setPage($event)"></app-paginator>
+
 </div>

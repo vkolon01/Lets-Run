@@ -20,12 +20,14 @@ import { PostListWithDescComponent } from "./forum/forum-item/post-list-with-des
 import { PostItemComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-item.component";
 import { PostDetailComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-detail.component";
 import { PostCommentComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-comment/post-comment.component";
+import { PaginatorComponent } from "./core/paginator/paginator.component";
 
 
 @NgModule({
     declarations: [
         FooterComponent,
         HeaderComponent,
+        PaginatorComponent,
         HomeComponent,
         EventDetailComponent,
         PostListWithDescComponent,
@@ -36,7 +38,7 @@ import { PostCommentComponent } from "./forum/forum-item/post-list-with-desc/pos
         SendInvitesComponent,
         PostItemComponent,
         PostDetailComponent,
-        PostCommentComponent
+        PostCommentComponent,
     ],
     imports: [
         CommonModule,
@@ -48,6 +50,7 @@ import { PostCommentComponent } from "./forum/forum-item/post-list-with-desc/pos
     exports: [FooterComponent,
         HeaderComponent,
         HomeComponent,
+        PaginatorComponent,
         EventDetailComponent,
         PostListWithDescComponent,
         CommentComponent,

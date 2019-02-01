@@ -1,66 +1,68 @@
-<div *ngIf="!deleted">
+
+    <div *ngIf="!deleted">
   
-  <div class="general-component--item" *ngIf="editMode">
-    <form class="general-add" [formGroup]="generalFormUpdate" (ngSubmit)="updateForumSection()">
-
-      <mat-form-field>
-              <input matInput placeholder="Icon" formControlName="icon"> 
-              <mat-hint>The icon of the folder ("Must be taken from angular material icons")!</mat-hint> 
-              <mat-error *ngIf="generalFormUpdate.get('icon').errors">Icon is requied</mat-error>
-            </mat-form-field>
-
-  <mat-form-field>
-      <input matInput placeholder="Title" formControlName="title"> 
-      <mat-hint>The title of the section!</mat-hint> 
-      <mat-error *ngIf="generalFormUpdate.get('title').errors">Title is requied</mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-          <textarea matInput cols="30" rows="10"  placeholder="Description" formControlName="description"></textarea> 
-          <mat-hint>The description of the section!</mat-hint> 
-          <mat-error *ngIf="generalFormUpdate.get('description').errors">Description is requied</mat-error>
-        </mat-form-field>
-
-              <mat-slide-toggle
-              class="example-margin"
-              [checked]="checked"
-              color="primary"
-              (change)="changed()">
-            <!-- Private Event? (Off by default) -->
-            {{checked}}
-          </mat-slide-toggle>
-
-  <button type="submit">Update</button>
-  <button (click)="checkEditMode()">Cancel</button>
-</form>
-  </div>
-  
-  <div *ngIf="!editMode" class="general-component--item">
-      <div class="general-component--item-icon">
-          <i class="material-icons">
-                {{forumCategory.icon}}
-              </i>
-              views: {{forumCategory.visitsCount}}
-              <div class="settings">
-               <i class="material-icons" (click)="checkEditMode()">settings</i> 
-               <i class="material-icons" (click)="deleteSection()">delete_sweep</i> 
+        <div class="general-component--item" *ngIf="editMode">
+          <form class="general-add" [formGroup]="generalFormUpdate" (ngSubmit)="updateForumSection()">
+      
+            <mat-form-field>
+                    <input matInput placeholder="Icon" formControlName="icon"> 
+                    <mat-hint>The icon of the folder ("Must be taken from angular material icons")!</mat-hint> 
+                    <mat-error *ngIf="generalFormUpdate.get('icon').errors">Icon is requied</mat-error>
+                  </mat-form-field>
+      
+        <mat-form-field>
+            <input matInput placeholder="Title" formControlName="title"> 
+            <mat-hint>The title of the section!</mat-hint> 
+            <mat-error *ngIf="generalFormUpdate.get('title').errors">Title is requied</mat-error>
+          </mat-form-field>
+      
+          <mat-form-field>
+                <textarea matInput cols="30" rows="10"  placeholder="Description" formControlName="description"></textarea> 
+                <mat-hint>The description of the section!</mat-hint> 
+                <mat-error *ngIf="generalFormUpdate.get('description').errors">Description is requied</mat-error>
+              </mat-form-field>
+      
+                    <mat-slide-toggle
+                    class="example-margin"
+                    [checked]="checked"
+                    color="primary"
+                    (change)="changed()">
+                  <!-- Private Event? (Off by default) -->
+                  {{checked}}
+                </mat-slide-toggle>
+      
+        <button type="submit">Update</button>
+        <button (click)="checkEditMode()">Cancel</button>
+      </form>
+        </div>
+        
+        <div *ngIf="!editMode" class="general-component--item">
+            <div class="general-component--item-icon">
+                <i class="material-icons">
+                      {{forumCategory.icon}}
+                    </i>
+                    views: {{forumCategory.visitsCount}}
+                    <div class="settings">
+                     <i class="material-icons" (click)="checkEditMode()">settings</i> 
+                     <i class="material-icons" (click)="deleteSection()">delete_sweep</i> 
+                    </div>
               </div>
+              <div class="general-component--item-desc">
+                <h2> <a (click)="openForumList(forumCategory._id)">{{forumCategory.title}}</a></h2>
+                <p>{{forumCategory.description}}</p>
+              </div>
+              <div class="general-component--item-topicsCount">
+                <h2>45</h2>
+                <p>topics</p>
+              </div>
+              <div class="general-component--item-postCount">
+                  <h2>45</h2>
+                  <p>posts</p>
+              </div>
+              <div class="general-component--item-lastPost">
+                  <p>Last post by < name > in < postName > on < post date ></p>
+              </div>
+          </div>
+        
         </div>
-        <div class="general-component--item-desc">
-          <h2> <a (click)="openForumList(forumCategory._id)">{{forumCategory.title}}</a></h2>
-          <p>{{forumCategory.description}}</p>
-        </div>
-        <div class="general-component--item-topicsCount">
-          <h2>45</h2>
-          <p>topics</p>
-        </div>
-        <div class="general-component--item-postCount">
-            <h2>45</h2>
-            <p>posts</p>
-        </div>
-        <div class="general-component--item-lastPost">
-            <p>Last post by < name > in < postName > on < post date ></p>
-        </div>
-    </div>
-  
-  </div>
+   

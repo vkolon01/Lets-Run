@@ -164,6 +164,7 @@ exports.deleteForumInCategoryById = async function(req, res, next) {
 
 exports.getTopicForCategoryById = async function(req, res, next) {
 
+
   const topic_id = req.params.topic_id;
 
   try {
@@ -248,15 +249,20 @@ exports.addPostToTopic = async function(req, res, next) {
 
 exports.getPostPreviewToTopicList = async function(req, res, next) {
 
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.currentPage;
   const topic_id = req.params.topic_id;
 
   try {
 
-    var foundPosts = await TopicPost.find({ topic: topic_id});  
+    var foundPosts = await TopicPost.find({ topic: topic_id}).sort({createdAt: -1}).skip(pageSize * (currentPage - 1));  
+
+    var countPost = await TopicPost.find({ topic: topic_id}).countDocuments();
 
     res.status(200).json({
       message: 'Topic with posts send!',
-      postsForTopic: foundPosts
+      postsForTopic: foundPosts,
+      totalPosts: countPost
     });
   } catch (error) {
     next(error);
@@ -365,15 +371,19 @@ exports.deletePostById = async function(req, res, next) {
 
 exports.getCommentsByPostId = async function(req, res, next) {
 
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.currentPage;
   const post_id = req.params.post_id;
 
   try {
 
-    var foundComment = await PostComment.find({forumPost: post_id}).populate({path: "author", select: "username"});
-
+    var foundComment = await PostComment.find({forumPost: post_id}).sort({createdAt: -1}).skip(pageSize * (currentPage - 1)).limit(pageSize).populate({path: "author", select: "username"});
+// .skip(pageSize * (currentPage - 1)).limit(pageSize)
+    var commentsCount = await PostComment.find({forumPost: post_id}).countDocuments();
     res.status(200).json({
       message: 'post was send!',
-      comments: foundComment
+      comments: foundComment,
+      commentsCount: commentsCount
     });
   } catch (error) {
     next(error);

@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-forum-item',
   templateUrl: './forum-item.component.html',
-  styleUrls: ['./forum-item.component.scss', '../../global-css/forum-css.scss']
+  styleUrls: ['./forum-item.component.scss', '../../global-css/forum-css.scss', '../../global-css/global-input.scss']
 })
 export class ForumItemComponent implements OnInit {
 

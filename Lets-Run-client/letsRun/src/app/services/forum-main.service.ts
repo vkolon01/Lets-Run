@@ -45,8 +45,9 @@ export class ForumService {
         return this.http.get<{ foundTopic: TopicCategoryModel }>(BACKEND_URL + "/forum/get_topic_by_id/" + id);
     }
 
-    getPostsForTopic(topic_id: string) {
-        return this.http.get<{postsForTopic: PostModel[]}>(BACKEND_URL + "/forum/get_posts_list/" + topic_id);
+    getPostsForTopic(topic_id: string,  pageSize: number, currentPage: number) {
+        const queryParams = `?pageSize=${pageSize}&currentPage=${currentPage}`;
+        return this.http.get<{postsForTopic: PostModel[], totalPosts: number}>(BACKEND_URL + "/forum/get_posts_list/" + topic_id + queryParams);
     }
 
     addPostToTheTopic(topic_id: string, icon: string, title: string, description: string, content: string) {
@@ -80,8 +81,9 @@ export class ForumService {
         return this.http.delete(BACKEND_URL + "/forum/delete_post/" + post_id);
     }
 
-    getCommentToThePost(post_id: string) {
-        return this.http.get<{comments: PostCommentModule[]}>(BACKEND_URL + "/forum/get_comment_to_post/" + post_id);
+    getCommentToThePost(post_id: string, pageSize: number, currentPage: number) {
+        const queryParams = `?pageSize=${pageSize}&currentPage=${currentPage}`;
+        return this.http.get<{comments: PostCommentModule[], commentsCount: number}>(BACKEND_URL + "/forum/get_comment_to_post/" + post_id + queryParams);
     }
 
     addCommentToThePost(post_id: string, content: string) {

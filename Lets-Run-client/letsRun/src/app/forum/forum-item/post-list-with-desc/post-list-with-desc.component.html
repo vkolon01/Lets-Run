@@ -1,5 +1,13 @@
 <div class="main">
 
+    <div class="navigation">
+        <ul>
+            <li><a [routerLink]="['/forum']">main</a></li>
+            <li>>>></li>
+            <li>{{topic?.title}}</li>
+        </ul>
+       </div>
+
   <div *ngIf="!editMode" class="general-component--item general-component--list topic-header">
     <div class="general-component--item-icon">
       <i class="material-icons">
@@ -56,4 +64,5 @@
     <app-post-item [post]="post" [topicId]="topic?._id"></app-post-item> 
     </div>
   </div>
+  <app-paginator [pager]="pager" (page)="setPage($event)"></app-paginator>
 </div>

@@ -1,5 +1,19 @@
 <div class="main">
 
+    <div class="navigation">
+        <ul *ngIf="post">
+            <li><a [routerLink]="['/forum']">main</a></li>
+            <li><i class="material-icons">
+                navigate_next
+                </i></li>
+            <li><a [routerLink]="['/forum', post?.topic._id]">{{post?.topic.title}}</a></li>
+            <li><i class="material-icons">
+                navigate_next
+                </i></li>
+            <li>{{post?.title}}</li>
+        </ul>
+       </div>
+
     <form class="general-add" *ngIf="editMode" [formGroup]="updatePostForm" (ngSubmit)="updatePost()">
 
 
@@ -60,5 +74,8 @@
   <div [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" *ngFor="let comment of postComments; index as i"> 
       <app-post-comment [comment]="comment"></app-post-comment>
   </div>
-  
+
+  <!-- <div *ngFor="let item of pagedItems">{{item.name}}</div> -->
+
+  <app-paginator [pager]="pager" (page)="setPage($event)"></app-paginator>
 </div>

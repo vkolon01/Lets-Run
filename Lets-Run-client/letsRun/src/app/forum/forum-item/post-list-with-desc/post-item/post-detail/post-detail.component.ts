@@ -6,6 +6,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { DialogService } from 'src/app/services/dialogService';
 import { PostCommentModule } from 'src/app/models/postComment.model';
+import { PagerService } from 'src/app/services/pager.service';
 
 @Component({
   selector: 'app-post-detail',
@@ -17,16 +18,26 @@ export class PostDetailComponent implements OnInit {
   updatePostForm: FormGroup;
   addCommentForm: FormGroup;
 
+    //total items in collection
+    totalComments: number;
+
+      // paged items
+      pagedItems: any[];
+
+      // pager object
+      pager: any = {};
+
   editMode = false;
   post: PostModel;
   post_id: string;
-  postComments: PostCommentModule[];
+  postComments: PostCommentModule[] = [];
   
   constructor(private forumService: ForumService,
               private activeRoute: ActivatedRoute,
               private snackBarService: SnackBarService,
               private confirm: DialogService,
-              private route: Router      
+              private route: Router ,
+              private pagerService: PagerService     
     ) { }
 
   ngOnInit() {
@@ -48,14 +59,27 @@ export class PostDetailComponent implements OnInit {
         this.post = result.post;
       });
 
-      this.forumService.getCommentToThePost(this.post_id).subscribe((result: {comments: PostCommentModule[]}) => {
-        this.postComments = result.comments;
-        console.log('this.postComments');
-        console.log(this.postComments);
-        
-      });
+
     });
+
+    this.setPage(1);
   }
+
+  setPage(page: number) {
+    if (page < 1 || this.pager.totalPages &&  page > this.pager.totalPages) {
+        return;
+    }
+    
+        // get current page of items
+        this.forumService.getCommentToThePost(this.post_id, 10, page).subscribe((result: {comments: PostCommentModule[], commentsCount: number}) => {
+          this.postComments = result.comments;
+          this.totalComments = result.commentsCount;
+              // get pager object from service
+          this.pager = this.pagerService.getPager(this.totalComments, page);
+
+        });
+}
+
 
   updateModeToggle() {
     this.editMode = !this.editMode;
@@ -74,7 +98,6 @@ export class PostDetailComponent implements OnInit {
     this.forumService.updatePostById(this.post_id, title, description, content)
         .subscribe((result: {updatedPost: PostModel}) => {
           this.post = result.updatedPost;
-          
           this.updateModeToggle();
         });
 
@@ -101,9 +124,10 @@ export class PostDetailComponent implements OnInit {
 
     this.forumService.addCommentToThePost(this.post_id, this.addCommentForm.get('content').value)
         .subscribe((result: {comments: PostCommentModule[]}) => {
-          this.postComments = result.comments;
-          this.addCommentForm.reset();
+          this.setPage(1);
         })
+
+        this.addCommentForm.reset();
   }
 
 }

@@ -4,6 +4,7 @@ import { TopicCategoryModel } from 'src/app/models/forum_category.module';
 import { ForumService } from 'src/app/services/forum-main.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostModel } from 'src/app/models/post.model';
+import { PagerService } from 'src/app/services/pager.service';
 
 @Component({
   selector: 'app-post-list-with-desc',
@@ -17,10 +18,20 @@ export class PostListWithDescComponent implements OnInit {
   addMode = false;
   posts: PostModel[];
 
+      //total items in collection
+      totalPosts: number;
+
+      // paged items
+      pagedItems: any[];
+
+      // pager object
+      pager: any = {};
+
   addPostToTopic: FormGroup;
 
   constructor(private activeRoute: ActivatedRoute,
-              private forumService: ForumService
+              private forumService: ForumService,
+              private pagerService: PagerService
               ) { }
 
   ngOnInit() {
@@ -39,13 +50,28 @@ export class PostListWithDescComponent implements OnInit {
         this.topic = result.foundTopic;
     });
 
-    this.forumService.getPostsForTopic(this.forumList_id).subscribe((result: {postsForTopic: PostModel[]}) => {
-      this.posts = result.postsForTopic;
-    });
+    this.setPage(1);
 
     });
 
   }
+
+  setPage(page: number) {
+    if (page < 1 || this.pager.totalPages &&  page > this.pager.totalPages) {
+        return;
+    }
+    
+        // get current page of items
+        this.forumService.getPostsForTopic(this.forumList_id, 10, page).subscribe((result: {postsForTopic: PostModel[], totalPosts: number}) => {
+          this.posts = result.postsForTopic;
+          this.totalPosts = result.totalPosts;
+
+          this.pager = this.pagerService.getPager(this.totalPosts, page);
+        });
+
+        // this.pager = this.pagerService.getPager(this.totalComments, page);
+
+}
 
   addPost() {
     const topic_id = this.forumList_id;

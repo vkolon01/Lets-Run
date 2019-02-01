@@ -1,7 +1,9 @@
 @import '../../../../global-css/variables';
 
 
-
+h2 {
+    word-break: break-all;
+}
 
 
 :host-context(.evenStyle) .general-component--item {
