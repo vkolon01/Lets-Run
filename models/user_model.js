@@ -73,7 +73,7 @@ var userSchema = new Schema({
   }],
   createdPosts: [{
     type: Schema.Types.ObjectId,
-    ref: 'ForumPost'
+    ref: 'Post'
   }]
 }, {
   timestamps: true

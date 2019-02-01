@@ -15,7 +15,7 @@ var userSchema = new Schema({
   },
   forumPost: {
     type: Schema.Types.ObjectId,
-    ref: 'ForumPost'
+    ref: 'Post'
   },
   author: {
     type: Schema.Types.ObjectId,
@@ -34,7 +34,7 @@ var userSchema = new Schema({
 
       var postComment = this;
 
-          await mongoose.model('ForumPost').update({
+          await mongoose.model('Post').update({
             postComments: postComment._id
           }, {
             $pull: {
@@ -50,4 +50,4 @@ var userSchema = new Schema({
     }
   });
 
-module.exports = mongoose.model('forumPost_Comment', userSchema);
+module.exports = mongoose.model('PostComment', userSchema);

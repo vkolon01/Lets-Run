@@ -36,10 +36,10 @@ var userSchema = new Schema({
   },
   posts: [{
     type: Schema.Types.ObjectId,
-    ref: 'ForumPost'
+    ref: 'Post'
   }]
   },{
   timestamps: true
 });
 
-module.exports = mongoose.model('ForumCategory', userSchema);
+module.exports = mongoose.model('Topic', userSchema);

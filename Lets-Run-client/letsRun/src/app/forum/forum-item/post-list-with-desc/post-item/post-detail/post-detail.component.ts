@@ -103,9 +103,6 @@ export class PostDetailComponent implements OnInit {
         .subscribe((result: {comments: PostCommentModule[]}) => {
           this.postComments = result.comments;
           this.addCommentForm.reset();
-          console.log('this.postComments');
-          console.log(this.postComments);
-          
         })
   }
 

@@ -19,6 +19,7 @@ h2, p {
 }
 
 form {
+    width: 95%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,6 +33,7 @@ form {
 
 .general-component--item{
     border-bottom: 2px solid $darkBlue;
+    width: 95%;
 }
 
 .add-comment {
@@ -39,4 +41,8 @@ form {
     flex-direction: row !important;
     align-items: center;
     box-shadow: 4px 4px 12px black;
+}
+
+.evenStyle, .oddStyle {
+    width: 95%;
 }

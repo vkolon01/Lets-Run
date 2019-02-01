@@ -7,9 +7,9 @@ const {
   var User = require('../models/user_model');
   var Event = require('../models/event_model');
   var Comment = require('../models/comment_model');
-  var ForumCategory = require('../models/forum_category_model');
-  var TopicPost = require('../models/ForumPost_model')
-  var PostComment = require('../models/forumPost_comment_module');
+  var Topic = require('../models/Topic_model');
+  var TopicPost = require('../models/Post_model')
+  var PostComment = require('../models/Post_comment_module');
   
   var nodemailer = require('nodemailer');
   
@@ -30,7 +30,7 @@ exports.getForumList = async function (req, res, next) {
     const queryCategoryName = req.query.categoryName;
 
     try {
-        var forumCategory = await ForumCategory.find({forumCategory: queryCategoryName});
+        var forumCategory = await Topic.find({forumCategory: queryCategoryName});
     
         if (!forumCategory) {
           const error = new Error('Forum category not found');
@@ -58,7 +58,7 @@ exports.postForumInGivenCategoryList = async function (req, res, next) {
 
     try {
 
-        var forumCategory = new ForumCategory({
+        var forumCategory = new Topic({
             icon: req.body.icon,
             title: req.body.title,
             description: req.body.description,
@@ -69,11 +69,11 @@ exports.postForumInGivenCategoryList = async function (req, res, next) {
 
         await forumCategory.save();
 
-        var updatedForumCategoryList = await ForumCategory.find({forumCategory: req.body.forumCategory});
+        var updatedTopicList = await Topic.find({forumCategory: req.body.forumCategory});
 
         res.status(200).json({
         //   message: 'Forum category added for given category!',
-          forumCategory: updatedForumCategoryList
+          forumCategory: updatedTopicList
         });
       } catch (error) {
         next(error);
@@ -88,7 +88,7 @@ exports.postForumInGivenCategoryList = async function (req, res, next) {
 exports.updateForumInCategoryById = async function(req, res, next) {
 
     try {
-        var result = await ForumCategory.updateOne({
+        var result = await Topic.updateOne({
             _id: req.body.id,
             author: req.userData.userId
         },{
@@ -102,7 +102,7 @@ exports.updateForumInCategoryById = async function(req, res, next) {
               }
         });
 
-        var updatedForum = await ForumCategory.findById(req.body.id);
+        var updatedForum = await Topic.findById(req.body.id);
 
         if (result.n > 0) {
             res.status(201).json({
@@ -133,7 +133,7 @@ exports.deleteForumInCategoryById = async function(req, res, next) {
     console.log('ID');
     console.log(req.params.category_id);
 
-    let forumToBeDeleted = await ForumCategory.findById(req.params.category_id);
+    let forumToBeDeleted = await Topic.findById(req.params.category_id);
 
     if(!forumToBeDeleted) {
       const error = new Error('Forum could not be found!');
@@ -167,7 +167,7 @@ exports.getTopicForCategoryById = async function(req, res, next) {
   const topic_id = req.params.topic_id;
 
   try {
-    var foundTopic = await ForumCategory.findById(topic_id);
+    var foundTopic = await Topic.findById(topic_id);
 
     if (!foundTopic) {
       const error = new Error('Forum category not found');
@@ -210,7 +210,7 @@ exports.addPostToTopic = async function(req, res, next) {
 
     await newPost.save();
 
-    await ForumCategory.update({
+    await Topic.update({
       _id: topic_id
     }, {
       $push: {
@@ -218,7 +218,15 @@ exports.addPostToTopic = async function(req, res, next) {
       }
     });
 
-    var foundTopic = await ForumCategory.findById(topic_id);
+    await User.update({
+      _id: req.userData.userId
+    }, {
+      $push: {
+        createdPosts: newPost._id
+      }
+    })
+
+    var foundTopic = await Topic.findById(topic_id);
 
     var allPosts = await TopicPost.find();
 

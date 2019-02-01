@@ -29,7 +29,7 @@ var userSchema = new Schema({
   },
   postComments: [{
     type: Schema.Types.ObjectId,
-    ref: 'forumPost_Comment'
+    ref: 'PostComment'
   }],
   author: {
     type: Schema.Types.ObjectId,
@@ -37,7 +37,7 @@ var userSchema = new Schema({
   },
   topic: {
     type: Schema.Types.ObjectId,
-    ref: 'ForumCategory'
+    ref: 'Topic'
   }
   },{
   timestamps: true
@@ -60,7 +60,20 @@ var userSchema = new Schema({
             }
           }, {
             multi: true
-          });         
+          });   
+          
+          await mongoose.model('Topic').update({
+            posts: post._id
+          }, {
+            $pull: {
+              posts: post._id
+            }
+          }, {
+            multi: true
+          });
+          
+         await mongoose.model('PostComment').find({forumPost: post}).remove().exec();
+             
 
       next();
     } catch (err) {
@@ -68,4 +81,4 @@ var userSchema = new Schema({
     }
   });
 
-module.exports = mongoose.model('ForumPost', userSchema);
+module.exports = mongoose.model('Post', userSchema);
