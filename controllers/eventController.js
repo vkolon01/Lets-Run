@@ -95,10 +95,6 @@ exports.getEvents = function (req, res, next) {
     });
   }
 
-
-
-
-
   if (pageSize && currentPage) {
     eventQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
@@ -124,7 +120,6 @@ exports.getEvents = function (req, res, next) {
       return Event.count();
     })
     .then(eventCount => {
-      console.log(eventCounted);
 
       res.status(200).json({
         message: 'Fetched Posts',

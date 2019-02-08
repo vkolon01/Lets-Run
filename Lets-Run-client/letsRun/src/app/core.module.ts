@@ -16,19 +16,30 @@ import { Page404Component } from "./core/page404/page404.component";
 import { GoogleMapComponent } from "./event/google-map/google-map.component";
 import { GooglePlacesDirective } from "./directives/google-palces.directive";
 import { SendInvitesComponent } from "./event/send-invites/send-invites.component";
+import { PostListWithDescComponent } from "./forum/forum-item/post-list-with-desc/post-list-with-desc.component";
+import { PostItemComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-item.component";
+import { PostDetailComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-detail.component";
+import { PostCommentComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-comment/post-comment.component";
+import { PaginatorComponent } from "./core/paginator/paginator.component";
 
 
 @NgModule({
     declarations: [
         FooterComponent,
         HeaderComponent,
+        PaginatorComponent,
         HomeComponent,
         EventDetailComponent,
+        PostListWithDescComponent,
         CommentComponent,
         Page404Component,
         GoogleMapComponent,
         GooglePlacesDirective,
-        SendInvitesComponent],
+        SendInvitesComponent,
+        PostItemComponent,
+        PostDetailComponent,
+        PostCommentComponent,
+    ],
     imports: [
         CommonModule,
         RouterModule,
@@ -39,12 +50,17 @@ import { SendInvitesComponent } from "./event/send-invites/send-invites.componen
     exports: [FooterComponent,
         HeaderComponent,
         HomeComponent,
+        PaginatorComponent,
         EventDetailComponent,
+        PostListWithDescComponent,
         CommentComponent,
         Page404Component,
         GoogleMapComponent,
         GooglePlacesDirective,
-        SendInvitesComponent]
+        SendInvitesComponent,
+        PostItemComponent,
+        PostDetailComponent,
+        PostCommentComponent]
 })
 
 export class CoreModule { }

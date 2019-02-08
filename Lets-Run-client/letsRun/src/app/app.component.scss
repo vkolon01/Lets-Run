@@ -8,7 +8,7 @@ grid-template-rows: minmax(100vh, auto) fit-content(10%);
 app-header {
     position: fixed;
     width: 100%;
-    z-index: 3;
+    z-index: 50;
 }
 
 main {

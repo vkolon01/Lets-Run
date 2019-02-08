@@ -1,0 +1,47 @@
+
+    .general-component--item {
+        background: #0f246a !important;
+    }
+
+.topic-header {
+
+    div {
+        h2, p , i{
+            color: yellow;
+        }
+    }
+
+}
+
+    h2, p {
+        text-align: center;
+    }
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.posts {
+    position: relative;
+    margin-bottom: 1rem;
+    &:after,
+    &:before {
+        z-index: 1;
+        position: absolute;
+        content: "";
+        bottom: 10px;
+        left: 2px;
+        width: 50%;
+        top: 80%;
+        box-shadow: 0 15px 10px #777;
+        transform: rotate(-3deg);
+    }
+  
+    &:after {
+      right: 2px;
+      left: auto;
+      transform: rotate(3deg);
+    }
+}
+

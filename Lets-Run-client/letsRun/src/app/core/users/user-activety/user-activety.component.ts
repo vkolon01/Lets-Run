@@ -48,10 +48,6 @@ export class UserActivetyComponent implements OnInit {
           this.userSubscription = this.userService.getUserListener()
               .subscribe((value: {user: UserModel}) => {
                 this.user = value.user
-
-                if(this.current_user_id === this.user_id) {
-                  this.loadPrivateInfo();
-                }
               })
 
 
@@ -67,6 +63,10 @@ export class UserActivetyComponent implements OnInit {
         this.user_id = paramMap.get('user_id');
              
         this.current_user_id = this.authService.getUserId()
+
+        if(this.current_user_id === this.user_id) {
+          this.loadPrivateInfo();
+        }
     })
     }
 

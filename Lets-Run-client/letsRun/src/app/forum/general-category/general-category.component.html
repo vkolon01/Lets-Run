@@ -1,0 +1,42 @@
+<div class="main">
+<div class="general-category--main">
+  <h1>General Category</h1>
+</div>
+<button (click)="showAddField()">Add forum in General section!</button>
+<form *ngIf="showGeneralAddField" class="general-add" [formGroup]="generalFormAdd" (ngSubmit)="addGeneralForumSection()">
+
+        <mat-form-field>
+                <input matInput placeholder="Icon" formControlName="icon"> 
+                <mat-hint>The icon of the folder ("Must be taken from angular material icons")!</mat-hint> 
+                <mat-error *ngIf="generalFormAdd.get('icon').errors">Icon is requied</mat-error>
+              </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Title" formControlName="title"> 
+        <mat-hint>The title of the section!</mat-hint> 
+        <mat-error *ngIf="generalFormAdd.get('title').errors">Title is requied</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+            <textarea matInput cols="30" rows="10"  placeholder="Description" formControlName="description"></textarea> 
+            <mat-hint>The description of the section!</mat-hint> 
+            <mat-error *ngIf="generalFormAdd.get('description').errors">Description is requied</mat-error>
+          </mat-form-field>
+
+                <mat-slide-toggle
+                class="example-margin"
+                [checked]="checked"
+                color="primary"
+                (change)="changed()">
+              {{checked}}
+            </mat-slide-toggle>
+
+    <button type="submit">Add to section</button>
+    <button (click)="showAddField()">Cancel</button>
+</form>
+
+<div class="general-component--list" *ngFor="let forumList of generalCategory; index as i">
+    <div [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" >
+            <app-forum-item [forumCategory]="forumList" ></app-forum-item>
+    </div>
+</div>

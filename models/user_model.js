@@ -70,29 +70,13 @@ var userSchema = new Schema({
   comment: [{
     type: Schema.Types.ObjectId,
     ref: 'Comment'
+  }],
+  createdPosts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Post'
   }]
 }, {
-  timestamps: true //auto generation time of creation and last update
+  timestamps: true
 });
-
-// eventSchema.pre('remove', async function (next) {
-//   try {
-
-//     var event = this;
-//         await mongoose.model('Event').update({
-//           createdEvent: event._id
-//         }, {
-//           $pull: {
-//             createdEvent: event._id
-//           }
-//         }, {
-//           multi: true
-//         });
-
-//     next();
-//   } catch (err) {
-//     next(err)
-//   }
-// });
 
 module.exports = mongoose.model('User', userSchema);

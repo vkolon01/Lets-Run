@@ -8,6 +8,7 @@ import { AngularMaterialModule } from "../angular-material.module";
 import { UiScrollModule } from 'ngx-ui-scroll';
 import { GoogleMapComponent } from "./google-map/google-map.component";
 import { SendInvitesComponent } from "./send-invites/send-invites.component";
+import { CoreModule } from "../core.module";
 
 @NgModule({
     declarations: [EventsListComponent
@@ -18,7 +19,7 @@ import { SendInvitesComponent } from "./send-invites/send-invites.component";
         EventsRouterModule,
         ReactiveFormsModule,
         AngularMaterialModule,
-        
+        CoreModule
         
     ],
     exports: [EventsListComponent]

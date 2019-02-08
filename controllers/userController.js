@@ -3,11 +3,15 @@ const {
 } = require('express-validator/check');
 const crypto = require('crypto');
 var bcrypt = require('bcryptjs');
-var User = require('../models/user_model');
 var constants = require('../constants/messages');
-var jwt = require('jsonwebtoken');
+
+var User = require('../models/user_model');
 var Comment = require('../models/comment_model');
 var Event = require('../models/event_model');
+var Post = require('../models/Post_model');
+var PostComment = require('../models/Post_comment_module');
+
+var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 var htmlTemplates = require('../constants/htmlTemplateForEmail');
 const quotes = require('../constants/emailQuotesArray');
@@ -488,6 +492,9 @@ exports.deleteUser = function (req, res, next) {
             event[i].remove()
           }
         })
+
+        // Post.find({})
+
 
       user.remove();
 

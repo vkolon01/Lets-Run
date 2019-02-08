@@ -52,7 +52,6 @@ router.get('/:event_id/invitedUsers', authCheck, EventController.getInvitedUsers
 
 //////////////////////// CONTROLLERS FOR EVENT LIKES AND FOLLOWING
 
-
 router.get('/:event_id/like_event_switcher', authCheck, EventController.eventLikeSwitcher);
 
 router.get('/:event_id/participate_at_event', authCheck, EventController.participateAtEvent);
@@ -74,11 +73,5 @@ router.put('/:event_id/:comment_id',[
 ], authCheck, CommentController.editComment);
 
 router.delete('/:event_id/:comment_id', authCheck, CommentController.DeleteEventComment);
-
-
-
-
-
-
 
 module.exports = router;

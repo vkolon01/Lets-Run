@@ -1,0 +1,89 @@
+
+
+.main {
+    z-index: 1;
+}
+
+.comment-main {
+    display: flex;
+    flex-direction: column;
+    
+
+}
+
+.comment-main-header {
+    display: flex;
+    flex-direction: row;
+    width: 98%;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.comment-main-quote{
+    display: flex;
+    flex-direction: column;
+    width: 97%;
+
+    p:last-child {
+        position: relative;
+        margin-left: 1rem;
+        &:after {
+            content: "\201D";
+            font-size: 1.5rem;
+            margin-top: .5rem;
+        }
+    
+        &:before {
+            content: "\201C";
+            font-size: 1.5rem;
+        }
+    }
+
+
+}
+
+.comment-main-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 98%;
+}
+
+.comment-main-settings {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    div {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .report {
+        background: red;
+    }
+}
+
+:host-context(.evenStyle) .main {
+    background: #dbe0f1;
+    margin-bottom: 1rem;
+    position: relative;
+    // box-shadow: -4px 6px 12px 0px black;
+}
+
+:host-context(.oddStyle) .main {
+    background:  #a8b9e0;
+    margin-bottom: 1rem;
+    position: relative;
+    // box-shadow: 6px 6px 12px 0px black;
+}
+
+:host-context(.evenStyle) .comment-main-quote {
+    background: #9fa79f;
+}
+
+:host-context(.oddStyle) .comment-main-quote {
+    background:  #dcf0dc;
+
+}

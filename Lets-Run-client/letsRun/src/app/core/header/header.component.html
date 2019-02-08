@@ -14,7 +14,7 @@
     <div [@links]="animation_links" class="menu_nav--routes">
         <a routerLink="/" [@links]="animation_links" (click)="toggle_animation_state()">Main</a>
         <a routerLink="/events" [@links]="animation_links" (click)="toggle_animation_state()">Events</a>
-        
+        <a routerLink="/forum" [@links]="animation_links" (click)="toggle_animation_state()">Forum</a>
     </div>
     <div [@links]="animation_links" class="menu_nav--routes">
         <a *ngIf="userIsAuthenticated" [@links]="animation_links" (click)="onAddEvent()" (click)="toggle_animation_state()">Add event</a>
