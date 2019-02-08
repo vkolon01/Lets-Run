@@ -1,0 +1,61 @@
+<div class="main">
+
+    <div class="navigation">
+        <ul>
+            <li  [routerLink]="['/forum']"><a>main</a></li>
+            <li class="active"><a>{{topic?.title}}</a></li>
+        </ul>
+       </div>
+
+  <div *ngIf="!editMode" class="general-component--item general-component--list topic-header">
+    <div class="general-component--item-icon">
+      <i class="material-icons">
+        {{topic?.icon}}
+      </i>
+      <p>views: {{topic?.visitsCount}}</p>
+
+    </div>
+    <div class="general-component--item-desc">
+      <h2> <a>{{topic?.title}}</a></h2>
+      <p>{{topic?.description}}</p>
+    </div>
+  </div>
+
+  <h1>Posts List</h1>
+
+  <button (click)="addModeToggle()">Add post!</button>
+
+  <form class="general-add" *ngIf="addMode" [formGroup]="addPostToTopic" (ngSubmit)="addPost()">
+
+
+    <mat-form-field>
+      <input matInput placeholder="Title" formControlName="title">
+      <mat-hint>The title of the section!</mat-hint>
+      <mat-error *ngIf="addPostToTopic.get('title').errors">Title is requied</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea matInput cols="30" rows="10" placeholder="Description" formControlName="description"></textarea>
+      <mat-hint>The description of the section!</mat-hint>
+      <mat-error *ngIf="addPostToTopic.get('description').errors">Description is requied</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea matInput cols="30" rows="10" placeholder="Content" formControlName="content"></textarea>
+      <mat-hint>The content of the section!</mat-hint>
+      <mat-error *ngIf="addPostToTopic.get('content').errors">Content is requied</mat-error>
+    </mat-form-field>
+
+
+    <button type="submit">Add</button>
+    <button (click)="addModeToggle()">Cancel</button>
+  </form>
+  <div class="general-component--list" *ngFor="let post of posts; index as i">
+    <div  [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" > 
+        <div class="posts">
+            <app-post-item [post]="post" [topicId]="topic?._id"></app-post-item> 
+        </div>
+    </div>
+  </div>
+  <app-paginator [pager]="pager" (page)="setPage($event)"></app-paginator>
+</div>
