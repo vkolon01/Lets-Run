@@ -5,6 +5,8 @@ import { ForumService } from 'src/app/services/forum-main.service';
 import { Subscription } from 'rxjs';
 import { ForumModule } from '../forum.module';
 import { TopicCategoryModel } from 'src/app/models/forum_category.module';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-general-category',
@@ -18,12 +20,15 @@ export class GeneralCategoryComponent implements OnInit {
   checked = false;
   showGeneralAddField = false;
 
+  userRole;
+
   private forumSub: Subscription;
 
   generalCategory: TopicCategoryModel[];
 
   constructor(private snackBarService: SnackBarService,
-              private forumService: ForumService        
+              private forumService: ForumService,
+              private authService: AuthService
       ) { }
 
   ngOnInit() {
@@ -34,13 +39,11 @@ export class GeneralCategoryComponent implements OnInit {
       'forOwnersOnly': new FormControl(false)
     });
 
+    this.userRole = this.authService.getUserRole();
+
     this.forumSub = this.forumService.getCategory('General')
         .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.generalCategory = result.forumCategory;
-
-          console.log('this.generalCategory');
-         console.log(this.generalCategory);
-         
         })
   }
 

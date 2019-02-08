@@ -2,7 +2,7 @@
 <div class="general-category--main">
   <h1>General Category</h1>
 </div>
-<button (click)="showAddField()">Add forum in General section!</button>
+<button (click)="showAddField()"  *ngIf="userRole === 'admin'">Add forum in General section!</button>
 <form *ngIf="showGeneralAddField" class="general-add" [formGroup]="generalFormAdd" (ngSubmit)="addGeneralForumSection()">
 
         <mat-form-field>

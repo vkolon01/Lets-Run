@@ -225,6 +225,7 @@ exports.sign_in = function (req, res, next) {
         expiresIn: 3600,
         userId: fetchedUser._id.toString(),
         username: fetchedUser.username,
+        role: fetchedUser.role,
         message: constants.success.login
       });
     })

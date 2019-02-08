@@ -7,6 +7,7 @@ export interface UserModel {
     lastName: string,
     createdAt: Date,
     dob: Date,
+    role: string,
     invitesToPrivateEvent?: string[],
     comment?: [string],
     likedEvent?: [string],

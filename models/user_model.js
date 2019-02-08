@@ -23,6 +23,10 @@ var userSchema = new Schema({
     unique: true,
     required: true
   },
+  role: {
+    type: String,
+    default: "user"
+  },
   email: {
     type: String,
     unique: true,

@@ -16,6 +16,7 @@ export class AuthService {
     private token: string;
     private tokenTimer: any;
     private userId: string;
+    private userRole: string;
     private authStatusListener = new Subject<boolean>();
     private userIdListener = new Subject<string>();
     private registeredListener = new Subject<boolean>();
@@ -33,7 +34,10 @@ export class AuthService {
     
       getUserId() {
         return this.userId;
-        
+      }
+
+      getUserRole() {
+        return this.userRole;
       }
     
       getAuthStatusListener() {
@@ -75,7 +79,7 @@ export class AuthService {
 
       login(email: string, password: string) {
         const authData = { email: email, password: password };
-        return this.http.post<{ token: string; expiresIn: number; username: string; userId: string }>(BACKEND_URL + "/users/sign_in", authData)
+        return this.http.post<{ token: string; expiresIn: number; username: string; userId: string, role: string }>(BACKEND_URL + "/users/sign_in", authData)
             .subscribe(response => {
                 const token = response.token;
                 this.token = token;
@@ -85,6 +89,7 @@ export class AuthService {
                   this.setAuthTimer(expiresInDuration);
                   this.isAuthenticated = true;
                   this.userId = response.userId;
+                  this.userRole = response.role;
                   this.authStatusListener.next(true);
                   this.username = response.username;
                   this.usernameListener.next(response.username);
@@ -94,7 +99,7 @@ export class AuthService {
                     now.getTime() + expiresInDuration * 1000
                   );
                   // console.log(expirationDate);
-                  this.saveAuthData(token, expirationDate, this.userId, this.username);
+                  this.saveAuthData(token, expirationDate, this.userId, this.username, this.userRole);
                   this.snackBarService.showMessageWithDuration('Welcome ' + this.username + '!', 'OK', 3000);
                   this.router.navigate(["/"]);
                 }
@@ -122,6 +127,7 @@ export class AuthService {
           this.token = authInformation.token;
           this.isAuthenticated = true;
           this.userId = authInformation.userId;
+          this.userRole = authInformation.userRole;
           this.setAuthTimer(expiresIn / 1000);
           this.authStatusListener.next(true);
           this.userIdListener.next(authInformation.userId);
@@ -136,6 +142,7 @@ export class AuthService {
         this.authStatusListener.next(false);
         this.userIdListener.next(null);        
         this.userId = null;
+        this.userRole = null;
         clearTimeout(this.tokenTimer);
         this.clearAuthData();
         this.router.navigate(["/"]);
@@ -147,10 +154,11 @@ export class AuthService {
         }, duration * 1000);
       }
     
-      private saveAuthData(token: string, expirationDate: Date, userId: string, username: string) {
+      private saveAuthData(token: string, expirationDate: Date, userId: string, username: string, userRole: string) {
         localStorage.setItem("token", token);
         localStorage.setItem("expiration", expirationDate.toISOString());
         localStorage.setItem("userId", userId);
+        localStorage.setItem("userRole", userRole);
         localStorage.setItem("username", username);
       }
     
@@ -158,6 +166,7 @@ export class AuthService {
         localStorage.removeItem("token");
         localStorage.removeItem("expiration");
         localStorage.removeItem("userId");
+        localStorage.removeItem("userRole");
         localStorage.removeItem("username");
       }
     
@@ -166,6 +175,7 @@ export class AuthService {
         const expirationDate = localStorage.getItem("expiration");
         const userId = localStorage.getItem("userId");
         const username = localStorage.getItem("username");
+        const userRole = localStorage.getItem("userRole");
         if (!token || !expirationDate) {
           return;
         }
@@ -173,7 +183,8 @@ export class AuthService {
           token: token,
           expirationDate: new Date(expirationDate),
           userId: userId,
-          username: username
+          username: username,
+          userRole: userRole
         };
       }
 

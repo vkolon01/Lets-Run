@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TopicCategoryModel } from 'src/app/models/forum_category.module';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { ForumService } from 'src/app/services/forum-main.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-users-category',
@@ -17,12 +18,15 @@ export class UsersCategoryComponent implements OnInit {
   checked = false;
   showGeneralAddField = false;
 
+  userRole;
+
   private forumSub: Subscription;
 
   commonCategory: TopicCategoryModel[];
 
   constructor(private snackBarService: SnackBarService,
-              private forumService: ForumService        
+              private forumService: ForumService,
+              private authService: AuthService        
       ) { }
 
   ngOnInit() {
@@ -33,16 +37,11 @@ export class UsersCategoryComponent implements OnInit {
       'forOwnersOnly': new FormControl(false)
     });
 
+    this.userRole = this.authService.getUserRole();
+
     this.forumSub = this.forumService.getCategory('Common')
         .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.commonCategory = result.forumCategory;
-
-          console.log('result.forumList');
-          console.log(result.forumCategory);
-
-          console.log('this.commonCategory');
-          console.log(this.commonCategory);
-          
         })
   }
 
