@@ -1,38 +1,62 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { TopicCategoryModel } from 'src/app/models/forum_category.module';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { ForumService } from 'src/app/services/forum-main.service';
 import { DialogService } from 'src/app/services/dialogService';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-forum-item',
   templateUrl: './forum-item.component.html',
   styleUrls: ['./forum-item.component.scss', '../../global-css/forum-css.scss', '../../global-css/global-input.scss']
 })
-export class ForumItemComponent implements OnInit {
+export class ForumItemComponent implements OnInit{
 
   editMode = false;
   @Input() forumCategory: TopicCategoryModel;
   generalFormUpdate: FormGroup;
   checked = false;
   deleted = false;
+  postCount: number;
+
+  userId;
+
+  dateForLastComment;
+  // dateModified;
 
   constructor(private snackBarService: SnackBarService,
               private forumService: ForumService,
               private confirm: DialogService,
-              private route: Router
+              private route: Router,
+              private authService: AuthService
               ){ }
 
 
   ngOnInit() {
+    this.userId = this.authService.getUserId();
+
+
+    
     this.generalFormUpdate = new FormGroup({
       'icon': new FormControl(null, { validators: [Validators.required] }),
       'title': new FormControl(null, { validators: [Validators.required] }),
       'description': new FormControl(null, { validators: [Validators.required] }),
       'forOwnersOnly': new FormControl(false)
     });
+
+    if(this.forumCategory.lastComment) {
+      this.dateForLastComment = moment(this.forumCategory.lastComment.date).format("DD MMMM YY - HH:mm");
+    }
+
+    console.log('this.user');
+    console.log(this.userId);
+    
+    // this.dateForLastComment = this.forumCategory.lastComment.date;
+    this.postCount = this.forumCategory.posts.length;
 
     this.prepareFieldsForUpdate();
     

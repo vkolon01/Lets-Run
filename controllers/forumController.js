@@ -164,6 +164,7 @@ exports.deleteForumInCategoryById = async function(req, res, next) {
 
 exports.getTopicForCategoryById = async function(req, res, next) {
 
+  const errors = validationResult(req);
 
   const topic_id = req.params.topic_id;
 
@@ -229,7 +230,7 @@ exports.addPostToTopic = async function(req, res, next) {
 
     var foundTopic = await Topic.findById(topic_id);
 
-    var allPosts = await TopicPost.find();
+    var allPosts = await TopicPost.find({topic: topic_id}).sort({createdAt: -1});
 
     res.status(200).json({
       message: 'Topic with posts send!',
@@ -409,13 +410,46 @@ exports.addCommentToPost = async function(req, res, next) {
 
     await newComment.save();
 
+    const user = await User.findById(req.userData.userId);
+    const  username = user.username;
+
     await TopicPost.update({
       _id: post_id
     }, {
       $push: {
         postComments: newComment._id
+      },
+      $set: {
+        lastComment: {
+          username: username,
+          date: newComment.createdAt
+        }
       }
     });
+
+    const post = await TopicPost.findById(post_id);
+    const postInfo = {
+           name: post.title,
+           id: post._id
+          }
+
+    const topicToUpdate = await Topic.update({
+      posts: post_id
+    }, {
+      $set: {
+        lastComment: {
+          post: {
+            postName: postInfo.name,
+            postId: postInfo.id
+          },
+          userName: username,
+          date: newComment.createdAt
+        }
+      }
+    });
+
+    
+  
 
     var allComments = await PostComment.find({forumPost: post_id});
 
@@ -450,6 +484,60 @@ exports.updateCommentToPost = async function(req, res, next) {
     res.status(200).json({
       message: 'post was send!',
       comment: updatedComment
+    });
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    REPLY TO COMMENT IN POST
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.replyToCommentInPost = async function(req, res, next) {
+
+  const comment_id = req.body.comment_id;
+  const post_id = req.params.post_id;
+
+  try {
+
+    const commentToQuote = await PostComment.findById(comment_id);
+
+    const quoteContent = commentToQuote.content;
+
+    const authorOfQuote = await User.findById(commentToQuote.author._id);
+
+    const quoteAuthor = authorOfQuote.username;
+
+    // console.log('authorOfQuote.username');
+    // console.log(authorOfQuote.username);
+
+    var newComment = new PostComment({
+      content: req.body.content,
+      author: req.userData.userId,
+      quote: {
+        content: quoteContent,
+        quoteAuthor: quoteAuthor
+      },
+      forumPost: post_id
+    });
+
+    await newComment.save();
+
+    await TopicPost.update({
+      _id: post_id
+    }, {
+      $push: {
+        postComments: newComment._id
+      }
+    });
+
+    var allComments = await PostComment.find({forumPost: post_id});
+
+    res.status(200).json({
+      message: 'post was send!',
+      comments: allComments
     });
   } catch (error) {
     next(error);

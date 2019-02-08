@@ -6,6 +6,9 @@ export interface PostCommentModule {
     updatedAt?: string;
     content: string;
     author: UserModel;
-    quote?: string;
+    quote?: {
+        content: string,
+        quoteAuthor: string
+    },
     authorImage?: string;
 } 

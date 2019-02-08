@@ -35,6 +35,10 @@ var userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
+  lastComment: {
+    username: String,
+    date: Date
+  },
   topic: {
     type: Schema.Types.ObjectId,
     ref: 'Topic'

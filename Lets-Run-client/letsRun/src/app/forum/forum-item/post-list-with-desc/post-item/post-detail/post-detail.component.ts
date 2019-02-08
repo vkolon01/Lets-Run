@@ -7,6 +7,7 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { DialogService } from 'src/app/services/dialogService';
 import { PostCommentModule } from 'src/app/models/postComment.model';
 import { PagerService } from 'src/app/services/pager.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-post-detail',
@@ -31,16 +32,20 @@ export class PostDetailComponent implements OnInit {
   post: PostModel;
   post_id: string;
   postComments: PostCommentModule[] = [];
+
+  userId;
   
   constructor(private forumService: ForumService,
               private activeRoute: ActivatedRoute,
               private snackBarService: SnackBarService,
               private confirm: DialogService,
               private route: Router ,
-              private pagerService: PagerService     
+              private pagerService: PagerService,
+              private authService: AuthService
     ) { }
 
   ngOnInit() {
+    this.userId = this.authService.getUserId();
     this.updatePostForm = new FormGroup({
       'title': new FormControl(null, { validators: [Validators.required] }),
       'description': new FormControl(null, { validators: [Validators.required] }),
@@ -57,11 +62,27 @@ export class PostDetailComponent implements OnInit {
 
       this.forumService.getPostById(this.post_id).subscribe((result: {post: PostModel}) => {
         this.post = result.post;
+
+        console.log('post?.author._id');
+        console.log(this.post.author._id);
+
+        console.log('userId');
+        console.log(this.userId);
+
+        console.log('userId === ');
+        console.log(this.userId === this.post.author._id);
+
       });
 
 
+      
     });
 
+    this.setPage(1);
+  }
+
+  updateComments(comments: PostCommentModule[]) {
+    this.postComments = comments;
     this.setPage(1);
   }
 

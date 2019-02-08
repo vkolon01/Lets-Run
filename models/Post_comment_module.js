@@ -11,7 +11,8 @@ var userSchema = new Schema({
     required: true
   },
   quote: {
-    type: String
+    content: String,
+    quoteAuthor: String
   },
   forumPost: {
     type: Schema.Types.ObjectId,

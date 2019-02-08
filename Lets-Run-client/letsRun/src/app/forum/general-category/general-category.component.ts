@@ -38,12 +38,9 @@ export class GeneralCategoryComponent implements OnInit {
         .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.generalCategory = result.forumCategory;
 
-          console.log('result.forumList');
-          console.log(result.forumCategory);
-
           console.log('this.generalCategory');
-          console.log(this.generalCategory);
-          
+         console.log(this.generalCategory);
+         
         })
   }
 

@@ -46,6 +46,8 @@ router.post('/add_comment/:post_id', authCheck, forumHandler.addCommentToPost);
 
 router.put('/update_comment_to_post', authCheck, forumHandler.updateCommentToPost);
 
+router.put('/reply_to_comment/:post_id', authCheck, forumHandler.replyToCommentInPost);
+
 router.delete('/delete_comment_to_post/:comment_id', authCheck,  forumHandler.deleteCommentById);
 
 

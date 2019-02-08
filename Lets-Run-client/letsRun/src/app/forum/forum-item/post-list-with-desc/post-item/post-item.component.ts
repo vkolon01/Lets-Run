@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PostModel } from 'src/app/models/post.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { post } from 'selenium-webdriver/http';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-post-item',
@@ -14,11 +16,15 @@ export class PostItemComponent implements OnInit {
 
   @Input() post: PostModel;
   @Input() topicId: string;
-  
-
+  commentDate;
+  commentsCount;
   constructor(private route: Router) { }
 
   ngOnInit() {
+    this.commentsCount = this.post.postComments.length;
+    if(this.post.lastComment) {
+      this.commentDate = moment(this.post.lastComment.date).format("DD MMMM YY - HH:mm");
+    }
   }
 
 

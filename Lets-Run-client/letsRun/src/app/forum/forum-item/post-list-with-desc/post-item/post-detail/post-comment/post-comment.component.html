@@ -7,19 +7,39 @@
     <span>Created:  {{createdDate}}</span>
     <span>Modified {{modifiedDate}}</span>
   </div>
-  <div class="comment-main-content" *ngIf="!updateField">
+  <div class="comment-main-quote" *ngIf="comment?.quote">
+   <p>reply to: {{comment?.quote.quoteAuthor}}</p>
+   <p>{{comment?.quote.content}}</p>
+  </div> 
+  <!-- *ngIf="!updateField && !replyField" 
+  *ngIf="!updateField && !replyField && comment?.quote" -->
+  <div class="comment-main-content" >
     <p>{{comment?.content}}</p>
-    <div>
-        <i class="material-icons" (click)="updateCommentToggle()">settings</i>
-        <i class="material-icons" (click)="deleteComment()">delete_sweep</i> 
-      </div>
+  </div>
+  <div class="comment-main-settings" *ngIf="!updateField && !replyField">
+    <div *ngIf="userId === comment?.author._id">
+      <i class="material-icons" (click)="updateCommentToggle()">settings</i>
+      <i class="material-icons" (click)="deleteComment()">delete_sweep</i> 
+    </div>
+    <button class="report">Report</button>
+    <button (click)="replyFieldToggle()">Reply</button>
   </div>
       <form *ngIf="updateField" class="comment-main-content" [formGroup]="updateCommentForm" (ngSubmit)="updateCommentToThePost()">
           <mat-form-field>
-              <input matInput placeholder="Content" formControlName="content">
+              <textarea matInput placeholder="Content" formControlName="content"></textarea>
               <mat-error *ngIf="updateCommentForm.get('content').errors">Content is required</mat-error>
             </mat-form-field>
             <button type="submit">Update comment!</button>
             <i class="material-icons" (click)="updateCommentToggle()">clear</i> 
       </form>
+
+      <form *ngIf="replyField" class="comment-main-content" [formGroup]="replyToCommentForm" (ngSubmit)="replyToComment()">
+        <mat-form-field>
+            <textarea matInput placeholder="Content" formControlName="content"></textarea>
+            <mat-error *ngIf="replyToCommentForm.get('content').errors">Content is required</mat-error>
+          </mat-form-field>
+          <button type="submit">Reply!</button>
+          <i class="material-icons" (click)="replyFieldToggle()">clear</i> 
+    </form>
+      
 </div>

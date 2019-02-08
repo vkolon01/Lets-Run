@@ -3,9 +3,15 @@
         background: #0f246a !important;
     }
 
-    h2, p , i{
-        color: yellow;
+.topic-header {
+
+    div {
+        h2, p , i{
+            color: yellow;
+        }
     }
+
+}
 
     h2, p {
         text-align: center;
@@ -16,16 +22,26 @@ form {
     flex-direction: column;
 }
 
-.navigation{
-    width: 95%;
-
-    ul {
-        list-style: none;
-        padding: 5px 5px 5px 0;
-        display: inline-flex;
-        li {
-            font-size: 1.2rem;
-            padding-right: 5px;
-        }
+.posts {
+    position: relative;
+    margin-bottom: 1rem;
+    &:after,
+    &:before {
+        z-index: 1;
+        position: absolute;
+        content: "";
+        bottom: 10px;
+        left: 2px;
+        width: 50%;
+        top: 80%;
+        box-shadow: 0 15px 10px #777;
+        transform: rotate(-3deg);
+    }
+  
+    &:after {
+      right: 2px;
+      left: auto;
+      transform: rotate(3deg);
     }
 }
+

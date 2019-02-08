@@ -1,16 +1,16 @@
 <div class="main">
 
-    <div class="navigation">
+       <div class="navigation">
         <ul *ngIf="post">
-            <li><a [routerLink]="['/forum']">main</a></li>
-            <li><i class="material-icons">
-                navigate_next
-                </i></li>
-            <li><a [routerLink]="['/forum', post?.topic._id]">{{post?.topic.title}}</a></li>
-            <li><i class="material-icons">
-                navigate_next
-                </i></li>
-            <li>{{post?.title}}</li>
+            <li [routerLink]="['/forum']"><a>main</a></li>
+            <!-- <i class="material-icons">
+                code
+                </i>           -->
+            <li [routerLink]="['/forum', post?.topic._id]"><a>{{post?.topic.title}}</a></li>
+            <!-- <i class="material-icons">
+                code
+                </i>   -->
+            <li class="active"><a>{{post?.title}}</a></li>
         </ul>
        </div>
 
@@ -46,7 +46,7 @@
           <img src="{{post?.author.imagePath}}" alt="author avatar">
         </div>
             <p>views: {{post?.visitsCount}}</p>
-            <div class="settings">
+            <div class="settings"  *ngIf="userId === post?.author._id">
              <i class="material-icons" (click)="updateModeToggle()">settings</i> 
              <i class="material-icons" (click)="deletePost()">delete_sweep</i> 
             </div>
@@ -55,24 +55,21 @@
         <h2> <a>{{post?.description}}</a></h2>
         <p>{{post?.content}}</p>
       </div>
-      <div class="general-component--item-postCount">
-          <h2>45</h2>
-          <p>replies</p>
-      </div>
-      <div class="general-component--item-lastPost">
-          <p>Last comment by < name > on < post date ></p>
-      </div>
   </div>
 
   <form class="add-comment" [formGroup]="addCommentForm" (ngSubmit)="addCommentToThePost()">
       <mat-form-field>
-          <input matInput placeholder="Content" formControlName="content">
+          <textarea matInput placeholder="Content" formControlName="content"></textarea>
           <mat-error *ngIf="addCommentForm.get('content').errors">Content is required</mat-error>
         </mat-form-field>
         <button type="submit">Leave a comment!</button>
   </form>
   <div [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" *ngFor="let comment of postComments; index as i"> 
-      <app-post-comment [comment]="comment"></app-post-comment>
+      
+    <div class="comment">
+        <app-post-comment [comment]="comment" [postId]="post_id" (comments)="updateComments($event)"></app-post-comment>
+    </div>
+    
   </div>
 
   <!-- <div *ngFor="let item of pagedItems">{{item.name}}</div> -->

@@ -92,8 +92,11 @@ export class ForumService {
     }
 
     updateCommentToThePost(comment_id: string, content: string) {
-
         return this.http.put<{comment: PostCommentModule}>(BACKEND_URL + "/forum/update_comment_to_post", { comment_id, content});
+    }
+
+    replyToCommentToThePost(comment_id: string, postId: string, content: string) {
+        return this.http.put<{comments: PostCommentModule[]}>(BACKEND_URL + "/forum/reply_to_comment/" + postId, { comment_id, content});
     }
 
     deleteCommentToThePost(comment_id) {

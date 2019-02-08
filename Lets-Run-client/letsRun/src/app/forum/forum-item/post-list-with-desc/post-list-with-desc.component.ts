@@ -81,7 +81,6 @@ export class PostListWithDescComponent implements OnInit {
 
     this.forumService.addPostToTheTopic(topic_id, "folder_open" , title, description, content).subscribe((result: {postsList: PostModel[]}) => {
       this.posts = result.postsList;
-
       this.addModeToggle();
     })
   }

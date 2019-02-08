@@ -2,9 +2,8 @@
 
     <div class="navigation">
         <ul>
-            <li><a [routerLink]="['/forum']">main</a></li>
-            <li>>>></li>
-            <li>{{topic?.title}}</li>
+            <li  [routerLink]="['/forum']"><a>main</a></li>
+            <li class="active"><a>{{topic?.title}}</a></li>
         </ul>
        </div>
 
@@ -19,14 +18,6 @@
     <div class="general-component--item-desc">
       <h2> <a>{{topic?.title}}</a></h2>
       <p>{{topic?.description}}</p>
-    </div>
-    <div class="general-component--item-postCount">
-      <h2>45</h2>
-      <p>replies</p>
-    </div>
-    <div class="general-component--item-lastPost">
-      <p>Last comment by < name> in on < post date>
-      </p>
     </div>
   </div>
 
@@ -60,8 +51,10 @@
     <button (click)="addModeToggle()">Cancel</button>
   </form>
   <div class="general-component--list" *ngFor="let post of posts; index as i">
-    <div [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" > 
-    <app-post-item [post]="post" [topicId]="topic?._id"></app-post-item> 
+    <div  [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" > 
+        <div class="posts">
+            <app-post-item [post]="post" [topicId]="topic?._id"></app-post-item> 
+        </div>
     </div>
   </div>
   <app-paginator [pager]="pager" (page)="setPage($event)"></app-paginator>
