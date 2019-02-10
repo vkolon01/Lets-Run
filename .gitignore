@@ -5,3 +5,4 @@ Lets-Run-client/letsRun/src/environments/environment.prod.ts
 node_modules
 # Lets-Run-client/letsRun/api
 Lets-Run-client
+images/ignore
