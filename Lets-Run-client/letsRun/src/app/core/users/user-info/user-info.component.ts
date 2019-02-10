@@ -9,12 +9,15 @@ import * as moment from 'moment';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { AddEventComponent } from 'src/app/event/add-event/add-event.component';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss']
 })
 export class UserInfoComponent implements OnInit {
+
+  title;
 
   memberSince;
   age;
@@ -32,7 +35,8 @@ export class UserInfoComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private confirm: DialogService,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private titleService: Title
   ) { }
 
   ngOnInit() {
@@ -48,7 +52,8 @@ export class UserInfoComponent implements OnInit {
           this.user = value.user;
           this.memberSince = moment(this.user.createdAt).fromNow();
           this.age = moment().diff(this.user.dob, 'year');
-
+          this.title = this.user.firstName + " " + this.user.lastName +  " Info Panel";
+          this.titleService.setTitle(this.title);
           this.alreadyFriends = this.checkIfAlreadyFriends(value.user.followers, this.currentUserId);
         })
     })

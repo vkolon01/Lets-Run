@@ -21,6 +21,8 @@ import { PostItemComponent } from "./forum/forum-item/post-list-with-desc/post-i
 import { PostDetailComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-detail.component";
 import { PostCommentComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-comment/post-comment.component";
 import { PaginatorComponent } from "./core/paginator/paginator.component";
+import { HttpClientModule, HttpClientJsonpModule } from "@angular/common/http";
+import { ShareButtonsModule } from "@ngx-share/buttons";
 
 
 @NgModule({
@@ -41,6 +43,11 @@ import { PaginatorComponent } from "./core/paginator/paginator.component";
         PostCommentComponent,
     ],
     imports: [
+        HttpClientModule,       // (Required) For share counts
+        HttpClientJsonpModule,  // (Optional) Add if you want tumblr share counts
+        ShareButtonsModule.withConfig({
+            debug: true
+        }),
         CommonModule,
         RouterModule,
         ReactiveFormsModule,

@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { PagerService } from 'src/app/services/pager.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-events-list',
@@ -60,10 +61,11 @@ export class EventsListComponent implements OnInit, OnDestroy {
               private eventService: EventService,
               private authService: AuthService,
               private route: Router,
-              private pagerService: PagerService) { }
+              private pagerService: PagerService,
+              private titleService: Title) { }
 
   ngOnInit() {
-    
+    this.titleService.setTitle("Event List");
     this.setPage(1);
 
     this.userIsAuthenticated = this.authService.getIsAuth();

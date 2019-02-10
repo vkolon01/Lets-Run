@@ -4,6 +4,7 @@
                   EVENT SHOWCASE SECTION   
    ///////////////////////////////////////////-->
 
+
   <div class="event-back-edit-delete-container">
     <div class="event-back-photoChange">
       <mat-icon routerLink="/events" class="back_icon"> settings_backup_restore </mat-icon>
@@ -38,9 +39,22 @@
         (click)="takePart()" matBadgeColor="warn"> directions_run </mat-icon>
     </div>
   </div>
-
+  
+            <!-- Your share button code -->
+            <!-- <div class="fb-share-button" 
+            data-href="https://www.your-domain.com/your-page.html" 
+            data-layout="button_count">
+          </div> -->
+          
  
   <div class="event-description-commentSection">
+
+      <share-buttons 
+      show="5" 
+      [showText]="true"
+      image="{{ event?.picture }}"
+      autoSetMeta="true">
+      </share-buttons>
 
     <button *ngIf="userId === creatorId && event?.privateEvent" (click)="invite = !invite">Send invites</button>
 

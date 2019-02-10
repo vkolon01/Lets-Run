@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS, HttpClientJsonpModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { EventDetailComponent } from './event/event-detail/event-detail.component';
 import { AngularMaterialModule } from './angular-material.module';
@@ -18,6 +18,9 @@ import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dial
 import { LoginComponent } from './auth/login/login.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { AddEventComponent } from './event/add-event/add-event.component';
+
+import { ShareButtonsModule } from '@ngx-share/buttons';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +29,7 @@ import { AddEventComponent } from './event/add-event/add-event.component';
     LoginComponent,
     SigninComponent,
     AddEventComponent,
+
   ],
   imports: [
     BrowserModule.withServerTransition({appId: "lets-run"}),
@@ -34,8 +38,7 @@ import { AddEventComponent } from './event/add-event/add-event.component';
     CoreModule,
     UiScrollModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

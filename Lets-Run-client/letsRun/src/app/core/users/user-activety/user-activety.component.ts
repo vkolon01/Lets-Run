@@ -7,6 +7,7 @@ import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import { shrinkUpAndDownAnimation, shrinkUpAndDownAnimationField } from 'src/app/animations/animationsUpDown';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-activety',
@@ -19,7 +20,7 @@ export class UserActivetyComponent implements OnInit {
   current_user_id: string;
   private userSubscription: Subscription;
   user: UserModel;
-  privatUserInfo: UserModel;
+  privateUserInfo: UserModel;
 
   // createdEvents: boolean = false;
   attemptEvents: boolean = false;
@@ -34,7 +35,8 @@ export class UserActivetyComponent implements OnInit {
    constructor(public userService: UserService,
     private activeRoute: ActivatedRoute,
      private authService: AuthService,
-     private confirm: DialogService
+     private confirm: DialogService,
+     private titleService: Title
      ) { }
 
      ngOnInit() {
@@ -48,6 +50,7 @@ export class UserActivetyComponent implements OnInit {
           this.userSubscription = this.userService.getUserListener()
               .subscribe((value: {user: UserModel}) => {
                 this.user = value.user
+                this.titleService.setTitle(this.user.firstName + " " + this.user.lastName + " Activety");
               })
 
 
@@ -71,14 +74,11 @@ export class UserActivetyComponent implements OnInit {
     }
 
     loadPrivateInfo() {
-      console.log('this.user_id');
-      console.log(this.user_id);
-      
 
       if(this.user_id) {
         this.userService.getPrivateUserInfo(this.user_id)
-        .subscribe(privatInfo => {
-          this.privatUserInfo = privatInfo.user;
+        .subscribe(privateInfo => {
+          this.privateUserInfo = privateInfo.user;
         });
       }
 

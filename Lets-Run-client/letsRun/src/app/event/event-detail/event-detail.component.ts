@@ -19,6 +19,7 @@ import { Weather } from 'src/app/models/weather.model';
 import {Router} from "@angular/router"
 declare var google: any;
 import { } from 'googlemaps';
+import { Title } from '@angular/platform-browser';
 
 registerLocaleData(localeRu);
 
@@ -59,6 +60,8 @@ export class EventDetailComponent implements OnInit {
 
   commentForm: FormGroup;
 
+  FB: any;
+
   commentInputArea = false;
 
   userId: string;
@@ -74,7 +77,8 @@ export class EventDetailComponent implements OnInit {
     private confirm: DialogService,
     private dialog: MatDialog,
     private weatherSer: WeatherService,
-    private router: Router
+    private router: Router,
+    private titleService: Title
   ) { }
 
   datasource = new Datasource({
@@ -97,35 +101,36 @@ export class EventDetailComponent implements OnInit {
     this.commentForm = new FormGroup({
       'content': new FormControl(null, { validators: [Validators.required] }),
     });
-
+    
     this.userId = this.authService.getUserId();
-
+    
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
-
+      
       this.eventId = paramMap.get('event_id');
       this.eventService.getEventById(this.eventId);
-
+      
       this.eventLikeSubscribe = this.eventService.getLikesUpdate()
       .subscribe((value: { likes: string[] }) => {
         this.eventLikes = value.likes
       });
-
+      
       this.creatorNameAndIdSub = this.eventService.getCreatorNameAndId()
       .subscribe((value: { creatorName: string, creatorId: string }) => {
         this.creatorId = value.creatorId;
         this.eventCreatorName = value.creatorName;
       });
-
+      
       this.eventSub = this.eventService.getEventUpdate()
-        .subscribe((value: { event: EventModule }) => {
-          this.event = value.event;
-          this.eventLocation = value.event.location;
-          this.eventCreatedAt = moment(this.event.createdAt).fromNow();
-          this.checkForLikeExistence();
-          this.checkForAttemptExistence();
-          const eventDate = value.event.eventDate;
-          this.formatedEventDate = moment(eventDate).format('YYYY-MM-DD').toString();
-          this.geocodeAddress(this.geocoder, value.event.location);
+      .subscribe((value: { event: EventModule }) => {
+        this.event = value.event;
+        this.eventLocation = value.event.location;
+        this.eventCreatedAt = moment(this.event.createdAt).fromNow();
+        this.checkForLikeExistence();
+        this.checkForAttemptExistence();
+        const eventDate = value.event.eventDate;
+        this.formatedEventDate = moment(eventDate).format('YYYY-MM-DD').toString();
+        this.geocodeAddress(this.geocoder, value.event.location);
+        this.titleService.setTitle("Event: " + this.event.title);
           
 
         });

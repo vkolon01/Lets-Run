@@ -5,6 +5,7 @@ import { DialogService } from 'src/app/services/dialogService';
 import { AuthService } from 'src/app/services/auth.service'
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-friends',
@@ -21,7 +22,8 @@ export class UserFriendsComponent implements OnInit {
   constructor(public userService: UserService,
     private activeRoute: ActivatedRoute,
      private authService: AuthService,
-     private confirm: DialogService
+     private confirm: DialogService,
+     private titleService: Title
      ) { }
 
   ngOnInit() {
@@ -37,6 +39,7 @@ export class UserFriendsComponent implements OnInit {
         this.userSubscription = this.userService.getUserListener()
             .subscribe((value: {user: UserModel}) => {
               this.user = value.user;
+              this.titleService.setTitle(this.user.firstName + " " + this.user.lastName + " Friends");
             })
     })
   }

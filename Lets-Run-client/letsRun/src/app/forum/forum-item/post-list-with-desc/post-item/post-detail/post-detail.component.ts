@@ -8,6 +8,7 @@ import { DialogService } from 'src/app/services/dialogService';
 import { PostCommentModule } from 'src/app/models/postComment.model';
 import { PagerService } from 'src/app/services/pager.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post-detail',
@@ -41,7 +42,8 @@ export class PostDetailComponent implements OnInit {
               private confirm: DialogService,
               private route: Router ,
               private pagerService: PagerService,
-              private authService: AuthService
+              private authService: AuthService,
+              private titleService: Title
     ) { }
 
   ngOnInit() {
@@ -62,15 +64,7 @@ export class PostDetailComponent implements OnInit {
 
       this.forumService.getPostById(this.post_id).subscribe((result: {post: PostModel}) => {
         this.post = result.post;
-
-        console.log('post?.author._id');
-        console.log(this.post.author._id);
-
-        console.log('userId');
-        console.log(this.userId);
-
-        console.log('userId === ');
-        console.log(this.userId === this.post.author._id);
+        this.titleService.setTitle("Post: " + this.post.title);
 
       });
 

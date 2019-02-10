@@ -12,7 +12,6 @@ import { CoreModule } from "../core.module";
 
 @NgModule({
     declarations: [EventsListComponent
-        ,
     ],
     imports: [
         CommonModule,

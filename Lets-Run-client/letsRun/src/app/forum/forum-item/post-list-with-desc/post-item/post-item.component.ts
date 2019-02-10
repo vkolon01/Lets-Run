@@ -18,6 +18,8 @@ export class PostItemComponent implements OnInit {
   @Input() topicId: string;
   commentDate;
   commentsCount;
+  editMode = false;
+
   constructor(private route: Router) { }
 
   ngOnInit() {

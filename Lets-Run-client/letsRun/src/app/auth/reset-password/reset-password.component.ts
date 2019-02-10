@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-reset-password',
@@ -14,9 +15,11 @@ export class ResetPasswordComponent implements OnInit {
 
   constructor(private userService: UserService,
               private snackBarService: SnackBarService,
+              private titleService: Title
               ) { }
 
   ngOnInit() {
+    this.titleService.setTitle("Reset Password Page");
     this.resetEmailForm = new FormGroup({
       'email': new FormControl(null, {validators: [Validators.required, Validators.email]})
     });

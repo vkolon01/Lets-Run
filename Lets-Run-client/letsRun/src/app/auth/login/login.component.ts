@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(public authService: AuthService,
               private snackBarService: SnackBarService,
               private dialogRef: MatDialogRef<LoginComponent>
+              
      ) { }
 
   ngOnInit() {

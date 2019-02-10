@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-forum-item',
@@ -52,8 +53,6 @@ export class ForumItemComponent implements OnInit{
       this.dateForLastComment = moment(this.forumCategory.lastComment.date).format("DD MMMM YY - HH:mm");
     }
 
-    console.log('this.user');
-    console.log(this.userId);
     
     // this.dateForLastComment = this.forumCategory.lastComment.date;
     this.postCount = this.forumCategory.posts.length;

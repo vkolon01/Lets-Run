@@ -47,15 +47,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
                 })
               }
 
-              // SejimF
-              // http://localhost:4200/userpage/5c0852b63955d001780e24f2/info
-
-              // maksoutlook
-              // http://localhost:4200/userpage/5c4c6a330576fd26dc801fc5/info
-
-              // RomanSnakes
-              //                               /5c252ea23c24a21b0ca8a6ce
-
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.userIdSub = this.authService.getUserIdListener().subscribe(result => {

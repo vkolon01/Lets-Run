@@ -178,6 +178,12 @@ exports.getTopicForCategoryById = async function(req, res, next) {
       throw error;
     }
 
+    const currentViewsCount = foundTopic.visitsCount;
+
+    await Topic.update({_id: topic_id}, {
+      visitsCount: currentViewsCount + 1
+    })
+
     
     res.status(200).json({
       message: 'Topic with posts send!',
@@ -284,6 +290,12 @@ exports.getPostById = async function(req, res, next) {
     var foundPost = await TopicPost.findById(post_id)
                      .populate({path: "author", select: "username _id imagePath"})
                      .populate({path: "topic", select: "title _id"});  
+
+    const currentViewsCount = foundPost.visitsCount;
+
+    await TopicPost.update({ _id: post_id },{
+      visitsCount: currentViewsCount + 1
+    })
 
     res.status(200).json({
       message: 'post was send!',

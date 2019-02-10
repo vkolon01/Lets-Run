@@ -5,6 +5,7 @@ import { ForumService } from 'src/app/services/forum-main.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostModel } from 'src/app/models/post.model';
 import { PagerService } from 'src/app/services/pager.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post-list-with-desc',
@@ -16,6 +17,7 @@ export class PostListWithDescComponent implements OnInit {
   forumList_id;
   topic: TopicCategoryModel; 
   addMode = false;
+  editMode = false;
   posts: PostModel[];
 
       //total items in collection
@@ -31,7 +33,8 @@ export class PostListWithDescComponent implements OnInit {
 
   constructor(private activeRoute: ActivatedRoute,
               private forumService: ForumService,
-              private pagerService: PagerService
+              private pagerService: PagerService,
+              private titleService: Title
               ) { }
 
   ngOnInit() {
@@ -48,6 +51,7 @@ export class PostListWithDescComponent implements OnInit {
 
       this.forumService.getTopicById(this.forumList_id).subscribe((result: {foundTopic: TopicCategoryModel}) => {
         this.topic = result.foundTopic;
+        this.titleService.setTitle("Topic: " + this.topic.title);
     });
 
     this.setPage(1);
