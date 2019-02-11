@@ -1,13 +1,13 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { TopicCategoryModel } from 'src/app/models/forum_category.module';
+import { TopicCategoryModel } from '../../models/forum_category.module';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { ForumService } from 'src/app/services/forum-main.service';
-import { DialogService } from 'src/app/services/dialogService';
+import { SnackBarService } from '../../services/snack-bar.service';
+import { ForumService } from '../../services/forum-main.service';
+import { DialogService } from '../../services/dialogService';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
-import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-forum-item',

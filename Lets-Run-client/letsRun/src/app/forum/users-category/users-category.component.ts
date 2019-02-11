@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { TopicCategoryModel } from 'src/app/models/forum_category.module';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { ForumService } from 'src/app/services/forum-main.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { TopicCategoryModel } from '../../models/forum_category.module';
+import { SnackBarService } from '../../services/snack-bar.service';
+import { ForumService } from '../../services/forum-main.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-users-category',

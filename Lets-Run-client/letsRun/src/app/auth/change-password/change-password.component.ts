@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { UserService } from '../../services/user.service';
+import { SnackBarService } from '../../services/snack-bar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material'
 
-import { LoginComponent } from 'src/app/auth/login/login.component';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-change-password',

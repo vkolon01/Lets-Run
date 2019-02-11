@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PagerService } from 'src/app/services/pager.service';
 
 @Component({
   selector: 'app-paginator',

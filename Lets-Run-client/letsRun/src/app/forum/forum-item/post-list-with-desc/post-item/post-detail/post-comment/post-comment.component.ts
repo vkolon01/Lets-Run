@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PostCommentModule } from 'src/app/models/postComment.model';
+import { PostCommentModule } from '../../../../../../models/postComment.model';
 import * as moment from 'moment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ForumService } from 'src/app/services/forum-main.service';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { DialogService } from 'src/app/services/dialogService';
-import { AuthService } from 'src/app/services/auth.service';
+import { ForumService } from '../../../../../../services/forum-main.service';
+import { SnackBarService } from '../../../../../../services/snack-bar.service';
+import { DialogService } from '../../../../../../services/dialogService';
+import { AuthService } from '../../../../../../services/auth.service';
 
 @Component({
   selector: 'app-post-comment',

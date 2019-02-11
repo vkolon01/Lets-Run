@@ -1,3 +1,6 @@
+import { NgtUniversalModule } from '@ng-toolkit/universal';
+import { CommonModule } from '@angular/common';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -27,8 +30,14 @@ import { AddEventComponent } from './event/add-event/add-event.component';
     SigninComponent,
     AddEventComponent,
   ],
-  imports: [
-    BrowserModule,
+  imports:[
+ CommonModule,
+NgtUniversalModule,
+ 
+ TransferHttpCacheModule,
+HttpClientModule,
+ 
+    
     AngularMaterialModule,
     AppRoutingModule,
     CoreModule,
@@ -41,7 +50,6 @@ import { AddEventComponent } from './event/add-event/add-event.component';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
-  bootstrap: [AppComponent],
   entryComponents: [ErrorComponent, MatConfirmDialogComponent, LoginComponent, SigninComponent, AddEventComponent]
 })
 export class AppModule { }

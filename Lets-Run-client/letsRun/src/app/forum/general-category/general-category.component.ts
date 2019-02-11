@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { ForumService } from 'src/app/services/forum-main.service';
+import { SnackBarService } from '../../services/snack-bar.service';
+import { ForumService } from '../../services/forum-main.service';
 import { Subscription } from 'rxjs';
 import { ForumModule } from '../forum.module';
-import { TopicCategoryModel } from 'src/app/models/forum_category.module';
-import { AuthService } from 'src/app/services/auth.service';
-import { UserService } from 'src/app/services/user.service';
+import { TopicCategoryModel } from '../../models/forum_category.module';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-general-category',

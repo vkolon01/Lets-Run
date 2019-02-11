@@ -1,0 +1,8 @@
+{
+  "universal": {
+    "project": "letsRun",
+    "skipInstall": false,
+    "directory": ".",
+    "http": true
+  }
+}

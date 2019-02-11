@@ -4,11 +4,10 @@ import { EventService } from '../../services/event.service';
 import { PageEvent } from "@angular/material";
 import { EventModule } from '../../models/event.model';
 import { Subscription } from 'rxjs';
-import { mimeType } from 'src/app/validators/mime-type.validator';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { PagerService } from 'src/app/services/pager.service';
+import { SnackBarService } from '../../services/snack-bar.service';
+import { PagerService } from '../../services/pager.service';
 
 @Component({
   selector: 'app-events-list',

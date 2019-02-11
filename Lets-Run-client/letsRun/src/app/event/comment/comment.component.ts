@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CommentModule } from 'src/app/models/comment.model';
+import { CommentModule } from '../../models/comment.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { CommentService } from '../../services/comment.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { DialogService } from 'src/app/services/dialogService';
+import { AuthService } from '../../services/auth.service';
+import { DialogService } from '../../services/dialogService';
 import * as moment from 'moment';
 
 @Component({

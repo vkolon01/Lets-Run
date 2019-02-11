@@ -2,9 +2,8 @@
 declare var google: any;
 import { } from 'googlemaps';
 import { Component, OnInit, ViewChild, Input, OnChanges } from '@angular/core';
-import { environment } from "../../../environments/environment"
 import { shrinkUpAndDownAnimation } from '../../animations/animationsUpDown'; 
-import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { SnackBarService } from '../../services/snack-bar.service';
 
 @Component({
   selector: 'app-google-map',

@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { UserModel } from '../../../models/user.model';
 import { ParamMap, ActivatedRoute } from '@angular/router';
-import { DialogService } from 'src/app/services/dialogService';
-import { AuthService } from 'src/app/services/auth.service';
+import { DialogService } from '../../../services/dialogService';
+import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../services/user.service';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
-import { shrinkUpAndDownAnimation, shrinkUpAndDownAnimationField } from 'src/app/animations/animationsUpDown';
+import { shrinkUpAndDownAnimation, shrinkUpAndDownAnimationField } from '../../../animations/animationsUpDown';
 
 @Component({
   selector: 'app-user-activety',
