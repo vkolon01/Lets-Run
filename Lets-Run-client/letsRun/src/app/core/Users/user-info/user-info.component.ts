@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { UserModel } from '../../../models/user.model';
 import { UserService } from '../../../services/user.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
-import { DialogService } from 'src/app/services/dialogService';
+import { AuthService } from '../../../services/auth.service';
+import { DialogService } from '../../../services/dialogService';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { SnackBarService } from '../../../services/snack-bar.service';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { AddEventComponent } from 'src/app/event/add-event/add-event.component';
+import { AddEventComponent } from '../../../event/add-event/add-event.component';
 @Component({
   selector: 'app-user-info',
   templateUrl: './user-info.component.html',

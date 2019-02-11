@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserModel } from 'src/app/models/user.model';
-import { UserService } from 'src/app/services/user.service';
+import { UserModel } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
 import { Subscription, Observable } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
-import { EventService } from 'src/app/services/event.service';
-import { shrinkUpAndDownAnimationField } from 'src/app/animations/animationsUpDown';
+import { EventService } from '../../services/event.service';
+import { shrinkUpAndDownAnimationField } from '../../animations/animationsUpDown';
 
 @Component({
   selector: 'app-send-invites',

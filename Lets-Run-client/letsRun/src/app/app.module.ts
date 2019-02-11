@@ -28,7 +28,7 @@ import { AddEventComponent } from './event/add-event/add-event.component';
     AddEventComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({appId: 'lets-run'}),
     AngularMaterialModule,
     AppRoutingModule,
     CoreModule,

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { SnackBarService } from '../../services/snack-bar.service';
 import { MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 
@@ -15,6 +15,7 @@ export class SigninComponent implements OnInit {
   signInFrom: FormGroup;
   success;
   private authSub: Subscription;
+  hide = false;
 
   constructor(public authService: AuthService,
       private snackBarService: SnackBarService,

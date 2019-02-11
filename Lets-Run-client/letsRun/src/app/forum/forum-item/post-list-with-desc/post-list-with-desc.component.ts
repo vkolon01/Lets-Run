@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { TopicCategoryModel } from 'src/app/models/forum_category.module';
-import { ForumService } from 'src/app/services/forum-main.service';
+import { TopicCategoryModel } from '../../../models/forum_category.module';
+import { ForumService } from '../../../services/forum-main.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PostModel } from 'src/app/models/post.model';
-import { PagerService } from 'src/app/services/pager.service';
+import { PostModel } from '../../../models/post.model';
+import { PagerService } from '../../../services/pager.service';
 
 @Component({
   selector: 'app-post-list-with-desc',

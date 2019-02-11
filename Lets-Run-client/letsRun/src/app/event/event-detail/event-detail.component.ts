@@ -5,17 +5,17 @@ import { CommentService } from '../../services/comment.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription,} from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { Datasource } from 'ngx-ui-scroll';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { DialogService } from 'src/app/services/dialogService';
+import { SnackBarService } from '../../services/snack-bar.service';
+import { DialogService } from '../../services/dialogService';
 import * as moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material'
 import { AddEventComponent } from '../add-event/add-event.component';
-import { WeatherService } from 'src/app/services/weather.service';
-import { Weather } from 'src/app/models/weather.model';
+import { WeatherService } from '../../services/weather.service';
+import { Weather } from '../../models/weather.model';
 import {Router} from "@angular/router"
 declare var google: any;
 import { } from 'googlemaps';

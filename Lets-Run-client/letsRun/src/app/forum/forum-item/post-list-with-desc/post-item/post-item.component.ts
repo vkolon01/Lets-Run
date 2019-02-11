@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PostModel } from 'src/app/models/post.model';
+import { PostModel } from '../../../../models/post.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { post } from 'selenium-webdriver/http';

@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, OnChanges, HostListener } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { MatDialog, MatDialogConfig } from '@angular/material'
 import { ScrollDispatchModule, ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
 
-import { LoginComponent } from 'src/app/auth/login/login.component';
-import { SigninComponent } from 'src/app/auth/signin/signin.component';
-import { AddEventComponent } from 'src/app/event/add-event/add-event.component';
+import { LoginComponent } from '../../auth/login/login.component';
+import { SigninComponent } from '../../auth/signin/signin.component';
+import { AddEventComponent } from '../../event/add-event/add-event.component';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { navBarAnimationFromLeft } from 'src/app/animations/animationsUpDown';
+import { navBarAnimationFromLeft } from '../../animations/animationsUpDown';
 
 @Component({
   selector: 'app-header',

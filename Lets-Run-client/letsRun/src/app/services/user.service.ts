@@ -5,8 +5,8 @@ import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment"
 import { UserModel } from "../models/user.model";
 import { Subject } from "rxjs";
-import { SnackBarService } from "src/app/services/snack-bar.service";
-import { AuthService } from "src/app/services/auth.service";
+import { SnackBarService } from "../services/snack-bar.service";
+import { AuthService } from "../services/auth.service";
 import { routerNgProbeToken } from "@angular/router/src/router_module";
 
 

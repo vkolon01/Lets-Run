@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { mimeType } from 'src/app/validators/mime-type.validator';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { mimeType } from '../../validators/mime-type.validator';
+import { SnackBarService } from '../../services/snack-bar.service';
 import { EventService } from '../../services/event.service';
 import { MatDialogRef } from '@angular/material';
 import {MAT_DIALOG_DATA} from '@angular/material';

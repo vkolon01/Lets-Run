@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PostModel } from 'src/app/models/post.model';
-import { ForumService } from 'src/app/services/forum-main.service';
+import { PostModel } from '../../../../../models/post.model';
+import { ForumService } from '../../../../../services/forum-main.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { DialogService } from 'src/app/services/dialogService';
-import { PostCommentModule } from 'src/app/models/postComment.model';
-import { PagerService } from 'src/app/services/pager.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { SnackBarService } from '../../../../../services/snack-bar.service';
+import { DialogService } from '../../../../../services/dialogService';
+import { PostCommentModule } from '../../../../../models/postComment.model';
+import { PagerService } from '../../../../../services/pager.service';
+import { AuthService } from '../../../../../services/auth.service';
 
 @Component({
   selector: 'app-post-detail',

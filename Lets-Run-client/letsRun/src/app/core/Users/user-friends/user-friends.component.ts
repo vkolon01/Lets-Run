@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserModel } from '../../../models/user.model';
-import { DialogService } from 'src/app/services/dialogService';
-import { AuthService } from 'src/app/services/auth.service'
+import { DialogService } from '../../../services/dialogService';
+import { AuthService } from '../../../services/auth.service'
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-user-friends',

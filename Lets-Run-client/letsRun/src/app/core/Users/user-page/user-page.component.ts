@@ -3,10 +3,10 @@ import { UserService } from '../../../services/user.service';
 import { UserModel } from '../../../models/user.model';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { mimeType } from 'src/app/validators/mime-type.validator';
-import { DialogService } from 'src/app/services/dialogService';
+import { mimeType } from '../../../validators/mime-type.validator';
+import { DialogService } from '../../../services/dialogService';
 // import { userInfo } from 'os';
 
 @Component({
