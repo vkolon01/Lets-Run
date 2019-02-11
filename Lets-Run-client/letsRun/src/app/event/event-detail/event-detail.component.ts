@@ -101,6 +101,7 @@ export class EventDetailComponent implements OnInit {
     this.userId = this.authService.getUserId();
 
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
+      
 
       this.eventId = paramMap.get('event_id');
       this.eventService.getEventById(this.eventId);

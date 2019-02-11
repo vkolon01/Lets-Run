@@ -229,7 +229,10 @@ export class EventService {
     eventLikeSwitcher(id: string) {
         return this.http.get(BACKEND_URL + '/events/' + id + '/like_event_switcher')
             .subscribe(result => {
-
+                
+                console.log('result');
+                console.log(result);
+                
                 this.getEventById(id);
             });
     }

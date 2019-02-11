@@ -40,6 +40,16 @@
   </div>
 
  
+<share-buttons [theme]="'modern-dark'"
+[include]="['facebook','twitter','linkedin','google','pinterest','reddit','tumblr','mix','vk','telegram','messenger','whatsapp','xing','line','sms','email','print','copy']"
+[show]="8"
+[showText]="true"
+[title]="'Title for event'"
+[description]="'Some description'"
+[image]="'https://en.wikipedia.org/wiki/File:Lemgo_-_Marktplatz_mit_Rathaus.jpg'"
+></share-buttons>
+<!-- [showCount]="true" -->
+ 
   <div class="event-description-commentSection">
 
     <button *ngIf="userId === creatorId && event?.privateEvent" (click)="invite = !invite">Send invites</button>
