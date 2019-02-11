@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, OnChanges, HostListener } from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import { Component, OnInit, OnDestroy, OnChanges, HostListener , Inject} from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog, MatDialogConfig } from '@angular/material'
@@ -34,7 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   pageYscroll = 0;
   showNavbar = false;
 
-  constructor(private authService: AuthService,
+  constructor(@Inject(WINDOW) private window: Window, private authService: AuthService,
               private dialog: MatDialog,
               private scrollDispatcher: ScrollDispatcher)
               {
@@ -86,7 +87,7 @@ ngOnChanges() {
       return;
     }
 
-    this.pageYscroll = window.pageYOffset;
+    this.pageYscroll = this.window.pageYOffset;
 
     if(this.pageYscroll > this.lastPageYscroll) {
       this.showNavbar = true;

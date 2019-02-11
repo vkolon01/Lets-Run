@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { LOCAL_STORAGE } from '@ng-toolkit/universal';
+import { Injectable, Inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
@@ -22,7 +23,7 @@ export class AuthService {
     private registeredListener = new Subject<boolean>();
     private username: string;
     private usernameListener = new Subject<string>();
-    constructor(private http: HttpClient, private router: Router, private snackBarService: SnackBarService) {}
+    constructor(@Inject(LOCAL_STORAGE) private localStorage: any, private http: HttpClient, private router: Router, private snackBarService: SnackBarService) {}
 
     getToken() {
         return this.token;
@@ -155,27 +156,27 @@ export class AuthService {
       }
     
       private saveAuthData(token: string, expirationDate: Date, userId: string, username: string, userRole: string) {
-        localStorage.setItem("token", token);
-        localStorage.setItem("expiration", expirationDate.toISOString());
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("userRole", userRole);
-        localStorage.setItem("username", username);
+        this.localStorage.setItem("token", token);
+        this.localStorage.setItem("expiration", expirationDate.toISOString());
+        this.localStorage.setItem("userId", userId);
+        this.localStorage.setItem("userRole", userRole);
+        this.localStorage.setItem("username", username);
       }
     
       private clearAuthData() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("expiration");
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userRole");
-        localStorage.removeItem("username");
+        this.localStorage.removeItem("token");
+        this.localStorage.removeItem("expiration");
+        this.localStorage.removeItem("userId");
+        this.localStorage.removeItem("userRole");
+        this.localStorage.removeItem("username");
       }
     
       private getAuthData() {
-        const token = localStorage.getItem("token");
-        const expirationDate = localStorage.getItem("expiration");
-        const userId = localStorage.getItem("userId");
-        const username = localStorage.getItem("username");
-        const userRole = localStorage.getItem("userRole");
+        const token = this.localStorage.getItem("token");
+        const expirationDate = this.localStorage.getItem("expiration");
+        const userId = this.localStorage.getItem("userId");
+        const username = this.localStorage.getItem("username");
+        const userRole = this.localStorage.getItem("userRole");
         if (!token || !expirationDate) {
           return;
         }
