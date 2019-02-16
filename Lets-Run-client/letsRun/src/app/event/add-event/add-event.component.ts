@@ -96,8 +96,6 @@ export class AddEventComponent implements OnInit {
     const file = (event.target as HTMLInputElement).files[0];
     this.eventForm.patchValue({ image: file });
     this.eventForm.get('image').updateValueAndValidity();
-    console.log('event.target');
-    console.log(event);
 
     const reader = new FileReader();
     reader.onload = () => {

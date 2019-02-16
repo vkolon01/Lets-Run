@@ -51,11 +51,7 @@ export class ForumItemComponent implements OnInit{
     if(this.forumCategory.lastComment) {
       this.dateForLastComment = moment(this.forumCategory.lastComment.date).format("DD MMMM YY - HH:mm");
     }
-
-    console.log('this.user');
-    console.log(this.userId);
     
-    // this.dateForLastComment = this.forumCategory.lastComment.date;
     this.postCount = this.forumCategory.posts.length;
 
     this.prepareFieldsForUpdate();

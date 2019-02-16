@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { EventModule } from '../../models/event.model';
 import { EventService } from '../../services/event.service';
 import { CommentService } from '../../services/comment.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, ActivatedRouteSnapshot } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription,} from 'rxjs';
 import { AuthService } from '../../services/auth.service';
@@ -19,6 +19,8 @@ import { Weather } from '../../models/weather.model';
 import {Router} from "@angular/router"
 declare var google: any;
 import { } from 'googlemaps';
+import { MetaTagsService } from '../../services/metaTags.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 registerLocaleData(localeRu);
 
@@ -32,7 +34,38 @@ registerLocaleData(localeRu);
 export class EventDetailComponent implements OnInit {
 
   geocoder = new google.maps.Geocoder();
+  // eventFromResolver;
+  // eventCreatedAt;
+  // event: EventModule;
+  // formatedEventDate: string;
+  // willShowWeatherIn: string;
+  // eventLocation: string;
+  // private eventSub: Subscription;
 
+  // eventCreatorName: string;
+  // creatorId: string;
+  // private creatorNameAndIdSub: Subscription;
+
+  // invite: false;
+  // eventId: string;
+
+  // eventLikes: string[] = [];
+  // private eventLikeSubscribe: Subscription;
+  // containsLike: boolean;
+
+  // currentWeather: Weather;
+  // weatherForecast: Weather[] = [];
+
+  // eventWillAttempt: string[] = [];
+  // containsEvent: boolean;
+
+  // commentForm: FormGroup;
+
+  // commentInputArea = false;
+
+  // userId: string;
+
+  eventFromResolver;
   eventCreatedAt;
   event: EventModule;
   formatedEventDate: string;
@@ -74,8 +107,13 @@ export class EventDetailComponent implements OnInit {
     private confirm: DialogService,
     private dialog: MatDialog,
     private weatherSer: WeatherService,
-    private router: Router
-  ) { }
+    private metaTags: MetaTagsService,
+    private meta: Meta,
+    private title: Title
+  ) { 
+    // this.activeRoute.data.subscribe(data => {console.log('data'), console.log(data)});
+    
+  }
 
   datasource = new Datasource({
     get: (index, count, success) => {
@@ -94,6 +132,32 @@ export class EventDetailComponent implements OnInit {
 
   ngOnInit() {
 
+    // this.eventFromResolver = this.activeRoute.snapshot.data['event'];
+
+    // console.log('this.eventFromResolver');
+    // console.log(this.eventFromResolver);
+    
+
+    this.meta.addTags([
+      {name: 'description', content: 'event detail '},
+      {name: 'author', content: 'event detail'},
+      {name: 'keywords', content: 'event detail, Meta detail'}
+    ]);
+
+    // this.eventCreatedAt = moment.now();
+    // this.eventId = '5c66d8076321a11fc49b3305';
+    // this.eventLikes = ['123131', '13123123', '12313123', '112314121441'];
+    // this.creatorId = '463463463463463';
+    // this.eventCreatorName = 'MAKSIM';
+    // // this.event = value.event;
+    // this.eventLocation = 'Moscow, Russia';
+    // this.eventCreatedAt = moment.now();
+    // // this.checkForLikeExistence();
+    // // this.checkForAttemptExistence();
+    // const eventDate = moment.now();
+    // this.formatedEventDate = moment(eventDate).format('YYYY-MM-DD').toString();
+    // this.geocodeAddress(this.geocoder, this.eventLocation);
+
     this.commentForm = new FormGroup({
       'content': new FormControl(null, { validators: [Validators.required] }),
     });
@@ -102,9 +166,10 @@ export class EventDetailComponent implements OnInit {
 
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
       
-
       this.eventId = paramMap.get('event_id');
       this.eventService.getEventById(this.eventId);
+
+
 
       this.eventLikeSubscribe = this.eventService.getLikesUpdate()
       .subscribe((value: { likes: string[] }) => {
@@ -127,11 +192,12 @@ export class EventDetailComponent implements OnInit {
           const eventDate = value.event.eventDate;
           this.formatedEventDate = moment(eventDate).format('YYYY-MM-DD').toString();
           this.geocodeAddress(this.geocoder, value.event.location);
+          // this.metaTags.updateTitle(this.event.title, this.event.description, "article", window.location.href, this.event.picture);
           
-
         });
 
     });
+    
   }
 
   private weatherDataCololect(latLngCoordinats: string) {

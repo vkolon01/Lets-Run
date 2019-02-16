@@ -7,6 +7,9 @@ import { Subject, pipe } from "rxjs";
 import { map } from "rxjs/operators";
 import { SnackBarService } from "./snack-bar.service";
 
+import {TransferState} from '@angular/platform-browser';
+import { MetaTagsService } from "./metaTags.service";
+
 
 
 const BACKEND_URL = environment.apiUrl;
@@ -29,13 +32,22 @@ export class EventService {
     private likes: string[] =[];
     private eventLikeUpdated = new Subject<{ likes: string[] }>();
 
-    constructor(private http: HttpClient, private router: Router,  private snackBarService: SnackBarService) { }
+    constructor(private state: TransferState ,
+        private http: HttpClient, 
+        private router: Router,  
+        private snackBarService: SnackBarService,
+        private metaTags: MetaTagsService,) { }
 
     getEvents() {
+
+        
         return this.events;
+
     }
 
     createEvent(title: string, location: string, distance, pace: string, eventDate, eventTime, desc: string, image: File, privateEvent: string) {
+
+
 
         const newEvent = new FormData();
         newEvent.append("title", title);
@@ -44,7 +56,7 @@ export class EventService {
         newEvent.append("eventDate", eventDate);
         newEvent.append("eventTime", eventTime)
         newEvent.append("distance", distance);
-        newEvent.append("image", image, location);
+        newEvent.append("image", image, this.guidGenerator());
         newEvent.append('description', desc);
         newEvent.append('privateEvent', privateEvent);
          this.http.post(BACKEND_URL + '/events/add-event', newEvent).subscribe(
@@ -57,6 +69,13 @@ export class EventService {
                 this.getEventList(5, 1, '', '');
             }
         )
+    }
+
+    guidGenerator() {
+        var S4 = function() {
+           return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        };
+        return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
     }
 
     getEventList(eventsPerPage: number, currentPage: number, filterDate: string, filterDist) {
@@ -143,11 +162,20 @@ export class EventService {
                 this.eventUpdate.next({
                     event: this.event
                 });
-
+ 
             }, error => {
                 this.router.navigate(['/events']);
-                
+ 
               });
+    }
+
+    getEventByIdForMeta(id: string) {
+        return this.http.get<{
+        eventById: any,
+        creatorName: string,
+        creatorId: string,
+
+        }>(BACKEND_URL + '/events/' + id);
     }
 
     updateEvent(id: string, title: string, location: string,distance ,pace: string,eventDate: Date, eventTime: Date ,author: string, description: string, image: File | string, privateEvent: boolean){

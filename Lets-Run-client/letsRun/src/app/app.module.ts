@@ -36,8 +36,6 @@ NgtUniversalModule,
  
  TransferHttpCacheModule,
 HttpClientModule,
- 
-    
     AngularMaterialModule,
     AppRoutingModule,
     CoreModule,
@@ -45,7 +43,8 @@ HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
-  ],
+  ]
+  ,
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }

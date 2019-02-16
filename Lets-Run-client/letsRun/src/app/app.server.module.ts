@@ -10,14 +10,14 @@ import {NgModule} from '@angular/core';
  bootstrap: [AppComponent],
 
         imports:[
- BrowserModule.withServerTransition({appId: 'app-root'}),
+        BrowserModule.withServerTransition({appId: 'app-root'}),
  
- AppModule,
+        AppModule,
  
-            ServerModule,
-            NoopAnimationsModule,
-            ModuleMapLoaderModule,
-            ServerTransferStateModule, // comment
+        ServerModule,
+        NoopAnimationsModule,
+        ModuleMapLoaderModule,
+        ServerTransferStateModule, // comment
         ]
     })
     export class AppServerModule {}

@@ -8,11 +8,16 @@ import { environment } from "../../environments/environment"
 
 import { AuthData } from "../models/auth-data.model";
 import { SnackBarService } from "./snack-bar.service";
+// import { CoolLocalStorage } from 'angular2-cool-storage';
+// import { CoolSessionStorage } from 'angular2-cool-storage';
+import { createLocalStorage } from "localstorage-ponyfill";
 
 const BACKEND_URL = environment.apiUrl; 
 
 @Injectable({providedIn: "root"})
 export class AuthService {
+    // localStorage = createLocalStorage();
+    // localStorage: CoolLocalStorage;
     private isAuthenticated = false;
     private token: string;
     private tokenTimer: any;
@@ -23,8 +28,8 @@ export class AuthService {
     private registeredListener = new Subject<boolean>();
     private username: string;
     private usernameListener = new Subject<string>();
-    constructor(@Inject(LOCAL_STORAGE) private localStorage: any, private http: HttpClient, private router: Router, private snackBarService: SnackBarService) {}
-
+    constructor(@Inject(LOCAL_STORAGE) private localStorage: any,private http: HttpClient, private router: Router, private snackBarService: SnackBarService) { this.localStorage = localStorage; }
+// @Inject(LOCAL_STORAGE) private localStorage: any,  localStorage: CoolLocalStorage, sessionStorage: CoolSessionStorage,
     getToken() {
         return this.token;
       }
@@ -161,6 +166,12 @@ export class AuthService {
         this.localStorage.setItem("userId", userId);
         this.localStorage.setItem("userRole", userRole);
         this.localStorage.setItem("username", username);
+
+        console.log("Save toke");
+        console.log(this.localStorage.getItem('token'));
+
+        console.log("Save toke");
+        console.log(this.localStorage.getItem('username'));
       }
     
       private clearAuthData() {
@@ -169,6 +180,12 @@ export class AuthService {
         this.localStorage.removeItem("userId");
         this.localStorage.removeItem("userRole");
         this.localStorage.removeItem("username");
+
+        console.log("Clear toke");
+        console.log(this.localStorage.getItem('token'));
+
+        console.log("Clear toke");
+        console.log(this.localStorage.getItem('username'));
       }
     
       private getAuthData() {
@@ -177,6 +194,11 @@ export class AuthService {
         const userId = this.localStorage.getItem("userId");
         const username = this.localStorage.getItem("username");
         const userRole = this.localStorage.getItem("userRole");
+        console.log("get toke");
+        console.log(this.localStorage.getItem('token'));
+
+        console.log("get toke");
+        console.log(this.localStorage.getItem('username'));
         if (!token || !expirationDate) {
           return;
         }

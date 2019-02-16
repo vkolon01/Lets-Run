@@ -8,6 +8,8 @@ import { DialogService } from '../../../../../services/dialogService';
 import { PostCommentModule } from '../../../../../models/postComment.model';
 import { PagerService } from '../../../../../services/pager.service';
 import { AuthService } from '../../../../../services/auth.service';
+import { MetaTagsService } from '../../../../../services/metaTags.service';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post-detail',
@@ -41,10 +43,19 @@ export class PostDetailComponent implements OnInit {
               private confirm: DialogService,
               private route: Router ,
               private pagerService: PagerService,
-              private authService: AuthService
+              private authService: AuthService,
+              private meta: Meta,
+    private metaTags: MetaTagsService
     ) { }
 
   ngOnInit() {
+
+    // this.meta.addTags([
+    //   {name: 'description', content: 'event detail'},
+    //   {name: 'author', content: 'event athor'},
+    //   {name: 'keywords', content: 'event keywords, Meta Service'}
+    // ]);
+
     this.userId = this.authService.getUserId();
     this.updatePostForm = new FormGroup({
       'title': new FormControl(null, { validators: [Validators.required] }),
@@ -62,16 +73,12 @@ export class PostDetailComponent implements OnInit {
 
       this.forumService.getPostById(this.post_id).subscribe((result: {post: PostModel}) => {
         this.post = result.post;
-
-        console.log('post?.author._id');
-        console.log(this.post.author._id);
-
-        console.log('userId');
-        console.log(this.userId);
-
-        console.log('userId === ');
-        console.log(this.userId === this.post.author._id);
-
+        // this.metaTags.updateTitle(this.post.title, this.post.description, "article", window.location.href, this.post.username);
+        this.meta.addTags([
+          {name: 'description', content: 'forum post inside api call'},
+          {name: 'author', content: 'forum post inside api call'},
+          {name: 'keywords', content: 'forum post inside api call'}
+        ]);
       });
 
 

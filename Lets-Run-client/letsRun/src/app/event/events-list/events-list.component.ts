@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { PagerService } from '../../services/pager.service';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-events-list',
@@ -59,9 +60,16 @@ export class EventsListComponent implements OnInit, OnDestroy {
               private eventService: EventService,
               private authService: AuthService,
               private route: Router,
-              private pagerService: PagerService) { }
+              private pagerService: PagerService,
+              private meta: Meta) { }
 
   ngOnInit() {
+
+    this.meta.addTags([
+      {name: 'description', content: 'event list '},
+      {name: 'author', content: 'event list'},
+      {name: 'keywords', content: 'event list, Meta list'}
+    ]);
     
     this.setPage(1);
 
@@ -74,7 +82,6 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   setPage(page: number) {
-console.log('setPage');
 
     if (page < 1 || this.pager.totalPages &&  page > this.pager.totalPages) {
         return;

@@ -8,6 +8,7 @@ import 'zone.js/dist/zone-node';
     import * as bodyParser from 'body-parser';
     import * as cors from 'cors';
     import * as compression from 'compression';
+    // import 'localstorage-polyfill'
     
     import {join} from 'path';
     
@@ -19,6 +20,8 @@ import 'zone.js/dist/zone-node';
     app.use(cors());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
+
+    // global['localStorage'] = localStorage;
     
     // const DIST_FOLDER = join(process.cwd(), 'dist');
     
@@ -44,11 +47,11 @@ import 'zone.js/dist/zone-node';
     }));
     
     app.get('/*', (req, res) => {
+
       res.render('index', {req, res}, (err, html) => {
         if (html) {
           res.send(html);
         } else {
-          console.error(err);
           res.send(err);
         }
       });

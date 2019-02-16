@@ -23,6 +23,8 @@ import { PostCommentComponent } from "./forum/forum-item/post-list-with-desc/pos
 import { PaginatorComponent } from "./core/paginator/paginator.component";
 import { HttpClientModule, HttpClientJsonpModule } from "@angular/common/http";
 import { ShareButtonsModule } from '@ngx-share/buttons';
+import { EventsListComponent } from "./event/events-list/events-list.component";
+// import { CoolStorageModule } from 'angular2-cool-storage';
 
 @NgModule({
     declarations: [
@@ -40,6 +42,7 @@ import { ShareButtonsModule } from '@ngx-share/buttons';
         PostItemComponent,
         PostDetailComponent,
         PostCommentComponent,
+        EventsListComponent
     ],
     imports: [
         HttpClientModule,       // (Required) For share counts
@@ -50,6 +53,7 @@ import { ShareButtonsModule } from '@ngx-share/buttons';
         ReactiveFormsModule,
         UiScrollModule,
         AngularMaterialModule
+        // CoolStorageModule
     ],
     exports: [FooterComponent,
         HeaderComponent,
@@ -64,7 +68,8 @@ import { ShareButtonsModule } from '@ngx-share/buttons';
         SendInvitesComponent,
         PostItemComponent,
         PostDetailComponent,
-        PostCommentComponent]
+        PostCommentComponent,
+        EventsListComponent]
 })
 
 export class CoreModule { }

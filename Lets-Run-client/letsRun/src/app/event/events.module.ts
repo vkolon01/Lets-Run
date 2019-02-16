@@ -11,8 +11,7 @@ import { SendInvitesComponent } from "./send-invites/send-invites.component";
 import { CoreModule } from "../core.module";
 
 @NgModule({
-    declarations: [EventsListComponent
-        ,
+    declarations: [
     ],
     imports: [
         CommonModule,
@@ -22,7 +21,7 @@ import { CoreModule } from "../core.module";
         CoreModule
         
     ],
-    exports: [EventsListComponent]
+    exports: []
 })
 
 export class EventsModule {}
