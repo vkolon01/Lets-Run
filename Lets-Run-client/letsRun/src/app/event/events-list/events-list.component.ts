@@ -13,9 +13,10 @@ import { PagerService } from 'src/app/services/pager.service';
 @Component({
   selector: 'app-events-list',
   templateUrl: './events-list.component.html',
-  styleUrls: ['./events-list.component.scss',
+  styleUrls: [
     './event-list-event-grid.component.scss',
-    '../../global-css/global-input.scss'
+    '../../global-css/global-input.scss',
+    './events-list.component.scss'
   ]
 })
 export class EventsListComponent implements OnInit, OnDestroy {

@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { environment } from "../../../environments/environment"
 
 @Component({
   selector: 'app-signin',
@@ -15,6 +16,7 @@ export class SigninComponent implements OnInit {
   signInFrom: FormGroup;
   success;
   private authSub: Subscription;
+  siteKey = environment.googleReCapcha;
 
   constructor(public authService: AuthService,
       private snackBarService: SnackBarService,
@@ -29,6 +31,7 @@ export class SigninComponent implements OnInit {
       'lastName': new FormControl(null, {validators: [Validators.required]}),
       'username': new FormControl(null, {validators: [Validators.required]}),
       'dob': new FormControl(null, {validators: [Validators.required]}),
+      'recaptcha': new FormControl('', {validators: [Validators.required]})
     });
   }
 

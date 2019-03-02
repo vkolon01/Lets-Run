@@ -6,3 +6,9 @@
 mat-form-field {
     margin-top: 2rem;
 }
+
+button {
+    &.arrow_box {
+        font-size: 1rem;
+    }
+}

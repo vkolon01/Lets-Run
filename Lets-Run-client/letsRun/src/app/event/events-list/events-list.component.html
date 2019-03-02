@@ -1,12 +1,12 @@
 <div class="main">
 
-  <div>
+  <div class="formSearch">
 
-      <button *ngIf="!searchEventModule" type="button" (click)="searchEventMenu()">Filters</button> 
+      <button class="arrow_box" *ngIf="!searchEventModule" type="button" (click)="searchEventMenu()">Filters</button> 
 
     <form [formGroup]="eventSearchForm" (ngSubmit)="searchEvent()" *ngIf="searchEventModule" > 
 
-        <button type="button" (click)="searchEventMenu()">Close</button>  
+        <button  class="arrow_box opened" type="button" (click)="searchEventMenu()">Close</button>  
 
         <mat-form-field>
             <input matInput [matDatepicker]="picker" placeholder="Search by date of Event" formControlName="eventDate">
@@ -22,8 +22,9 @@
               </mat-select>
             </mat-form-field>
 
-          <button type="button" (click)="clearSearchBox()">Clear filter</button>    
-          <button type="submit">search</button>
+          <button class="arrow_box solid" type="submit">search</button>
+          <button class="arrow_box solid" type="button" (click)="clearSearchBox()">Clear filter</button>    
+          
     </form>
   </div>
 

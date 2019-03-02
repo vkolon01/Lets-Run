@@ -23,7 +23,8 @@
 
   <h1>Posts List</h1>
 
-  <button (click)="addModeToggle()">Add post!</button>
+  <button class="arrow_box" *ngIf="!addMode" (click)="addModeToggle()">Add post!</button>
+  <button class="arrow_box opened" *ngIf="addMode" (click)="addModeToggle()">Cancel</button>
 
   <form class="general-add" *ngIf="addMode" [formGroup]="addPostToTopic" (ngSubmit)="addPost()">
 
@@ -35,20 +36,19 @@
     </mat-form-field>
 
     <mat-form-field>
-      <textarea matInput cols="30" rows="10" placeholder="Description" formControlName="description"></textarea>
+      <textarea matInput cols="30" rows="4" placeholder="Description" formControlName="description"></textarea>
       <mat-hint>The description of the section!</mat-hint>
       <mat-error *ngIf="addPostToTopic.get('description').errors">Description is requied</mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <textarea matInput cols="30" rows="10" placeholder="Content" formControlName="content"></textarea>
+      <textarea matInput cols="30" rows="4" placeholder="Content" formControlName="content"></textarea>
       <mat-hint>The content of the section!</mat-hint>
       <mat-error *ngIf="addPostToTopic.get('content').errors">Content is requied</mat-error>
     </mat-form-field>
 
 
-    <button type="submit">Add</button>
-    <button (click)="addModeToggle()">Cancel</button>
+    <button class="arrow_box solid" type="submit">Add</button>
   </form>
   <div class="general-component--list" *ngFor="let post of posts; index as i">
     <div  [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" > 

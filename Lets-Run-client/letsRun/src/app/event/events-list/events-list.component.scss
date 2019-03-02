@@ -4,12 +4,24 @@
 
 form {
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   border-radius: 5%;
       background: white;
 }
 
+.formSearch {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow_box {
+  margin-top: 1rem;
+}
 
 
 

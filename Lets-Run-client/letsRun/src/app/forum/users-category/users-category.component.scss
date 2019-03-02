@@ -4,5 +4,11 @@
 }
 
 mat-form-field {
-    margin-top: 2rem;
+    margin-top: 3rem;
+}
+
+button {
+    &.arrow_box {
+        font-size: 1rem;
+    }
 }

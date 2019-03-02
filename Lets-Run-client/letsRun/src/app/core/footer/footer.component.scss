@@ -1,6 +1,134 @@
-p {
-    text-align: center;
-    color: white;
-    background: black;
-    margin: 2px 0 0 0;
+.svgLine {
+    position: relative;
+    .svgImage{
+        width: 35px;
+        position: absolute;
+        
+        
+        img {
+            width: 100%;
+        }
+    }
+
+    .start {
+        left: 0;
+        top: -33px;
+    }
+    
+    .running {
+        right: 50%;
+        top: -24px;
+    }
+    
+    .finish {
+        right: 0;
+        top: -21px;
+    }
+
 }
+
+
+
+
+      .fLine {
+          display: flex;
+          flex-direction: row;
+          color: white;
+          width: 100%;
+          background: rgb(14, 34, 103);
+          align-content: space-between;
+          height: 100px;
+        .links {
+            height: 100%;
+            width: 100%;
+        }
+
+        .social {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            
+            .image {
+                width: 40px;
+                height: 40px;
+                
+                img {
+                    width: 100%;
+                    
+                    &.insta {
+                    color: white;
+                    }
+                }
+            }
+        }
+
+        .contactUs {
+            display: inherit;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            width: 100%;
+
+            &:active {
+                color: yellow;
+            }
+        }
+      }
+
+      .sLine {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        background: #0e2369;
+        justify-content: space-around;
+        color: white;
+        width: 100%;
+        // div {
+        //     text-align: center;
+
+            p {
+                &:last-of-type {
+                    text-align: right;
+                }
+            }
+        // }
+      }
+
+      // MEDIA QUERIES
+
+      @media only screen and (min-width: 320px) and (orientation: portrait) {
+        .svgLine {
+            position: relative;
+            .svgImage{
+                width: 49px;
+                position: absolute;
+                
+                
+                img {
+                    width: 100%;
+                }
+            }
+        
+            .start {
+                left: 0;
+                top: -48px;
+            }
+            
+            .running {
+                right: 50%;
+                top: -32px;
+            }
+            
+            .finish {
+                right: 0;
+                top: -30px;
+            }
+        
+        }
+      }
+
+      @media only screen and (min-width: 320px) and (orientation: portrait) {
+
+      }

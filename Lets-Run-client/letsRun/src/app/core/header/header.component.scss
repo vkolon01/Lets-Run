@@ -68,7 +68,7 @@ header {
   position: absolute;
   background: $darkBlue;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: grid;
   align-items: center;
   justify-content: center;
@@ -100,7 +100,6 @@ header {
 
 
 }
-
 
 @keyframes hide {
   0% { opacity: 1; transform: translateY(0px); }

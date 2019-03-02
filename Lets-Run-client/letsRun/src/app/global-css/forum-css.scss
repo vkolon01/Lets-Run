@@ -19,6 +19,7 @@
     align-items: center;
     justify-content: space-around;
     background: #7289d652;
+    width: 235px;
     cursor: pointer;
     &:nth-child(even) {
         background: #a8b9e0;
@@ -80,7 +81,7 @@
       font-size: 1rem;
       background: rgba(0, 0, 0 , .2);
       border-radius: 15px;
-      width: 300px;
+      width: 220px;
   
       li {
         outline: none;

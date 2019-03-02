@@ -17,7 +17,7 @@
           </mat-form-field>
       
           <mat-form-field>
-                <textarea matInput cols="30" rows="10"  placeholder="Description" formControlName="description"></textarea> 
+                <textarea matInput cols="30" rows="4"  placeholder="Description" formControlName="description"></textarea> 
                 <mat-hint>The description of the section!</mat-hint> 
                 <mat-error *ngIf="generalFormUpdate.get('description').errors">Description is requied</mat-error>
               </mat-form-field>
@@ -28,11 +28,11 @@
                     color="primary"
                     (change)="changed()">
                   <!-- Private Event? (Off by default) -->
-                  {{checked}}
+                   Locked: {{checked}}
                 </mat-slide-toggle>
       
-        <button type="submit">Update</button>
-        <button (click)="checkEditMode()">Cancel</button>
+        <button class="arrow_box solid"  type="submit">Update</button>
+        <button class="arrow_box solid"  (click)="checkEditMode()">Cancel</button>
       </form>
         </div>
         

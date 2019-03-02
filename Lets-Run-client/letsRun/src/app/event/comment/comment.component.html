@@ -1,4 +1,4 @@
-<div  *ngIf="!commentDeleted">
+<!-- <div  *ngIf="!commentDeleted">
 
 
   <mat-card class="comment" *ngIf="!showEditCommentForm">
@@ -33,4 +33,59 @@
     </form>
   </div>
 
+</div> -->
+
+<div class="main" *ngIf="!commentDeleted">
+  <div class="comment-main">
+
+  </div>
+  <div class="comment-main-header">
+    <h3><a [routerLink]="['/userpage', comment.authorId, 'info']">{{ comment.author }}</a></h3>
+
+    <span>Posted: {{ timeAgo}}</span>
+
+  </div>
+  <div class="comment-main-quote" *ngIf="comment.quote">
+   <p>reply to: {{comment.quote.quoteAuthor}}</p>
+   <p>{{comment.quote.content}}</p>
+   <!-- <p>reply to: comment?.quote.quoteAuthor</p>
+   <p>comment?.quote.content</p> -->
+  </div> 
+  <!-- *ngIf="!updateField && !replyField" 
+  *ngIf="!updateField && !replyField && comment?.quote" -->
+  <div class="comment-main-content" >
+    <p>{{ comment.content }} </p>
+  </div>
+  <div class="comment-main-settings" *ngIf="!updateField && !replyField">
+    <div *ngIf="comment.authorId === userId">
+      <i class="material-icons" (click)="updateCommentToggle()">settings</i>
+      <i class="material-icons delete" (click)="deleteComment()">delete_sweep</i> 
+    </div>
+    <button class="report">Report</button>
+    <button class="reply" (click)="replyFieldToggle()"><i class="material-icons">
+      reply
+      </i></button>
+  </div>
+      <form *ngIf="updateField" class="comment-main-content" [formGroup]="updateCommentForm" (ngSubmit)="updateComment()">
+          <mat-form-field>
+              <textarea matInput placeholder="Content" formControlName="content"></textarea>
+              <mat-error *ngIf="updateCommentForm.get('content').errors">Content is required</mat-error>
+            </mat-form-field>
+            <button  class="sendMessage" type="submit"><i class="material-icons">
+              send
+              </i></button>
+            <i class="material-icons" (click)="updateCommentToggle()">clear</i> 
+      </form>
+
+      <form *ngIf="replyField" class="comment-main-content" [formGroup]="replyToCommentForm" (ngSubmit)="replyToComment()">
+        <mat-form-field>
+            <textarea matInput placeholder="Content" formControlName="content"></textarea>
+            <mat-error *ngIf="replyToCommentForm.get('content').errors">Content is required</mat-error>
+          </mat-form-field>
+          <button class="sendMessage" type="submit"><i class="material-icons">
+            send
+            </i></button>
+          <i class="material-icons" (click)="replyFieldToggle()">clear</i> 
+    </form>
+      
 </div>

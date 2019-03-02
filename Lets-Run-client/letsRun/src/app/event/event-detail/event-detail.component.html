@@ -11,6 +11,7 @@
     <div class="event-title">
       <h1>{{event?.title}}</h1>
     </div>
+    <div></div>
     <div *ngIf="creatorId === userId" class="event-detail--setings">
       <mat-icon class="event_detail--mat-icon-setings" (click)="onEventEdit()"> settings </mat-icon>
       <mat-icon class="event_detail--mat-icon-delete" (click)="deleteEvent()"> delete_sweep </mat-icon>
@@ -96,31 +97,24 @@
     <div class="comments_main">
       <h1>comments</h1>
 
-      <div >
-        <form [formGroup]="commentForm" (ngSubmit)="add_Comment()">
-
-          <mat-form-field>
-              <textarea matInput placeholder="Content" formControlName="content"></textarea>
-              <mat-error *ngIf="commentForm.get('content').errors"></mat-error>
-            </mat-form-field>
-
-            <button type="submit">Post</button>
-            <button (click)="showCommentInputArea()">Cancel</button>
-
-        </form>
-      </div> 
+      <form class="add-comment" [formGroup]="commentForm" (ngSubmit)="add_Comment()">
+        <mat-form-field>
+            <textarea matInput placeholder="Content" formControlName="content"></textarea>
+            <mat-error *ngIf="commentForm.get('content').errors">Content is required</mat-error>
+          </mat-form-field>
+          <button class="sendMessage" type="submit"><i class="material-icons">
+            send
+            </i></button>
+    </form>
 
       <div class="event_detail--comments" >
-        <button (click)="showCommentInputArea()">Add comment</button>
 
         <div class="viewport" ui-scroll-viewport>
 
-          <div *uiScroll="let comment of datasource; let index = index">
-
+          <div  [ngClass]="{'evenStyle': (index % 2) === 0, 'oddStyle': (index % 2) !== 0}"  *uiScroll="let comment of datasource; let index = index">
+            <div class="comment">
             <app-comment *ngIf="!commentDeleted" [comment]="comment" [eventId]="eventId"></app-comment>
-
-            
-
+            </div>
           </div>
         </div>
 

@@ -21,6 +21,7 @@ import { PostItemComponent } from "./forum/forum-item/post-list-with-desc/post-i
 import { PostDetailComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-detail.component";
 import { PostCommentComponent } from "./forum/forum-item/post-list-with-desc/post-item/post-detail/post-comment/post-comment.component";
 import { PaginatorComponent } from "./core/paginator/paginator.component";
+import { NgxCaptchaModule } from "ngx-captcha";
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { PaginatorComponent } from "./core/paginator/paginator.component";
         RouterModule,
         ReactiveFormsModule,
         UiScrollModule,
-        AngularMaterialModule
+        AngularMaterialModule,
+        NgxCaptchaModule
     ],
     exports: [FooterComponent,
         HeaderComponent,

@@ -66,6 +66,8 @@ router.post('/:event_id/add_comment',[
     .withMessage('Check content')
 ], authCheck, CommentController.addCommentToEvent);
 
+router.put('/reply_to_comment/:event_id', authCheck, CommentController.replyToComment);
+
 router.put('/:event_id/:comment_id',[
     body('content')
     .trim()

@@ -19,6 +19,7 @@ import { Weather } from 'src/app/models/weather.model';
 import {Router} from "@angular/router"
 declare var google: any;
 import { } from 'googlemaps';
+import { timeout } from 'rxjs/operators';
 
 registerLocaleData(localeRu);
 
@@ -126,8 +127,6 @@ export class EventDetailComponent implements OnInit {
           const eventDate = value.event.eventDate;
           this.formatedEventDate = moment(eventDate).format('YYYY-MM-DD').toString();
           this.geocodeAddress(this.geocoder, value.event.location);
-          
-
         });
 
     });
@@ -228,7 +227,8 @@ export class EventDetailComponent implements OnInit {
     this.commentService.addComment(this.commentForm.value.content, this.eventId);
     this.commentForm.reset();
 
-    this.updateComment();
+    setTimeout(() => this.updateComment(), 1000)
+    
 
   }
 

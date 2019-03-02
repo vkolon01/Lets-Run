@@ -2,7 +2,8 @@
 <div class="general-category--main">
   <h1>General Category</h1>
 </div>
-<button (click)="showAddField()"  *ngIf="userRole === 'admin'">Add forum in General section!</button>
+<button class="arrow_box" (click)="showAddField()"  *ngIf="userRole === 'admin' && !showGeneralAddField">Add topic in general!</button>
+<button class="arrow_box opened" (click)="showAddField()"  *ngIf="userRole === 'admin' && showGeneralAddField">Cancel</button>
 <form *ngIf="showGeneralAddField" class="general-add" [formGroup]="generalFormAdd" (ngSubmit)="addGeneralForumSection()">
 
         <mat-form-field>
@@ -31,8 +32,7 @@
               {{checked}}
             </mat-slide-toggle>
 
-    <button type="submit">Add to section</button>
-    <button (click)="showAddField()">Cancel</button>
+    <button  class="arrow_box solid"  type="submit">Add to section</button>
 </form>
 
 <div class="general-component--list" *ngFor="let forumList of generalCategory; index as i">

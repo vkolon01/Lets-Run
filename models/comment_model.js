@@ -9,7 +9,11 @@ var User = require('./user_model');
 var commentSchema = new Schema({
   content: String,
   author: { type: Schema.Types.ObjectId, ref: 'User' },
-  event: { type: Schema.Types.ObjectId, ref: 'Event' }
+  event: { type: Schema.Types.ObjectId, ref: 'Event' },
+  quote: {
+    content: String,
+    quoteAuthor: String
+  },
 },
 {
   timestamps: true //auto generation time of creation and last update

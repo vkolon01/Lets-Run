@@ -2,7 +2,7 @@
 
 .container {
 display: grid;
-grid-template-rows: minmax(100vh, auto) fit-content(10%);
+grid-template-rows: minmax(100vh, auto) fit-content(20%);
 }
 // fit-content(10%) 
 app-header {
@@ -12,6 +12,6 @@ app-header {
 }
 
 main {
-    padding-top: 20%;
+    padding-top: 17%;
     background: $backgroundColor;
 }

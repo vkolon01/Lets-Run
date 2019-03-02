@@ -11,6 +11,11 @@
 .general-add {
     display: flex;
     flex-direction: column;
+    width: 235px;
+}
+
+mat-form-field {
+    margin-top: 2rem;
 }
 
 a {

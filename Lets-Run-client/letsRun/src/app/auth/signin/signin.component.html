@@ -44,9 +44,20 @@
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
+
+          <ngx-recaptcha2 #captchaId
+          [siteKey]="siteKey"
+          [size]="compact"
+          [hl]="en"
+          [theme]="light"
+          [type]="image"
+          [tabIndex]="1000"
+          [useGlobalDomain]="false"
+          formControlName="recaptcha">
+        </ngx-recaptcha2>
   
         <div class="formButtons">
-            <button type="submit" >Register</button>
+            <button  class="buttonMain" type="submit" >Register</button>
           </div>
           <p *ngIf="signInFrom.invalid && signInFrom.touched" class="error">Please check the form for errors</p>
    

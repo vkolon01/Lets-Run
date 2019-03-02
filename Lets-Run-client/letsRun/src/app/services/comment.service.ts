@@ -17,7 +17,6 @@ export class CommentService {
     private comments: CommentModule[] = [];
     private commentUpdated = new Subject<{ comments: CommentModule[] }>();
 
-
     constructor(private http: HttpClient, private router: Router,  private snackBarService: SnackBarService) { }
 
     addComment(content: string, eventId: string) {
@@ -36,17 +35,21 @@ export class CommentService {
         const queryParams = `?index=${index}&count=${count}`;
        return this.http.get<{ message: string, comments: any, authorId: string, }>(BACKEND_URL + '/events/' + eventId + '/get_comments' + queryParams)
             .pipe(map(commentDate => {
-                
+
                 return {
                     comments: commentDate.comments.map(comment => {
+                        console.log('comment');
+                        console.log(comment.quote);
                         return {
                             id: comment._id,
                             content: comment.content,
+                            quote: comment.quote,
                             author: comment.author.username,
                             authorId: comment.author._id,
                             authorImage: comment.author.imagePath,
                             createdAt: comment.createdAt
                         }
+
                     }),
 
                 }
@@ -66,13 +69,17 @@ export class CommentService {
 
         let newComment = { content: content };
 
-        this.http.put(BACKEND_URL + '/events/' + eventId + '/' + comment_id, newComment)
-            .subscribe(response => {
-                this.commentUpdated.next({
-                    comments: [...this.comments]
-                })
-                this.snackBarService.showMessageWithDuration('Comment updated', '', 3000);
-            });
+      return this.http.put<{updatedComment: CommentModule}>(BACKEND_URL + '/events/' + eventId + '/' + comment_id, newComment)
+            // .subscribe(response => {
+            //     this.commentUpdated.next({
+            //         comments: [...this.comments]
+            //     })
+            //     this.snackBarService.showMessageWithDuration('Comment updated', '', 3000);
+            // });
+    }
+
+    replyToComment(comment_id: string, eventId: string, content: string) {
+        return this.http.put<{comments: CommentModule[]}>(BACKEND_URL + "/events/reply_to_comment/" + eventId, { comment_id, content});
     }
 
     deleteComent(eventId: string, commentId: string) {

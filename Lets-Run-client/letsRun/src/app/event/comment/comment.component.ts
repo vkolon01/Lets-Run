@@ -10,13 +10,21 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.scss',
-              '../../global-css/global-input.scss'
+  styleUrls: [
+              '../../global-css/global-input.scss',
+              '../../global-css/comment.scss',
+              './comment.component.scss'
               ]
 })
 export class CommentComponent implements OnInit {
 
+  updateCommentForm: FormGroup;
+  replyToCommentForm: FormGroup;
+
   showEditCommentForm = false;
+  updateField = false;
+  replyField = false;
+
   editCommentForm: FormGroup;
   userId;
 
@@ -26,7 +34,7 @@ export class CommentComponent implements OnInit {
   @Input() eventId: string;
    timeAgo;
 
-
+   @Output() comments = new EventEmitter<CommentModule[]>();
 
   constructor(private activeRoute: ActivatedRoute,
      private commentService: CommentService,
@@ -36,23 +44,53 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {
     this.userId = this.authService.getUserId();
-    this.editCommentForm = new FormGroup({
-      'content': new FormControl(null, {validators: [Validators.required]}),
-    });
+    console.log(this.comment);
+    
+    this.updateCommentForm = new FormGroup({
+      'content': new FormControl(null, { validators: [Validators.required] })
+    })
+    this.replyToCommentForm = new FormGroup({
+      'content': new FormControl(null, { validators: [Validators.required] })
+    })
     this.timeAgo = moment(this.comment.createdAt).fromNow();
     
   }
 
-  edit_Comment() {
+  replyToComment() {
+    this.commentService.replyToComment(this.comment.id, this.eventId,  this.replyToCommentForm.get('content').value)
+        .subscribe((result: { comments: CommentModule[] }) => {
+          this.emitComments(result.comments);
+          this.replyFieldToggle();
+        });
+  }
+
+  emitComments(comments: CommentModule[]) {
+    this.comments.emit(comments);
+  }
+
+  replyFieldToggle() {
+    this.replyField = !this.replyField;
+  }
+
+  updateCommentToggle() {
+    this.updateCommentForm.get('content').setValue(this.comment.content);
+    this.updateField = !this.updateField;
+  }
+
+  updateComment() {
 
     
-    if(this.editCommentForm.invalid){
+    if(this.updateCommentForm.invalid){
       return;
     }
 
-    this.commentService.editComment(this.eventId, this.editCommentForm.value.content, this.comment.id);
-    this.editCommentForm.reset();
-    this.showEditCommentForm = !this.showEditCommentForm;
+    this.commentService.editComment(this.eventId, this.updateCommentForm.get('content').value, this.comment.id)
+        .subscribe(result => {
+          
+          this.comment.content = result.updatedComment.content;
+        });
+    this.updateCommentForm.reset();
+    this.updateField = !this.updateField;
 
   }
 
@@ -70,7 +108,7 @@ export class CommentComponent implements OnInit {
       if(result) {
 
         this.commentService.deleteComent(this.eventId, this.comment.id);
-        this.editCommentForm.reset();
+        this.updateCommentForm.reset();
         this.commentDeleted = true;
 
       }

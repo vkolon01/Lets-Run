@@ -109,7 +109,7 @@ exports.getCommnentsForEvent = function (req, res, next) {
 
     const commentQuery = Comment.find({
         event: req.params.event_id
-    }).populate('author', 'username imagePath' );
+    }).populate('author', 'username' );
     let fetchedComments;
 
     if (index && count) {
@@ -192,7 +192,8 @@ exports.editComment = function (req, res, next) {
         .then(result => {
             if (result) {
                 res.status(200).json({
-                    message: "Update successful!"
+                    message: "Update successful!",
+                    updatedComment: updatedComment
                 });
             } else {
                 const error = new Error("Not authorized!");
@@ -207,6 +208,60 @@ exports.editComment = function (req, res, next) {
             next(error);
         });
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    REPLY TO COMMENT IN POST
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.replyToComment = async function(req, res, next) {
+
+    const comment_id = req.body.comment_id;
+    const event_id = req.params.event_id;
+  
+    try {
+  
+      const commentToQuote = await Comment.findById(comment_id);
+  
+      const quoteContent = commentToQuote.content;
+  
+      const authorOfQuote = await User.findById(commentToQuote.author._id);
+  
+      const quoteAuthor = authorOfQuote.username;
+  
+      // console.log('authorOfQuote.username');
+      // console.log(authorOfQuote.username);
+  
+      var newComment = new Comment({
+        content: req.body.content,
+        author: req.userData.userId,
+        quote: {
+          content: quoteContent,
+          quoteAuthor: quoteAuthor
+        },
+        event: event_id
+      });
+  
+      await newComment.save();
+  
+      await Event.update({
+        _id: event_id
+      }, {
+        $push: {
+            comments: newComment._id
+        }
+      });
+  
+      var allComments = await Comment.find({event: event_id});
+  
+      res.status(200).json({
+        message: 'post was send!',
+        comments: allComments
+      });
+    } catch (error) {
+      next(error);
+    }
+  
+  }
 
 ///////////////////////////////////////////////////////
 //              DELETE EVENT

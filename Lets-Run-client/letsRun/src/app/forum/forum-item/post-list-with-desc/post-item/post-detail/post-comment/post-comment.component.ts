@@ -10,7 +10,10 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-post-comment',
   templateUrl: './post-comment.component.html',
-  styleUrls: ['./post-comment.component.scss', '../../../../../../global-css/global-input.scss']
+  styleUrls: ['./post-comment.component.scss',
+   '../../../../../../global-css/global-input.scss',
+   '../../../../../../global-css/comment.scss'
+  ]
 })
 export class PostCommentComponent implements OnInit {
 

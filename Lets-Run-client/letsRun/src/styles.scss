@@ -4,3 +4,12 @@ body {
     margin: 0 0;
     height: 100vh;
 }
+div[style*="visibility: hidden; position: absolute;"] {
+    position: fixed !important;
+}
+
+div[style*="visibility: visible; position: absolute;"] {
+    position: fixed !important;
+    z-index: 1000;
+    transform: scale(.6);
+}

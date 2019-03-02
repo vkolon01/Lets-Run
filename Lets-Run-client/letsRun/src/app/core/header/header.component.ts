@@ -13,7 +13,7 @@ import { navBarAnimationFromLeft } from 'src/app/animations/animationsUpDown';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrls: ['./header.component.scss', '../../global-css/global-input.scss'],
   animations: [navBarAnimationFromLeft]
 })
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
@@ -75,20 +75,16 @@ ngOnChanges() {
   this.userIdSub = this.authService.getUserIdListener().subscribe(result => {
     this.userId = result;
   })  
-
-  console.log('changes');
-  
 }
 
   @HostListener('window:scroll', ['$event']) onScrollEvent($event){
-
     if(this.animation_menu === 'fullWidhth') {
       return;
     }
 
     this.pageYscroll = window.pageYOffset;
 
-    if(this.pageYscroll > this.lastPageYscroll) {
+    if(this.pageYscroll > this.lastPageYscroll && window.pageYOffset > 76) {
       this.showNavbar = true;
       this.lastPageYscroll = this.pageYscroll;
     } else {
@@ -119,7 +115,7 @@ ngOnChanges() {
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "80%";
-    dialogConfig.height = "50%";
+    dialogConfig.height = "70%";
 
     this.dialog.open(LoginComponent, dialogConfig);
     this.usernameSub = this.authService.getUserNameListener().subscribe(result => {

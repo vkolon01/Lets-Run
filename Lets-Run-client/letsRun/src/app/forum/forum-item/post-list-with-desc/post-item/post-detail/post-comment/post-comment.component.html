@@ -22,14 +22,18 @@
       <i class="material-icons" (click)="deleteComment()">delete_sweep</i> 
     </div>
     <button class="report">Report</button>
-    <button (click)="replyFieldToggle()">Reply</button>
+    <button class="reply" (click)="replyFieldToggle()"><i class="material-icons">
+      reply
+      </i></button>
   </div>
       <form *ngIf="updateField" class="comment-main-content" [formGroup]="updateCommentForm" (ngSubmit)="updateCommentToThePost()">
           <mat-form-field>
               <textarea matInput placeholder="Content" formControlName="content"></textarea>
               <mat-error *ngIf="updateCommentForm.get('content').errors">Content is required</mat-error>
             </mat-form-field>
-            <button type="submit">Update comment!</button>
+            <button  class="sendMessage" type="submit"><i class="material-icons">
+              send
+              </i></button>
             <i class="material-icons" (click)="updateCommentToggle()">clear</i> 
       </form>
 
@@ -38,7 +42,9 @@
             <textarea matInput placeholder="Content" formControlName="content"></textarea>
             <mat-error *ngIf="replyToCommentForm.get('content').errors">Content is required</mat-error>
           </mat-form-field>
-          <button type="submit">Reply!</button>
+          <button  class="sendMessage" type="submit"><i class="material-icons">
+            send
+            </i></button>
           <i class="material-icons" (click)="replyFieldToggle()">clear</i> 
     </form>
       

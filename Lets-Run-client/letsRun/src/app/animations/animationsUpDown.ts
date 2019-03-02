@@ -147,20 +147,22 @@ export const navBarAnimationFromLeft = [
         state('invisible', style({
             opacity: '0',
             width: '0',
+            height: '0',
             transform: 'translateX(50vw)'
         })),
         state('fullWidhth', style({
             opacity: '0.9',
             width: '100%',
+            height: 'calc(100vh - 72px)',
             transform: 'translateX(0vw)'
         })),
         transition('invisible => fullWidhth', animate('.3s', keyframes([
-            style({ opacity: 0, width: '0', transform: 'translateX(50vw)',  offset: 0 }),
+            style({ opacity: 0, width: '0', height: '0', transform: 'translateX(50vw)',  offset: 0 }),
             style({ opacity: 0.2, width: '20%', transform: 'translateX(40vw)', offset: 0.2 }),
             style({ opacity: 0.4, width: '40%', transform: 'translateX(30vw)', offset: 0.4 }),
             style({ opacity: 0.6, width: '60%', transform: 'translateX(20vw)', offset: 0.6 }),
             style({ opacity: 0.8, width: '80%', transform: 'translateX(10vw)', offset: 0.8 }),
-            style({ opacity: 0.9, width: '100%', transform: 'translateX(0vw)', offset: 1 }),
+            style({ opacity: 0.9, width: '100%', height: 'calc(100vh - 72px)' , transform: 'translateX(0vw)', offset: 1 }),
         ]))
 
         ),
