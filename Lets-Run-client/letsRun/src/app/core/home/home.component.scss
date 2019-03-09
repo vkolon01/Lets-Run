@@ -1,18 +1,27 @@
 .first-section,
 .second-section {
+  display: inline-block;
   width: 100%;
-  height: 937px;
+  // height: 937px;
+  .section-image {
+    display: none;
+  }
 }
 
 .first-section {
   background: #2447b9;
   position: relative;
+  z-index: 3;
+
+
 }
 
 .second-section {
   background: #007bff;
   position: relative;
-  height: 1050px;
+  // height: 1050px;
+  // -moz-height: 1068px;
+  z-index: 4;
   &:after {
     content: "";
     position: absolute;
@@ -26,9 +35,16 @@
 
 .inside-container {
     text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 span {
@@ -49,11 +65,49 @@ span {
   color: #e3d62c;
 }
 
+.images {
+  width: 100%;
+  height: 70vh;
+}
+
 .image {
-    
+  h1 {
+    text-align: center;
+    margin: 0;
+    color: #0f246a;
+    text-shadow: 4px 2px 5px #721186;
+  }
+  position: relative;
+  
     img{
         width: 100%;
         display:block
+    }
+
+    &.first {
+      max-width: 229px;
+      width: 40%;
+      position: absolute;
+      right: 40%;
+      z-index: 1;
+      top: 14%;
+    }
+    &.second {
+      max-width: 229px;
+      width: 40%;
+      position: absolute;
+      z-index: 1;
+      right: 10%;
+      top: 30%;
+    }
+    
+    &.third {
+      max-width: 302px;
+      z-index: 3;
+      width: 40%;
+      position: absolute;
+      top: 45%;
+      right: 45%;
     }
 }
 
@@ -67,6 +121,7 @@ span {
   color: #ffffff;
   margin: 1rem 0.5rem;
   font-size: 2rem;
+  z-index: 1;
 }
 
 .lineHeight {
@@ -75,53 +130,109 @@ span {
 
 .info {
   margin-bottom: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 
 }
 
 .textRotated{
-  transform: translateY(40px) rotate(-22deg);
+  margin-bottom: 5rem;
+  margin-right: 4rem;
 }
 
-@media only screen and (min-width: 240px) and (orientation: landscape) {
-  .first-section {
-    height: 758px;
+@media only screen and (orientation: landscape) {
+  .images {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    height: 100vh;
+  }
+  .image {
+
+    position: relative;
+
+  
+      &.first {
+        max-width: 30%;
+        position: unset;
+      }
+      &.second {
+        max-width: 30%;
+        position: unset;
+      }
+      
+      &.third {
+        max-width: 30%;
+        position: unset;
+      }
+  }
   }
 
-  .textRotated{
-    transform: translateY(40px) rotate(-19deg);
-}
+  @media only screen and (min-width: 610px) { 
 
-.second-section {
-  height: 980px;
-}
-}
+    .first-section, .second-section {
 
-@media only screen and (min-width: 320px) and (orientation: portrait) {
-  .first-section {
-    height: 760px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      .inside-container {
+        margin: 10% 2%;
+        background-color: #1a181894;
+        border-radius: 8%;
+      }
+      .section-image {
+        display: block;
+        z-index: -1;
+        img {
+          max-width: 500px;
+          width: 100%;
+          border-radius: 13%;
+          transform: translateX(-12%) rotate(9deg);
+        }
+      }
+    }
+
   }
 
-  .textRotated{
-    transform: translateY(40px) rotate(-18deg);
-}
 
-.second-section {
-  height: 997px;
-}
-}
-
-@media only screen and (min-width: 320px) and (orientation: landscape) {
-  .first-section {
-    height: 597px;
+@media only screen and (min-width: 400px) {
+  .images {
+    height: 100vh;
+  }
   }
 
-  .textRotated{
-    transform: translateY(40px) rotate(-13deg);
-}
+  @media only screen and (min-width: 800px) {
+    .images {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      height: 90vh;
+    }
+    .image {
 
-.second-section {
-  height: 950px;
-}
-}
+      position: relative;
+
+    
+        &.first {
+          max-width: 30%;
+          position: unset;
+        }
+        &.second {
+          max-width: 30%;
+          position: unset;
+        }
+        
+        &.third {
+          max-width: 30%;
+          position: unset;
+        }
+    }
+    }

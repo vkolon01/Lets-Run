@@ -9,6 +9,7 @@ form {
   align-items: center;
   border-radius: 5%;
       background: white;
+      transform: scale(0.7) translateY(-73px);
 }
 
 .formSearch {
@@ -24,7 +25,11 @@ form {
 }
 
 
-
+@media only screen and (min-width: 480px){
+  form {
+        transform: scale(1) translateY(0px);
+  }
+}
 
 
 

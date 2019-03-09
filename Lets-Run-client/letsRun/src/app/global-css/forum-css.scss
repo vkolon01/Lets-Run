@@ -3,7 +3,7 @@
 .general-component--list {
     // min-width: 95%;
     // max-width: 95%;
-    width: 95%;
+    width: 98%;
 }
 
 .general-category--main {
@@ -19,7 +19,7 @@
     align-items: center;
     justify-content: space-around;
     background: #7289d652;
-    width: 235px;
+    // width: 235px;
     cursor: pointer;
     &:nth-child(even) {
         background: #a8b9e0;
@@ -94,6 +94,7 @@
   
         a{
           margin-right: 20px;
+          word-break: break-word;
         }
     
         &:hover {
@@ -152,27 +153,42 @@
             content: none;
           }
         }
-  
       }
-  
-  
-  
     }
   }
 
+//   @media screen and (min-width: 240px) and (orientation:landscape) {
+//     .general-component--item {
+//       width: 100%;
+//     }
+//    }
 
-@media (min-width: 620px) {
-    .general-component--item-topicsCount{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-right: 1rem;
-    }
+//   @media only screen and (min-width: 320px) and (orientation: portrait) {
+//     .general-component--item {
+//       width: 100%;
+//     }
+//   }
+
+
+// @media (min-width: 620px) {
+//     .general-component--item-topicsCount{
+//         display: flex;
+//         flex-direction: column;
+//         align-items: center;
+//         margin-right: 1rem;
+//     }
     
 
 
-    .general-component--item-lastPost {
-        display: block;
-        max-width: 40%;
-    }
-  }
+//     .general-component--item-lastPost {
+//         display: block;
+//         max-width: 40%;
+//     }
+//   }
+
+
+//   @media only screen and (min-width: 480px) and (orientation: portrait) {
+//     .main {
+//       margin-top: -1rem;
+//     }
+//   }

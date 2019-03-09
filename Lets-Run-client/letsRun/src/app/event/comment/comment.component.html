@@ -66,7 +66,7 @@
       reply
       </i></button>
   </div>
-      <form *ngIf="updateField" class="comment-main-content" [formGroup]="updateCommentForm" (ngSubmit)="updateComment()">
+      <form *ngIf="updateField" class="add-comment" [formGroup]="updateCommentForm" (ngSubmit)="updateComment()">
           <mat-form-field>
               <textarea matInput placeholder="Content" formControlName="content"></textarea>
               <mat-error *ngIf="updateCommentForm.get('content').errors">Content is required</mat-error>
@@ -77,7 +77,7 @@
             <i class="material-icons" (click)="updateCommentToggle()">clear</i> 
       </form>
 
-      <form *ngIf="replyField" class="comment-main-content" [formGroup]="replyToCommentForm" (ngSubmit)="replyToComment()">
+      <form *ngIf="replyField" class="add-comment" [formGroup]="replyToCommentForm" (ngSubmit)="replyToComment()">
         <mat-form-field>
             <textarea matInput placeholder="Content" formControlName="content"></textarea>
             <mat-error *ngIf="replyToCommentForm.get('content').errors">Content is required</mat-error>

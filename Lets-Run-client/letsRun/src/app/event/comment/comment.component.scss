@@ -26,3 +26,10 @@
     background:  #f0dcea;
 
 }
+
+@media only screen and (min-width: 480px) and (orientation: portrait) {
+    .comment-main-content  {
+        width: 100%;
+    }
+  }
+

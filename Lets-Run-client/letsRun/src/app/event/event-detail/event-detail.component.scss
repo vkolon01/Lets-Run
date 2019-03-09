@@ -144,17 +144,6 @@
   }
 }
 
-
-.add-comment {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  box-shadow: 4px 4px 12px black;
-  margin-bottom: 1rem;
-  width: 235px;
-}
-
 .event_detail--image-container {
   position: relative;
   width: 100%;
@@ -279,4 +268,28 @@ app-comment {
   width: 100%;
   overflow-y: auto;
   overflow-anchor: none;
+}
+
+@media only screen and (min-width: 480px){
+  .event-back-edit-delete-container {
+    .event-title {
+        h1 {
+          font-size: 2rem;
+        }
+    }
+  }
+
+  .mat-icon {
+    height: 28px;
+    width: 37px;
+  }
+
+  .material-icons {
+    font-size: 35px;
+  }
+}
+
+
+@media only screen and (min-width: 480px) and (orientation: portrait) {
+
 }

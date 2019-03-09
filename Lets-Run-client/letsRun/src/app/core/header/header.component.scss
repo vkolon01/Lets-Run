@@ -1,15 +1,23 @@
 @import '../../global-css/variables';
 $barColor: #e4d72b;
 
-header {
+.nav-firstLine {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   background: $darkBlue;
   height: 100%;
   transform: translateY(0px);
-
+  box-shadow: 3px 3px 11px 0px black;
   &.hide {
     animation: hide 1s ease-in forwards;
   }
@@ -64,6 +72,18 @@ header {
   }
 }
 
+.header_menu-userInfo {
+  display: none;
+}
+
+.nav-secondLine {
+  display: none;
+}
+
+.hide_navigation-fLine {
+  display: none;
+}
+
 .menu {
   position: absolute;
   background: $darkBlue;
@@ -87,8 +107,6 @@ header {
     flex-direction: column;
     justify-self: center;
     align-items: center;
-
-    
   }
 
   .menu_nav--auth {
@@ -111,4 +129,97 @@ header {
 @keyframes show {
   0% { opacity: 0; transform: translateY(-200px); }
   100% {opacity: 1; transform: translateY(0px);}
+}
+
+
+
+// MEDIA QUERIES
+
+
+
+@media screen and (min-width: 240px) and (orientation:landscape) {
+  .menu {
+    a {
+      font-size: 1rem;
+    }
+  }
+ }
+
+ @media only screen and (min-width: 600px) {
+  header {
+    border-bottom: 3px solid #294191;
+  }
+  .header_menu--switch {
+    display: none;
+  }
+
+  .nav-secondLine {
+    display: block;
+    height: 50px;
+  }
+
+  .active {
+    background: #284091;;
+  }
+
+  ul {
+  
+  margin: 0;
+  height: 48px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  font-size: 2rem;
+  justify-content: space-between;
+
+  li {
+    &:last-of-type {
+      margin-right: 1rem;
+    }
+    a {
+      cursor: pointer;
+      padding: .5rem;
+      color: white;
+      text-decoration: none;
+    }
+  }
+  }
+
+  .header_menu-userInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+ @media only screen and (min-width: 800px) {
+
+  .menu {
+    a {
+      font-size: 2rem;
+    }
+  }
+}
+
+
+@media only screen and (min-width: 1200px) {
+
+  ul {
+    li {
+      a {
+        padding-bottom: 1.2rem;
+      }
+    }
+  }
+
+  .hide_navigation-fLine {
+    display: flex;
+  }
+
+  .hide_navigation {
+    display: none;
+  }
 }

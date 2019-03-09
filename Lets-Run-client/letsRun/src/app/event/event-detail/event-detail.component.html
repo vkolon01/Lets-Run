@@ -11,7 +11,7 @@
     <div class="event-title">
       <h1>{{event?.title}}</h1>
     </div>
-    <div></div>
+    <div *ngIf="creatorId !== userId"></div>
     <div *ngIf="creatorId === userId" class="event-detail--setings">
       <mat-icon class="event_detail--mat-icon-setings" (click)="onEventEdit()"> settings </mat-icon>
       <mat-icon class="event_detail--mat-icon-delete" (click)="deleteEvent()"> delete_sweep </mat-icon>

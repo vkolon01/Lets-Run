@@ -1,7 +1,7 @@
 @import '../../../../global-css/variables';
 
 .main {
-    width: 95%;
+    width: 100%;
 }    
 
 .general-component--item {
@@ -24,3 +24,17 @@ h2 {
     background: inherit;
     z-index: 3;
 }
+
+
+@media screen and (min-width: 480px){
+    .main {
+        margin-top: 0rem;
+    }
+        }
+
+@media only screen and (min-width: 800px) {
+ .main {
+    width: 100%;
+}    
+  }
+

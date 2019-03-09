@@ -36,22 +36,14 @@ form {
 
 .general-component--item {
   border-bottom: 2px solid $darkBlue;
-  width: 95%;
+  width: 100%;
 }
 
-.add-comment {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  box-shadow: 4px 4px 12px black;
-  margin-bottom: 1rem;
-  width: 235px;
-}
+
 
 .evenStyle,
 .oddStyle {
-  width: 95%;
+  width: 100%;
 }
 
 .comment {
@@ -95,3 +87,59 @@ app-paginator {
   flex-direction: row;
   justify-content: center;
 }
+
+
+@media only screen and (min-width: 1000px){
+  .comment {
+  
+    &:after,
+    &:before {
+      bottom: 25px;
+      
+    }
+
+    &:after {
+
+      
+    }
+  }
+}
+
+@media only screen and (min-width: 1500px){
+  .comment {
+  
+    &:after,
+    &:before {
+      bottom: 32px;
+      width: 44%;
+    }
+
+    &:after {
+
+      
+    }
+  }
+}
+
+// @media only screen and (min-width: 800px) {
+//   .comment {
+  
+//     &:after,
+//     &:before {
+//         z-index: 0;
+//         position: absolute;
+//         content: "";
+//         bottom: 15px;
+//         left: 10px;
+//         width: 50%;
+//         top: 80%;
+//         box-shadow: 0 15px 10px #777;
+//         transform: rotate(-2deg);
+//     }
+
+//     &:after {
+//       left: 376px;
+//       transform: rotate(2deg);
+//     }
+//   }
+//    }

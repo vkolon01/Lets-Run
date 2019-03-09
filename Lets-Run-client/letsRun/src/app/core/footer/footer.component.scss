@@ -12,17 +12,19 @@
 
     .start {
         left: 0;
-        top: -33px;
+        width: 86px;
+        top: -34px;
     }
     
     .running {
-        right: 50%;
+        right: 40%;
         top: -24px;
     }
     
     .finish {
         right: 0;
-        top: -21px;
+        width: 67px;
+        top: -38px;
     }
 
 }
@@ -113,7 +115,8 @@
         
             .start {
                 left: 0;
-                top: -48px;
+                width: 100px;
+                top: -38px;
             }
             
             .running {
@@ -123,12 +126,98 @@
             
             .finish {
                 right: 0;
-                top: -30px;
+                width: 90px;
+                top: -50px;
             }
         
         }
       }
 
-      @media only screen and (min-width: 320px) and (orientation: portrait) {
+      
 
+      @media only screen and (min-width: 480px) and (orientation: portrait) {
+        .svgLine {
+            position: relative;
+            .svgImage{
+                width: 49px;
+                position: absolute;
+                
+                
+                img {
+                    width: 100%;
+                }
+            }
+        
+            .start {
+                left: 0;
+                width: 152px;
+                top: -58px;
+            }
+            
+            .running {
+                right: 50%;
+                top: -32px;
+            }
+            
+            .finish {
+                right: 0;
+                width: 130px;
+                top: -73px;
+            }
+        
+        }
+      }
+
+      @media only screen and (min-width: 800px) {
+        .svgLine {
+            .clouds {
+                right: 0;
+                width: 100px;
+                top: -55px;
+            }
+        }
+      }
+
+      @media only screen and (min-width: 800px) and (orientation: landscape) {
+        .svgLine {
+            position: relative;
+            .svgImage{
+                width: 49px;
+                position: absolute;
+                
+                
+                img {
+                    width: 100%;
+                }
+            }
+        
+            .start {
+                left: 0;
+                width: 174px;
+                top: -67px;
+            }
+            
+            .running {
+                right: 55%;
+                top: -32px;
+            }
+            
+            .finish {
+                right: 0;
+                width: 100px;
+                top: -55px;
+            }
+        
+        }
+      
+      }
+
+      @media only screen and (min-width: 800px) {
+        .svgLine {
+            .clouds {
+                right: 156px;
+                width: 140px;
+                top: -75px;
+            }
+        }
       }

@@ -37,8 +37,8 @@
       <mat-error *ngIf="eventForm.get('pace').errors">Pace is requied</mat-error>
     </mat-form-field>
 
-    <button type="button" (click)="filePicker.click()" *ngIf="!data">Add photo</button>
-    <button type="button" (click)="filePicker.click()" *ngIf="data">Change photo</button>
+    <button class="buttonMain" type="button" (click)="filePicker.click()" *ngIf="!data">Add photo</button>
+    <button class="buttonMain"  type="button" (click)="filePicker.click()" *ngIf="data">Change photo</button>
 
     <input type="file" #filePicker (change)="onImagePicked($event)">
 
@@ -71,8 +71,8 @@
       <!-- Private Event? (Off by default) -->
       {{checked}}
     </mat-slide-toggle>
-      <button type="submit" *ngIf="!data">Add event</button>
-      <button type="submit" *ngIf="data">Update event</button>
+      <button class="buttonMain"  type="submit" *ngIf="!data">Add event</button>
+      <button class="buttonMain"  type="submit" *ngIf="data">Update event</button>
 
     </div>
 

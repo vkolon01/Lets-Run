@@ -9,9 +9,50 @@ app-header {
     position: fixed;
     width: 100%;
     z-index: 50;
+    
 }
 
+app-footer {
+    z-index: 4;
+}
 main {
-    padding-top: 17%;
+    margin-top: 72px;
     background: $backgroundColor;
+}
+
+@media only screen and (min-width: 600px) {
+    main {
+        margin-top: 123px;
+    }
+      }
+
+// @media only screen and (min-width: 800px) {
+// main {
+//     padding-top: 0;
+// }
+//   }
+
+
+// div[style*="visibility: hidden; position: absolute;"] {
+//     position: fixed !important;
+//     top: 2290px !important;
+// }
+
+div[style*="visibility: visible; position: absolute;"] {
+    // position: fixed !important;
+    // z-index: 1000;
+    top: 3290px !important;
+    // transform: scale(2290px) !important;
+
+    // transform: translateY(2290px) !important;
+}
+
+
+div[style*="visibility: visible; position: absolute;"] {
+    // position: fixed !important;
+    // z-index: 1000;
+    top: 3290px !important;
+    // transform: scale(2290px) !important;
+
+    // transform: translateY(2290px) !important;
 }

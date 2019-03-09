@@ -13,3 +13,10 @@ div[style*="visibility: visible; position: absolute;"] {
     z-index: 1000;
     transform: scale(.6);
 }
+
+
+div[style*="position: absolute; transition: visibility"] {
+    position: fixed !important;
+    z-index: 1000;
+    transform: scale(1);
+}
