@@ -22,6 +22,7 @@ router.delete('/deleteSection/:category_id', authCheck, forumHandler.deleteForum
 
 router.get('/get_topic_by_id/:topic_id', forumHandler.getTopicForCategoryById);
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////// 
 ///                         POST INFORMATION
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,10 +51,11 @@ router.put('/reply_to_comment/:post_id', authCheck, forumHandler.replyToCommentI
 
 router.delete('/delete_comment_to_post/:comment_id', authCheck,  forumHandler.deleteCommentById);
 
+////////////////////////////////////////////////////////////////////////////////////////////// 
+///                         HOME COMPONENT INFORMATION
+//////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
+router.get('/get_forum_information_for_home_component', forumHandler.getForumInformationForHomeComponent);
 
 
 

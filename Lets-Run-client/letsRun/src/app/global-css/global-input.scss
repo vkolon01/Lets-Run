@@ -1,5 +1,16 @@
 @import './variables';
 
+
+// .event-list-main {
+
+//   display: none;
+// }
+
+.advertisement {
+  display: none;
+}
+
+
 .main {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -189,5 +200,37 @@ input[type="file"] {
 @media only screen and (min-width: 540px) {
   ngx-recaptcha2 {
     transform: scale(1);
+  }
+}
+
+@media only screen and (min-width: 800px) {
+  .event-list-main {
+
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .advertisement {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 1rem;
+  
+    .ad {
+      height: 600px;
+      width: 300px;
+      background: #8a8686;
+      border: 7px dashed black;
+      margin-bottom: 2rem;
+
+      &:last-of-type {
+        margin-bottom: 4rem;
+      }
+
+      p {
+        font-size: 3rem;
+        text-align: center;
+      }
+    }
   }
 }

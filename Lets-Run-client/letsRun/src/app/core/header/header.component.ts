@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, HostListener, ApplicationRef } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog, MatDialogConfig } from '@angular/material'
@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   lastPageYscroll = 0;
   pageYscroll = 0;
   showNavbar = false;
+  header;
 
   constructor(private authService: AuthService,
               private dialog: MatDialog,
@@ -57,6 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               //                               /5c252ea23c24a21b0ca8a6ce
 
   ngOnInit() {
+    this.header = document.getElementById('header_id');;
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.userIdSub = this.authService.getUserIdListener().subscribe(result => {
       this.userId = result;
@@ -77,6 +79,10 @@ ngOnChanges() {
   })  
 }
 
+@HostListener('window:resize', ['$event']) onResizeEvent($event){
+  this.header = document.getElementById('header_id').clientHeight;
+}
+
   @HostListener('window:scroll', ['$event']) onScrollEvent($event){
     if(this.animation_menu === 'fullWidhth') {
       return;
@@ -84,7 +90,9 @@ ngOnChanges() {
 
     this.pageYscroll = window.pageYOffset;
 
-    if(this.pageYscroll > this.lastPageYscroll && window.pageYOffset > 76) {
+    this.header = document.getElementById('header_id').clientHeight;
+
+    if(this.pageYscroll > this.lastPageYscroll && window.pageYOffset > +this.header) {
       this.showNavbar = true;
       this.lastPageYscroll = this.pageYscroll;
     } else {
@@ -111,11 +119,23 @@ ngOnChanges() {
 
 
   onLogin() {
+    // if(document.body.clientWidth < )
+
+
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = "80%";
-    dialogConfig.height = "70%";
+    
+
+    if(document.body.clientWidth > 800) {
+      dialogConfig.height = "50%";
+      dialogConfig.width = "40%";
+    } else {
+      dialogConfig.height = "100%";
+      dialogConfig.width = "80%";
+    }
+
+
 
     this.dialog.open(LoginComponent, dialogConfig);
     this.usernameSub = this.authService.getUserNameListener().subscribe(result => {
@@ -127,8 +147,13 @@ ngOnChanges() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = false;
-    dialogConfig.width = "80%";
-    dialogConfig.height = "80%";
+    if(document.body.clientWidth > 800) {
+      dialogConfig.height = "50%";
+      dialogConfig.width = "40%";
+    } else {
+      dialogConfig.height = "100%";
+      dialogConfig.width = "80%";
+    }
 
     this.dialog.open(SigninComponent, dialogConfig);
   }
@@ -141,8 +166,13 @@ ngOnChanges() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = "80%";
-    dialogConfig.height = "80%";
+    if(document.body.clientWidth > 800) {
+      dialogConfig.height = "50%";
+      dialogConfig.width = "40%";
+    } else {
+      dialogConfig.height = "100%";
+      dialogConfig.width = "80%";
+    }
 
     this.dialog.open(AddEventComponent, dialogConfig);
   }

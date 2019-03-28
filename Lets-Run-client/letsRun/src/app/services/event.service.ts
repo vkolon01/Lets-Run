@@ -122,6 +122,10 @@ export class EventService {
         return this.creatorNameAndId.asObservable();
     }
 
+    getEventForHomeComponent() {
+        return this.http.get<{ pastEvents: number; futureEvents: number;}>(BACKEND_URL + '/events/get_event_for_home_component/');
+    }
+
     getEventById(id: string) {
         return this.http.get<{
         eventById: any,
@@ -196,6 +200,16 @@ export class EventService {
             });
     }
 
+    deleteEvent(id: string) {
+        console.log('delete ' + id);
+        return this.http.delete(BACKEND_URL + '/events/' + id)
+                    .subscribe(result => {
+                        this.snackBarService.showMessageWithDuration('Event deleted', 'OK', 3000);
+                        this.getEventList(5, 1, '', '')
+                        this.router.navigate(["/events"]);
+                    });
+    }
+
     uploadEventPicture(event_id: string, image: File | string) {
         let avatarData: string | FormData;
 
@@ -215,16 +229,6 @@ export class EventService {
 
            return this.http.post(BACKEND_URL+ "/events/" + eventId + "/invitesToEvent", friendsIds)
           }
-
-    deleteEvent(id: string) {
-        console.log('delete ' + id);
-        return this.http.delete(BACKEND_URL + '/events/' + id)
-                    .subscribe(result => {
-                        this.snackBarService.showMessageWithDuration('Event deleted', 'OK', 3000);
-                        this.getEventList(5, 1, '', '')
-                        this.router.navigate(["/events"]);
-                    });
-    }
 
     eventLikeSwitcher(id: string) {
         return this.http.get(BACKEND_URL + '/events/' + id + '/like_event_switcher')

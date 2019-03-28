@@ -18,13 +18,26 @@ app-footer {
 main {
     margin-top: 72px;
     background: $backgroundColor;
+    overflow: hidden;
 }
 
-@media only screen and (min-width: 600px) {
-    main {
-        margin-top: 123px;
-    }
-      }
+// @media only screen and (min-width: 600px) {
+//     main {
+//         margin-top: 123px;
+//     }
+//       }
+
+    //   @media only screen and (min-width: 800px) and (orientation:landscape) {
+    //     main {
+    //         margin-top: 123px;
+    //     }
+    //       }
+
+// @media only screen and (min-width: 800px) and (orientation:portrait) {
+//   main {
+//       margin-top: 72px;
+//   }
+//     }
 
 // @media only screen and (min-width: 800px) {
 // main {

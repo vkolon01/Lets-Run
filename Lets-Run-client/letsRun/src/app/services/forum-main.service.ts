@@ -13,6 +13,10 @@ export class ForumService {
 
     constructor(private http: HttpClient) { }
 
+    getForumInformationForHome() {
+        return this.http.get<{ topics: number; posts: number; comments: number }>(BACKEND_URL + "/forum/get_forum_information_for_home_component");
+    }
+
     addInCategory(icon: string, title: string, description: string, forumCategory: string, forOwnersOnly: boolean) {
         const dataToSend = { icon: icon, title: title, description: description, forumCategory: forumCategory, forOwnersOnly: forOwnersOnly }
         return this.http.post<{ forumCategory: TopicCategoryModel[] }>(BACKEND_URL + "/forum/add_section", dataToSend);

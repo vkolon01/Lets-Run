@@ -13,10 +13,12 @@
               <li><a routerLink="/"       routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Main</a></li>
               <li><a routerLink="/events" routerLinkActive="active">Events</a></li>
               <li><a routerLink="/forum"  routerLinkActive="active">Forum</a></li>
+              <!-- <li><a *ngIf="userIsAuthenticated" [@links]="animation_links" (click)="onAddEvent()" (click)="toggle_animation_state()">Add event</a></li> -->
             </ul>
           </div>
         <div class="header_menu-userInfo">
           <ul>
+              <li><a *ngIf="userIsAuthenticated" [@links]="animation_links" (click)="onAddEvent()">Add event</a></li>
             <li *ngIf="!userIsAuthenticated">
               <a  [@links]="animation_links" (click)="onLogin()">Login</a>
             </li>
@@ -39,7 +41,6 @@
   <div class="nav-secondLine hide_navigation">
       <div class="header_menu-navigation">
         <ul>
-          <!-- <a [routerLink]="[ '/path' ]" >name</a> -->
           <li><a routerLink="/"       routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Main</a></li>
           <li><a routerLink="/events" routerLinkActive="active">Events</a></li>
           <li><a routerLink="/forum"  routerLinkActive="active">Forum</a></li>
@@ -50,10 +51,15 @@
 
 <div class="menu" [@menu]="animation_menu">
 
-  <div [@links]="animation_links" class="menu_nav--routes">
-    <a routerLink="/" [@links]="animation_links" (click)="toggle_animation_state()">Main</a>
-    <a routerLink="/events" [@links]="animation_links" (click)="toggle_animation_state()">Events</a>
-    <a routerLink="/forum" [@links]="animation_links" (click)="toggle_animation_state()">Forum</a>
+  <div [@links]="animation_links">
+    <ul class="menu_nav--routes">
+      <li routerLinkActive="route-active" [routerLinkActiveOptions]="{exact: true}">    <a routerLink="/" [@links]="animation_links" (click)="toggle_animation_state()" >Main</a>
+      </li>
+      <li routerLinkActive="route-active">    <a routerLink="/events" [@links]="animation_links" (click)="toggle_animation_state()">Events</a>
+      </li>
+      <li routerLinkActive="route-active">    <a routerLink="/forum" [@links]="animation_links" (click)="toggle_animation_state()">Forum</a>
+      </li>
+    </ul>
   </div>
   <div [@links]="animation_links" class="menu_nav--routes">
     <a *ngIf="userIsAuthenticated" [@links]="animation_links" (click)="onAddEvent()" (click)="toggle_animation_state()">Add

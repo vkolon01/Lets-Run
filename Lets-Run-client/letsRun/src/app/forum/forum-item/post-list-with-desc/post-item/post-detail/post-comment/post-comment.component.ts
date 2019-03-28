@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PostCommentModule } from 'src/app/models/postComment.model';
-import * as moment from 'moment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ForumService } from 'src/app/services/forum-main.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { DialogService } from 'src/app/services/dialogService';
 import { AuthService } from 'src/app/services/auth.service';
-
+import * as moment from 'moment';
+// import 'moment/locale/ru';
 @Component({
   selector: 'app-post-comment',
   templateUrl: './post-comment.component.html',
@@ -32,6 +32,8 @@ export class PostCommentComponent implements OnInit {
   updateField = false;
   replyField = false;
 
+  userLang = navigator.language; 
+
   userId;
   
 
@@ -39,7 +41,11 @@ export class PostCommentComponent implements OnInit {
               private snackBarService: SnackBarService,
               private confirm: DialogService,
               private authService: AuthService 
-              ) { }
+              ) {
+                
+                
+                
+               }
 
   ngOnInit() {
     this.userId = this.authService.getUserId();
@@ -50,8 +56,11 @@ export class PostCommentComponent implements OnInit {
     this.replyToCommentForm = new FormGroup({
       'content': new FormControl(null, { validators: [Validators.required] })
     })
-    this.createdDate = moment(this.comment.createdAt).format('DD-MM-YYYY H-mm').toString();
-    this.modifiedDate = moment(this.comment.updatedAt).format('DD-MM-YYYY H-mm').toString();
+    // this.createdDate = moment(this.comment.createdAt).format('DD-MM-YYYY H-mm').toString();
+    this.createdDate = moment(this.comment.createdAt).format('LLLL');
+    // this.createdDate = moment(this.comment.createdAt).locale('fr').toString();
+    // this.createdDate = moment.locale('fr');
+    this.modifiedDate = moment(this.comment.updatedAt).format('LLLL');
   }
 
   replyFieldToggle() {

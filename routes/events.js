@@ -11,8 +11,7 @@ const { body } = require('express-validator/check');
 
 router.get('/', EventController.getEvents);
 
-// router.put('/add_event_picture/:event_id', authCheck, extractFile, EventController.add_event_picture);
-
+router.get('/get_event_for_home_component', EventController.getEventsForHomeComponent);
 
 router.put('/:event_id', [
     body('location')

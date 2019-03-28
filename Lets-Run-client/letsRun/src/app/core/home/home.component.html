@@ -1,50 +1,67 @@
 <div class="main">
   <div class="images">
-      <div class="image first">
+        <div class="image first">
           <h1>RUN</h1>
-          <img src="../../../assets/14715666_10209412657691030_5374534727499663114_o.jpg" alt="">
+          <div>
+          <img src={{runImage}} alt="">
+          <img class="blurred" src={{runImage}} alt="">
+          </div>
         </div>
         <div class="image second">
             <h1>BREATH</h1>
-            <img src="../../../assets/casey-horner-673341-unsplash.jpg" alt="">
+            <div>
+              <img src={{breathImage}} alt="">
+              <img class="blurred" src={{breathImage}} alt="">
+            </div>
           </div>
           <div class="image third">
               <h1>LIVE</h1>
-              <img src="../../../assets/christian-holzinger-800688-unsplash.jpg" alt="">
+              <div>
+                <img src={{liveImage}} alt="">
+                <img class="blurred" src={{liveImage}} alt="">
+              </div>
             </div>
   </div>
 
   <div class="first-section">
-    <div class="inside-container">
-      <h1 class="text">Welcome to the Lets Run</h1>
-      <p class="text">Lets run it's website about running events. Create, find and participate at event's </p>
-      <!-- <div class="image">
-        <img src="../../../assets/14715666_10209412657691030_5374534727499663114_o.jpg" alt="">
-      </div>   [ngStyle]="{ 'transform': 'rotate(-' + degr + 'deg' }" --> 
-      <p class="text">You can create new event's public or private and invite only the one you want!</p>
-      <p class="text lineHeight">We have served: <span>15</span> events!</p>
-      <p class="text textRotated" [ngStyle]="{ 'transform': 'rotate(-' + degr + 'deg' }">Find new events <a href="">now!</a></p>
+    <div class="external_container">
+        <div class="inside-container">
+            <h1 class="text">Welcome to the Lets Run</h1>
+            <p class="text">Lets run it's website about running events. Create, find and participate at event's </p>
+            <!-- <div class="image">
+              <img src="../../../assets/14715666_10209412657691030_5374534727499663114_o.jpg" alt="">
+            </div>   [ngStyle]="{ 'transform': 'rotate(-' + degr + 'deg' }" --> 
+            <p class="text">You can create new event's public or private and invite only the one you want!</p>
+            <p class="text lineHeight">We have served: <span>{{pastEvents}}</span> events!</p>
+            <p class="text lineHeight">We have: <span>{{ futureEvents }}</span>  events waiting for you!</p>
+            <p class="text textRotated" [ngStyle]="{ 'transform': 'rotate(-' + degr + 'deg' }">Find new events <a routerLink="/events">now!</a></p>
+          </div>
+          <div class="section-image">
+              <img src="../../../assets/sylwia-bartyzel-442-unsplash.jpg" alt="">
+            </div>
     </div>
-    <div class="section-image">
-      <img src="../../../assets/sylwia-bartyzel-442-unsplash.jpg" alt="">
-    </div>
+    
   </div>
   <div class="second-section">
-    <div class="inside-container">
-      <h1 class="text2"  [ngStyle]="{ 'transform': 'rotate(-' + degr + 'deg' }">Read our forum section!</h1>
-      <p class="text2">Don't forget to look at our forum, maybe you can find something useful where too!</p>
-      
-      <div>
-        <p class="text2 info">We have</p>
-        <p class="text2 info">over<span class="span2">15</span> topics</p>
-        <p class="text2 info">in <span class="span2">15</span> posts</p>
-        <p class="text2 info">with <span class="span2">15</span> comments</p>
+    
+       <div class="external_container">
+          <div class="inside-container">
+              <div>
+                  <h1 class="text2 textRotated"  [ngStyle]="{ 'transform': 'rotate(-' + degr + 'deg' }">Read our forum section!</h1>
+                <p class="text2">Don't forget to look at our forum, maybe you can find something useful where too!</p>
+                <p class="text2 info">We have</p>
+                <p class="text2 info">over<span class="span2">{{posts}}</span> posts</p>
+                <p class="text2 info">in <span class="span2">{{topics}}</span> topics</p>
+                <p class="text2 info">with <span class="span2">{{comments}}</span> comments</p>
+                <p class="text2"><a routerLink="/forum">Check out!</a></p>
+              </div>
+            </div>
+            <div class="section-image">
+                <img src="../../../assets/zaini-izzuddin-1220188-unsplash.jpg" alt="">
+              </div>
       </div>
-        <p class="text2"><a href="">Check out!</a></p>
-    </div>
-    <div class="section-image">
-        <img src="../../../assets/zaini-izzuddin-1220188-unsplash.jpg" alt="">
-      </div>
+    
+
   </div>
 
 

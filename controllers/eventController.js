@@ -784,4 +784,38 @@ exports.participateAtEvent = function (req, res, next) {
     });
 }
 
+///////////////////////////////////////////////////////
+//              GET EVENTS FOR HOME COMPONENT
+///////////////////////////////////////////////////////
 
+exports.getEventsForHomeComponent = async function(req, res, next) {
+  console.log("HOme component");
+  try {
+
+    let currentDate = Date.now();
+
+    let modDate = new Date(currentDate).setDate(new Date(currentDate).getDate() - 1);
+    var isoCurrentDate = new Date(modDate).toISOString();
+
+    const pastEvents = await Event.countDocuments({
+      eventDate: {
+        $lt: currentDate
+      }
+    });
+
+    const futureEvents = await Event.countDocuments({
+      eventDate: {
+        $gt: isoCurrentDate
+      }
+    }).countDocuments();
+
+        res.status(201).json({
+          message: 'events found',
+          pastEvents: pastEvents,
+          futureEvents: futureEvents
+        });
+
+  } catch(error) {
+      next(error);
+  }
+}

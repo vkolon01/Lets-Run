@@ -1,72 +1,85 @@
-<div class="main">
+<div class="event-list-main">
 
-  <div class="formSearch">
+  <div class="main">
 
-      <button class="arrow_box" *ngIf="!searchEventModule" type="button" (click)="searchEventMenu()">Filters</button> 
+      <div class="formSearch">
 
-    <form [formGroup]="eventSearchForm" (ngSubmit)="searchEvent()" *ngIf="searchEventModule" > 
-
-        <button  class="arrow_box opened" type="button" (click)="searchEventMenu()">Close</button>  
-
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Search by date of Event" formControlName="eventDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+          <button class="arrow_box" *ngIf="!searchEventModule" type="button" (click)="searchEventMenu()">Filters</button> 
     
-          <mat-form-field>
-              <mat-select placeholder="Search by the Distance" formControlName="dist">
-                <mat-option *ngFor="let distanceValue of distances" [value]="distanceValue.value">
-                  {{ distanceValue.viewValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-          <button class="arrow_box solid" type="submit">search</button>
-          <button class="arrow_box solid" type="button" (click)="clearSearchBox()">Clear filter</button>    
-          
-    </form>
-  </div>
-
-
-
-  <div class="event-list">
-    <div class="event-list--noEvents" *ngIf="events.length === 0">
-      <h2>Sorry, no Event are found.</h2>
-      <h4>Try different filter settings!</h4>
-    </div>
-
-    <div class="event-list__element" *ngFor="let event of events; let index = 'index'">
-
-
-      <div class="event-list--grid ">
-        <div class="event-list--image"><img src="{{ event?.picture }}" alt=""></div>
-        <div class="event-list--title">
-          <h1 (click)="openEvent(event?.id)"> <span class="spanInfo">Where </span> {{ event?.title }}</h1>
-        </div>
-
-        <div class="event_list--detail">
-          <div> <span class="spanInfo">When</span>
-            <p>{{ event?.eventDate | date : 'MMMM' }} </p>
-            <p>{{ event?.eventDate | date: 'dd' }} </p>
-            <p>{{ event?.eventDate | date: 'yyyy' }} </p>
-          </div>
-          <div> <span class="spanInfo">Dist</span>
-            <p>{{ event?.distance }}</p>
-          </div>
-          <div> <span class="spanInfo">Pace</span>
-            <p>{{ event?.pace }}</p>
-          </div>
-        </div>
-
+        <form [formGroup]="eventSearchForm" (ngSubmit)="searchEvent()" *ngIf="searchEventModule" > 
+    
+            <button  class="arrow_box opened" type="button" (click)="searchEventMenu()">Close</button>  
+    
+            <mat-form-field>
+                <input matInput [matDatepicker]="picker" placeholder="Search by date of Event" formControlName="eventDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+        
+              <mat-form-field>
+                  <mat-select placeholder="Search by the Distance" formControlName="dist">
+                    <mat-option *ngFor="let distanceValue of distances" [value]="distanceValue.value">
+                      {{ distanceValue.viewValue }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+    
+              <button class="arrow_box solid" type="submit">search</button>
+              <button class="arrow_box solid" type="button" (click)="clearSearchBox()">Clear filter</button>    
+              
+        </form>
       </div>
-    </div>
-
-    <!-- <mat-paginator [length]="totalEvents" [pageSize]="eventsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
-      *ngIf="events.length > 0"></mat-paginator> -->
-
+    
+    
+    
+      <div class="event-list">
+        <div class="event-list--noEvents" *ngIf="events.length === 0">
+          <h2>Sorry, no Event are found.</h2>
+          <h4>Try different filter settings!</h4>
+        </div>
+    
+        <div class="event-list__element" *ngFor="let event of events; let index = 'index'">
+    
+    
+          <div class="event-list--grid ">
+            <div class="event-list--image"><img src="{{ event?.picture }}" alt=""></div>
+            <div class="event-list--title">
+              <h1 (click)="openEvent(event?.id)"> <span class="spanInfo">Where </span> {{ event?.title }}</h1>
+            </div>
+    
+            <div class="event_list--detail">
+              <div> <span class="spanInfo">When</span>
+                <p>{{ event?.eventDate | date : 'MMMM' }} </p>
+                <p>{{ event?.eventDate | date: 'dd' }} </p>
+                <p>{{ event?.eventDate | date: 'yyyy' }} </p>
+              </div>
+              <div> <span class="spanInfo">Dist</span>
+                <p>{{ event?.distance }}</p>
+              </div>
+              <div> <span class="spanInfo">Pace</span>
+                <p>{{ event?.pace }}</p>
+              </div>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    
+      <app-paginator [pager]="pager" (page)="setPage($event)"></app-paginator>
   </div>
 
-  <app-paginator [pager]="pager" (page)="setPage($event)"></app-paginator>
+  <div class="advertisement">
+      <div class="ad">
+        <p>
+          Your ad here!
+        </p>
+      </div>
+
+      <div class="ad">
+          <p>
+            Your ad here!
+          </p>
+        </div>
+  </div>
 
 </div>

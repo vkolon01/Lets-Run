@@ -575,3 +575,50 @@ exports.deleteCommentById = async function(req, res, next) {
       next(error);
   }
 }
+
+
+///////////////////////////////////////////////////////
+//              GET FORUM TOPICS FOR HOME COMPONENT
+///////////////////////////////////////////////////////
+
+exports.getForumInformationForHomeComponent = async function(req, res, next) {
+  console.log("HOme component");
+  try {
+
+    let currentDate = Date.now();
+
+    let modDate = new Date(currentDate).setDate(new Date(currentDate).getDate() - 1);
+    var isoCurrentDate = new Date(modDate).toISOString();
+
+    const topics = await Topic.countDocuments();
+
+    const posts = await TopicPost.countDocuments();
+
+    const comments = await PostComment.countDocuments();
+
+    // const futureEvents = await Event.countDocuments({
+    //   eventDate: {
+    //     $gt: isoCurrentDate
+    //   }
+    // }).countDocuments();
+    console.log('topics');
+    console.log(topics);
+
+    console.log('posts');
+    console.log(posts);
+
+    console.log('comments');
+    console.log(comments);
+    
+
+        res.status(201).json({
+          message: 'events found',
+          topics: topics,
+          posts: posts,
+          comments: comments
+        });
+
+  } catch(error) {
+      next(error);
+  }
+}

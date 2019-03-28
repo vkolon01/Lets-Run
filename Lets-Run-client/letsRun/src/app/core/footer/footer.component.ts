@@ -18,8 +18,13 @@ export class FooterComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
-    dialogConfig.width = "80%";
-    dialogConfig.height = "100%";
+    if(document.body.clientWidth > 1200) {
+      dialogConfig.height = "50%";
+      dialogConfig.width = "40%";
+    } else {
+      dialogConfig.height = "100%";
+      dialogConfig.width = "80%";
+    }
 
     this.dialog.open(ContactUsComponent, dialogConfig);
 

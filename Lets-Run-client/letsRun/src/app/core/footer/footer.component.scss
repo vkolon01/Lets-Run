@@ -171,7 +171,7 @@
       @media only screen and (min-width: 800px) {
         .svgLine {
             .clouds {
-                right: 0;
+                right: 20%;
                 width: 100px;
                 top: -55px;
             }
@@ -215,9 +215,14 @@
       @media only screen and (min-width: 800px) {
         .svgLine {
             .clouds {
-                right: 156px;
                 width: 140px;
                 top: -75px;
+            }
+
+            .bench {
+                right: 72%;
+                width: 50px;
+                top: -29px;
             }
         }
       }
