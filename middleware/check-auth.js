@@ -1,12 +1,19 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+var User = require('../models/user_model');
+
+module.exports = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
-    // const decodedToken = jwt.verify(token, secret_this_should_be_longer);
-    console.log("ENV" + process.env.JWT_KEY);
-    req.userData = { email: decodedToken.email, userId: decodedToken.userId };
+    
+    const user = await User.findById(decodedToken.userId);
+
+    console.log('user.role');
+    console.log(user.role);
+    
+
+    req.userData = { email: decodedToken.email, userId: decodedToken.userId, userRole:  user.role};
     next();
   } catch (error) {
     res.status(401).json({ message: "You are not authenticated!" });

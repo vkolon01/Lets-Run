@@ -6,6 +6,7 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { DialogService } from 'src/app/services/dialogService';
 import { AuthService } from 'src/app/services/auth.service';
 import * as moment from 'moment';
+import { CommentService } from 'src/app/services/comment.service';
 // import 'moment/locale/ru';
 @Component({
   selector: 'app-post-comment',
@@ -40,7 +41,8 @@ export class PostCommentComponent implements OnInit {
   constructor(private forumService: ForumService,
               private snackBarService: SnackBarService,
               private confirm: DialogService,
-              private authService: AuthService 
+              private authService: AuthService,
+              private commentService: CommentService
               ) {
                 
                 
@@ -105,5 +107,12 @@ export class PostCommentComponent implements OnInit {
         }
       })
   }
+
+  reportComment() {
+    this.commentService.reportComment('forum', this.comment._id).subscribe(result => {
+      this.snackBarService.showMessage(result.message, 'ok');
+    });
+  }
+
 
 }

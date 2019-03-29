@@ -51,6 +51,7 @@ router.put('/reply_to_comment/:post_id', authCheck, forumHandler.replyToCommentI
 
 router.delete('/delete_comment_to_post/:comment_id', authCheck,  forumHandler.deleteCommentById);
 
+router.get('/report_comment/:comment_id', authCheck, forumHandler.reportCommentById);
 ////////////////////////////////////////////////////////////////////////////////////////////// 
 ///                         HOME COMPONENT INFORMATION
 //////////////////////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,7 @@ import { CommentService } from '../../services/comment.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DialogService } from 'src/app/services/dialogService';
 import * as moment from 'moment';
+import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-comment',
@@ -39,7 +40,8 @@ export class CommentComponent implements OnInit {
   constructor(private activeRoute: ActivatedRoute,
      private commentService: CommentService,
       private authService: AuthService,
-      private confirm: DialogService
+      private confirm: DialogService,
+      private snackBarService: SnackBarService
       ) {  }
 
   ngOnInit() {
@@ -114,5 +116,11 @@ export class CommentComponent implements OnInit {
       }
       
     })
+  }
+
+  reportComment() {
+    this.commentService.reportComment('events', this.comment.id).subscribe(result => {
+      this.snackBarService.showMessage(result.message, 'ok');
+    });
   }
 }

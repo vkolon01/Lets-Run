@@ -132,12 +132,6 @@ exports.getCommnentsForEvent = function (req, res, next) {
             return Comment.count();
         })
         .then(count => {
-            console.log('count');
-
-            console.log(count);
-            console.log('fetchedComments');
-
-            // console.log(fetchedComments[0].id);
 
 
             res.status(200).json({
@@ -171,10 +165,6 @@ exports.editComment = function (req, res, next) {
     const eventId = req.params.event_id;
     const commentId = req.params.comment_id;
     const userId = req.userData.userId;
-
-    console.log(eventId);
-    console.log(commentId);
-    console.log(userId);
 
 
 
@@ -264,7 +254,7 @@ exports.replyToComment = async function(req, res, next) {
   }
 
 ///////////////////////////////////////////////////////
-//              DELETE EVENT
+//              DELETE COMMENT
 ///////////////////////////////////////////////////////
 exports.DeleteEventComment = function (req, res, next) {
 
@@ -308,3 +298,38 @@ exports.DeleteEventComment = function (req, res, next) {
             next(error);
         });
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    REPORT COMMENT TO POST
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.reportCommentById = async function(req, res, next) {
+
+
+    try {
+  
+      const commentId = req.params.comment_id;
+  
+      await Comment.findOneAndUpdate({_id: commentId},
+        {
+          _id: commentId,
+          reported: {
+            status: true,
+            reporter: req.userData.userId,
+            dateOfReport: Date.now()
+          }
+        });
+  
+        console.log(await Comment.findById(commentId));
+        
+  
+      res.status(200).json({
+        message: 'Comment reported!'
+      });
+  
+  
+    } catch(error) {
+        next(error);
+    }
+  }

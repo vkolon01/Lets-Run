@@ -245,7 +245,8 @@ exports.addEvent = function (req, res, next) {
 //              GET EVENT BY ID
 ///////////////////////////////////////////////////////
 exports.getEvent = function (req, res, next) {
-
+  console.log('req.userData');
+  console.log(req.userData);
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {

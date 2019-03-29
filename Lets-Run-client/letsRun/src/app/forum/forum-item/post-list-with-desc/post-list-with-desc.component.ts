@@ -5,6 +5,7 @@ import { ForumService } from 'src/app/services/forum-main.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostModel } from 'src/app/models/post.model';
 import { PagerService } from 'src/app/services/pager.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-post-list-with-desc',
@@ -17,6 +18,8 @@ export class PostListWithDescComponent implements OnInit {
   topic: TopicCategoryModel; 
   addMode = false;
   posts: PostModel[];
+  forOwnersOnly;
+  userRole;
 
       //total items in collection
       totalPosts: number;
@@ -31,7 +34,8 @@ export class PostListWithDescComponent implements OnInit {
 
   constructor(private activeRoute: ActivatedRoute,
               private forumService: ForumService,
-              private pagerService: PagerService
+              private pagerService: PagerService,
+              private authService: AuthService
               ) { }
 
   ngOnInit() {
@@ -42,12 +46,15 @@ export class PostListWithDescComponent implements OnInit {
       'content': new FormControl(null, { validators: [Validators.required] })
     });
 
+    this.userRole = this.authService.getUserRole();
+
     this.activeRoute.paramMap.subscribe((paramMap: ParamMap) => {
 
       this.forumList_id = paramMap.get('forumList_id');
 
       this.forumService.getTopicById(this.forumList_id).subscribe((result: {foundTopic: TopicCategoryModel}) => {
         this.topic = result.foundTopic;
+        this.forOwnersOnly = this.topic.forOwnersOnly;
     });
 
     this.setPage(1);

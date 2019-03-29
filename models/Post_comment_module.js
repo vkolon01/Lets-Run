@@ -21,6 +21,17 @@ var userSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
     ref: 'User'
+  }, 
+  reported: {
+    status: {
+      type: Boolean,
+      default: false
+    },
+    reporter: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    dateOfReport: Date
   }
   },{
   timestamps: true

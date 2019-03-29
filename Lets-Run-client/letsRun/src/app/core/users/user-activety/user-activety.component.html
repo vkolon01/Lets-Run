@@ -1,28 +1,33 @@
 <div class="main">
 
 
+  <div class="list-container">
+      <li (click)="show('created')" [ngClass]="{'opened': createdEvents_animation_state == 'down'}">Created events</li>
 
-  <li (click)="show('created')">Created events</li>
-  <p *ngIf="user?.createdEvent.length <= 0"> No created events</p>
+      <p *ngIf="user?.createdEvent.length <= 0"> No created events</p>
  
-        <div class="events"  *ngFor="let event of user?.createdEvent" [@shrinkDownUp]="createdEvents_animation_state">
-                <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}"
-                  class="events_container">
-                  <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
-                  <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active">{{event.title}}</a></div>
-                </div>
-        </div>
+      <div class="events"  *ngFor="let event of user?.createdEvent" [@shrinkDownUp]="createdEvents_animation_state">
+              <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}"
+                class="events_container">
+                <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
+                <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active">{{event.title}}</a></div>
+              </div>
+      </div>
 
-  <li (click)="show('attempts')">Attempt events history</li>
-  <p *ngIf="user?.eventWillAttempt.length <= 0"> No events will attempt</p>
-  
-  <div  class="events"  *ngFor="let event of user?.eventWillAttempt" [@shrinkDownUp]="attemptEvents_animation_state">
-    <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}"
-      class="events_container">
-      <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
-      <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active">{{event.title}}</a></div>
-    </div>
+      <hr>
+      <p *ngIf="user?.eventWillAttempt.length <= 0"> No events will attempt</p>
+      
+      <div  class="events"  *ngFor="let event of user?.eventWillAttempt" [@shrinkDownUp]="attemptEvents_animation_state">
+        <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}"
+          class="events_container">
+          <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
+          <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active">{{event.title}}</a></div>
+        </div>
+      </div>
+      <li (click)="show('attempts')" [ngClass]="{'opened': attemptEvents_animation_state == 'down'}">Attempt events history</li>
+
   </div>
+
 
   
 
@@ -30,29 +35,36 @@
      
   <hr>
 
-    <li class="list">Private Events List</li>
+  <div class="list-container">
 
-    <li (click)="show('privateCreatedEvents')">Private created events history</li>
-    <p *ngIf="privatUserInfo?.createdEvent.length <= 0"  [@shrinkDownUp]="privateCreatedEvents_animation_state"> No private events created</p>
-    
-    <div class="events" *ngFor="let event of privatUserInfo?.createdEvent" [@shrinkDownUp]="privateCreatedEvents_animation_state">
-      <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}"
-        class="events_container">
-        <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
-        <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active">{{event.title}}</a></div>
-      </div>
-    </div>
+      <li class="list" [ngClass]="{'opened': privateCreatedEvents_animation_state == 'down'}">Private Events List</li>
 
-    <li (click)="show('privateEventsInvites')">Private events invites</li>
-    <p *ngIf="privatUserInfo?.invitesToPrivateEvent.length <= 0" [@shrinkDownUp]="privateEventsInvited_animation_state">No invites to private events</p>
-    
-    <div class="events" *ngFor="let event of privatUserInfo?.invitesToPrivateEvent" [@shrinkDownUp]="privateEventsInvited_animation_state">
-      <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}"
-        class="events_container">
-        <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
-        <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active">{{event.title}}</a></div>
+      <li (click)="show('privateCreatedEvents')">Private created events history</li>
+      <p *ngIf="privatUserInfo?.createdEvent.length <= 0"  [@shrinkDownUp]="privateCreatedEvents_animation_state"> No private events created</p>
+      
+      <div class="events" *ngFor="let event of privatUserInfo?.createdEvent" [@shrinkDownUp]="privateCreatedEvents_animation_state">
+        <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}"
+          class="events_container">
+          <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
+          <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active">{{event.title}}</a></div>
+        </div>
       </div>
+
+      <hr>
+      <p *ngIf="privatUserInfo?.invitesToPrivateEvent.length <= 0" [@shrinkDownUp]="privateEventsInvited_animation_state">No invites to private events</p>
+      
+      <div class="events" *ngFor="let event of privatUserInfo?.invitesToPrivateEvent" [@shrinkDownUp]="privateEventsInvited_animation_state">
+        <div [ngClass]="{'ended': checkForEndedStatus(event.eventDate), 'soon': chekForEventWillBeSoon(event.eventDate)}"
+          class="events_container">
+          <div class="events_container--image"><img src="{{event.picture}}" alt=""></div>
+          <div> <a [routerLink]="['/events', event._id]" routerLinkActive="router-link-active">{{event.title}}</a></div>
+        </div>
+      </div>
+      <li (click)="show('privateEventsInvites')" [ngClass]="{'opened': privateEventsInvited_animation_state == 'down'}">Private events invites</li>
+
     </div>
+ 
+
   </div>
 
 

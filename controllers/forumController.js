@@ -29,6 +29,8 @@ const {
 exports.getForumList = async function (req, res, next) {
     const queryCategoryName = req.query.categoryName;
 
+    
+
     try {
         var forumCategory = await Topic.find({forumCategory: queryCategoryName});
     
@@ -57,6 +59,14 @@ exports.getForumList = async function (req, res, next) {
 exports.postForumInGivenCategoryList = async function (req, res, next) {
 
     try {
+
+      if(req.userData.userRole !== 'admin') {
+        const error = new Error('You are not allowed, sorry');
+        error.statusCode = 401;
+        // error.data = error.array();
+        throw error;
+      }
+      
 
         var forumCategory = new Topic({
             icon: req.body.icon,
@@ -88,6 +98,15 @@ exports.postForumInGivenCategoryList = async function (req, res, next) {
 exports.updateForumInCategoryById = async function(req, res, next) {
 
     try {
+
+
+      if(req.userData.userRole !== 'admin') {
+        const error = new Error('You are not allowed, sorry');
+        error.statusCode = 401;
+        // error.data = error.array();
+        throw error;
+      }
+
         var result = await Topic.updateOne({
             _id: req.body.id,
             author: req.userData.userId
@@ -130,8 +149,12 @@ exports.deleteForumInCategoryById = async function(req, res, next) {
 
   try {
 
-    console.log('ID');
-    console.log(req.params.category_id);
+    if(req.userData.userRole !== 'admin') {
+      const error = new Error('You are not allowed, sorry');
+      error.statusCode = 401;
+      // error.data = error.array();
+      throw error;
+    }
 
     let forumToBeDeleted = await Topic.findById(req.params.category_id);
 
@@ -200,6 +223,16 @@ exports.addPostToTopic = async function(req, res, next) {
   const topic_id = req.body.topic_id;
 
   try {
+
+    const topic = await Topic.findById(topic_id);
+
+    if(topic.forOwnersOnly = true &&  req.userData.userRole !== 'admin') {
+      const error = new Error('You are not allowed, sorry');
+      error.statusCode = 401;
+      // error.data = error.array();
+      throw error;
+    }
+
 
     var newPost = new TopicPost({
       icon: req.body.icon,
@@ -576,6 +609,43 @@ exports.deleteCommentById = async function(req, res, next) {
   }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+////                    REPORT COMMENT TO POST
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.reportCommentById = async function(req, res, next) {
+
+
+  try {
+
+    const commentId = req.params.comment_id;
+
+    console.log('commentId');
+    console.log(commentId);
+    
+
+    await PostComment.findOneAndUpdate({_id: commentId},
+      {
+        _id: commentId,
+        reported: {
+          status: true,
+          reporter: req.userData.userId,
+          dateOfReport: Date.now()
+        }
+      });
+
+      console.log(await PostComment.findById(commentId));
+      
+
+    res.status(200).json({
+      message: 'Comment reported!'
+    });
+
+
+  } catch(error) {
+      next(error);
+  }
+}
 
 ///////////////////////////////////////////////////////
 //              GET FORUM TOPICS FOR HOME COMPONENT

@@ -9,7 +9,18 @@ var User = require('./user_model');
 var commentSchema = new Schema({
   content: String,
   author: { type: Schema.Types.ObjectId, ref: 'User' },
-  event: { type: Schema.Types.ObjectId, ref: 'Event' },
+  event: { type: Schema.Types.ObjectId, ref: 'Event' }, 
+  reported: {
+    status: {
+      type: Boolean,
+      default: false
+    },
+    reporter: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    dateOfReport: Date
+  },
   quote: {
     content: String,
     quoteAuthor: String

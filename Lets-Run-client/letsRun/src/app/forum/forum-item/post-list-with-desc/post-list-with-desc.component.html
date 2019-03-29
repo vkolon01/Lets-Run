@@ -25,7 +25,7 @@
     
       <h1>Posts List</h1>
     
-      <button class="arrow_box" *ngIf="!addMode" (click)="addModeToggle()">Add post!</button>
+      <button class="arrow_box" *ngIf="(!addMode && forOwnersOnly === false) || (!addMode && userRole === 'admin')" (click)="addModeToggle()">Add post!</button>
       <button class="arrow_box opened" *ngIf="addMode" (click)="addModeToggle()">Cancel</button>
     
       <form class="general-add" *ngIf="addMode" [formGroup]="addPostToTopic" (ngSubmit)="addPost()">

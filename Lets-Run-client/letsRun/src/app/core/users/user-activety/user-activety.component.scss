@@ -29,6 +29,20 @@ li {
       background: #42528b;
     }
 
+    &:first-of-type {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    &:last-of-type {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    &.opened {
+        border: 2px solid #0edb7f;
+    }
+
   }
 
 hr { 
@@ -53,7 +67,7 @@ hr {
     margin-bottom: 1rem;
     align-items: center;
     background: $darkBlue;
-
+    
     .events_container--image {
         height: 50px;
         width: 50px;
@@ -103,4 +117,15 @@ hr {
         color: #ffffff;
     }
 
+}
+
+.list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    border-radius: 40px;
+    background: rgba(0, 0, 0, 0.2);
+    margin: 1rem 0;
 }

@@ -89,5 +89,8 @@ export class CommentService {
         })
     }
 
+    reportComment( placeToReport: string ,commentId: string) {
+        return this.http.get<{message: string}>(BACKEND_URL + '/' + placeToReport + '/report_comment/' + commentId);
+    }
 
 }

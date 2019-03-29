@@ -75,4 +75,6 @@ router.put('/:event_id/:comment_id',[
 
 router.delete('/:event_id/:comment_id', authCheck, CommentController.DeleteEventComment);
 
+router.get('/report_comment/:comment_id', authCheck, CommentController.reportCommentById);
+
 module.exports = router;
