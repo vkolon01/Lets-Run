@@ -17,6 +17,12 @@ export class SigninComponent implements OnInit {
   success;
   private authSub: Subscription;
   siteKey = environment.googleReCapcha;
+  hide = true;
+
+  compact ="compact"
+  en ="en"
+  light ="light"
+  image ="image"
 
   constructor(public authService: AuthService,
       private snackBarService: SnackBarService,

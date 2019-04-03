@@ -134,7 +134,6 @@ export class AddEventComponent implements OnInit {
       if(!this.eventForm.get('image').valueChanges) {
         imageToSend = this.data.image
       }
-      
       this.eventService.updateEvent(
         this.data.id,
         this.eventForm.value.title,
@@ -148,11 +147,9 @@ export class AddEventComponent implements OnInit {
         imageToSend,
         this.eventForm.value.privateEvent
       );
+      
       this.onClose();
-
     }
-
-
   }
 
   onClose() {

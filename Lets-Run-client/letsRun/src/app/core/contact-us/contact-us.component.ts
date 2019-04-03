@@ -18,6 +18,11 @@ export class ContactUsComponent implements OnInit, OnDestroy {
   // siteKey = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
   siteKey = environment.googleReCapcha;
 
+  compact ="compact"
+  en ="en"
+  light ="light"
+  image ="image"
+
   idNum;
 
   constructor(

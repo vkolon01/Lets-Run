@@ -3,8 +3,10 @@ var router = express.Router();
 var EventController = require('../controllers/eventController');
 var AuthController = require('../controllers/authController');
 var CommentController = require('../controllers/commentController');
+
 const authCheck = require('../middleware/check-auth');
 const extractFile = require('../middleware/file');
+
 const { body } = require('express-validator/check');
 
 //////////////      EVENT CONTROLLERS 
@@ -25,8 +27,7 @@ router.put('/:event_id', [
     body('pace')
     .trim()
     .withMessage('Please enter a pace')
-], authCheck, extractFile, EventController.updateEvent);
-
+], authCheck, extractFile,  EventController.updateEvent);
 router.get('/:event_id', authCheck, EventController.getEvent);
 
 router.post('/add-event',[
@@ -41,7 +42,7 @@ router.post('/add-event',[
     body('pace')
     .trim()
     .withMessage('Please enter a pace')
-], authCheck, extractFile, EventController.addEvent);
+], authCheck, extractFile,  EventController.addEvent);
 
 router.delete('/:event_id', authCheck, EventController.deleteEvent);
 

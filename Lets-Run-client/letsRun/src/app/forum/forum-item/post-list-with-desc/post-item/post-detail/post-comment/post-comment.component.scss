@@ -1,24 +1,24 @@
-
+@import "../../../../../../global-css/variables";
 
 :host-context(.evenStyle) .main {
-    background: #dbe0f1;
+    background: $evenColor;
     margin-bottom: 1rem;
     position: relative;
     // box-shadow: -4px 6px 12px 0px black;
 }
 
 :host-context(.oddStyle) .main {
-    background:  #a8b9e0;
+    background:  $oddColor;
     margin-bottom: 1rem;
     position: relative;
     // box-shadow: 6px 6px 12px 0px black;
 }
 
 :host-context(.evenStyle) .comment-main-quote {
-    background: #9fa79f;
+    background: $oddColor;
 }
 
 :host-context(.oddStyle) .comment-main-quote {
-    background:  #dcf0dc;
+    background:  $evenColor;
 
 }

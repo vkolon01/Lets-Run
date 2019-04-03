@@ -47,14 +47,19 @@
 
           <ngx-recaptcha2 #captchaId
           [siteKey]="siteKey"
-          [size]="compact"
-          [hl]="en"
-          [theme]="light"
-          [type]="image"
+          [size]='compact'
+          [hl]='en'
+          [theme]='light'
+          [type]='image'
           [tabIndex]="1000"
           [useGlobalDomain]="false"
           formControlName="recaptcha">
         </ngx-recaptcha2>
+
+        <!-- [size]={{size}}
+        [hl]={{hl}}
+        [theme]={{theme}}
+        [type]={{type}} -->
   
         <div class="formButtons">
             <button  class="buttonMain" type="submit" >Register</button>

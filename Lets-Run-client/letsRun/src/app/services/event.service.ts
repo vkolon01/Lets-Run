@@ -171,7 +171,16 @@ export class EventService {
             updatedEvent.append("privateEvent", privateEvent.toString());
 
             console.log('image to send like object');
-            console.log(updatedEvent);
+            console.log(updatedEvent.get("id"));
+            console.log(updatedEvent.get("title"));
+            console.log(updatedEvent.get("location"));
+            console.log(updatedEvent.get("pace"));
+            console.log(updatedEvent.get("eventDate"));
+            console.log(updatedEvent.get("eventTime"));
+            console.log(updatedEvent.get("distance"));
+            console.log(updatedEvent.get("description"));
+            console.log(updatedEvent.get("image"));
+            console.log(updatedEvent.get("privateEvent"));
         } else {
 
             updatedEvent = {

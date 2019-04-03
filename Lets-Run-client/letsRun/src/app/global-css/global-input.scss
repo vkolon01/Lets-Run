@@ -101,18 +101,18 @@ input:-webkit-autofill:focus {
   list-style-type: none;
     outline: none;
   &.active {
-    background: #42528b;
+    background: $brightBlue;
   }
 }
 
 .sendMessage {
 width: 100px;
 height: 50px;
-background: #0e2369;
+background: $darkBlue;
 color: white;
 outline: none;
 &:active {
-  background: #1f3da1;
+  background: $brightBlue;
 }
 }
 
@@ -122,18 +122,18 @@ outline: none;
   position: relative;
   width: 150px;
   height: 50px;
-  background: #0e2369;
-  border-top: 4px solid #542771;
+  background: $darkBlue;
+  border-top: 4px solid $buttonBorderColor;
   
   font-size: 1.5rem;
   color: white;
 
   &.solid {
-    border: 4px solid #542771;
+    border: 4px solid $buttonBorderColor;
 
     &:active {
       border: none;
-      background: #0e2369;
+      background: $darkBlue;
       border-bottom: 4px solid black;
       border-right: 4px solid black;
       border-style: inset;
@@ -143,7 +143,7 @@ outline: none;
   &.opened {
     margin-bottom: 2rem;
     border-top: none;
-    border-bottom: 4px solid #542771;
+    border-bottom: 4px solid $buttonBorderColor;
     &:after, &:before {
       border-top: none;
 
@@ -158,13 +158,13 @@ outline: none;
     }
     &:after {
       border-color: rgba(136, 183, 213, 0);
-      border-top-color: #0e2369;
+      border-top-color: $darkBlue;
       border-width: 30px;
       margin-left: -30px;
     }
     &:before {
       border-color: rgba(194, 225, 245, 0);
-      border-top-color: #542771;
+      border-top-color: $buttonBorderColor;
       border-width: 36px;
       margin-left: -36px;
     }

@@ -10,11 +10,11 @@
 }
 
 :host-context(.evenStyle) .general-component--item {
-    background: #7289d6;
+    background: $evenColor;
 }
 
 :host-context(.oddStyle) .general-component--item {
-    background:  #8a9fd1;
+    background:  $oddColor;
 }
 h2 {
     word-break: break-all;

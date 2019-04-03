@@ -1,11 +1,12 @@
 @import '../../global-css/variables';
 
 :host-context(.evenStyle) .general-component--item {
-    background: #7289d652;
+    background: $evenColor;
+    
 }
 
 :host-context(.oddStyle) .general-component--item {
-    background:  #a8b9e0;
+    background:  $oddColor;
 }
 
 .general-add {
@@ -26,3 +27,4 @@ a {
         cursor: pointer;
     }
 }
+

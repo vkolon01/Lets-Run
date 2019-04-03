@@ -46,7 +46,7 @@ li {
   }
 
 hr { 
-    background: #0e2369;
+    background: $darkBlue;
     width: 83%;
     height: 1px;
   } 
@@ -99,7 +99,7 @@ hr {
         text-align: center;
         width: 50px;
         height: 15px;
-        background: $highlightBlue;
+        background: $brightBlue;
         color: #ed2c2c;
     }
 

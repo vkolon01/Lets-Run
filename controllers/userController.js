@@ -16,6 +16,20 @@ var nodemailer = require('nodemailer');
 var htmlTemplates = require('../constants/htmlTemplateForEmail');
 const quotes = require('../constants/emailQuotesArray');
 
+const fs = require('fs');
+const { promisify } = require('util');
+const unlinkAsync = promisify(fs.unlink);
+
+const {Storage} = require('@google-cloud/storage');
+
+const storage = new Storage({
+  projectId: "lets-run-bce4d",
+  keyFilename: 'lets-run-bce4d-firebase-adminsdk-98kk9-f06853bcf5.json'
+});
+
+const bucketName = "gs://lets-run-bce4d.appspot.com";
+const bucketNameMini = "lets-run-bce4d.appspot.com";
+
 
 var transporter = nodemailer.createTransport({
   host: "smtp.google.com",
@@ -646,40 +660,57 @@ exports.followPersonController = function (req, res, next) {
 //              ADD AVATAR FOR THE USER
 ///////////////////////////////////////////////////////
 
-exports.add_avatar = function (req, res, next) {
+exports.add_avatar = async function (req, res, next) {
   let imagePath = req.body.imagePath;
 
-  if (req.file) {
-    console.log('file');
+  try {
+    if (req.file) {
 
-    const url = req.protocol + "://" + req.get("host");
-    imagePath = url + "/images/" + req.file.filename;
-  }
 
-  User.findByIdAndUpdate({
-    _id: req.userData.userId
-  }, {
-    $set: {
-      "imagePath": imagePath
+      const filenameDes = req.file.destination + "/" + req.file.filename;
+  
+     await uploadFile(bucketName, filenameDes)
+                .then(result => {
+                  let url = `https://storage.googleapis.com/${bucketNameMini}/users/${filenameDes}`;
+                  imagePath = url;
+                });
     }
-  }).then(user => {
+
+    const userFound = await  User.findById(req.userData.userId);
+    const userImagePath = await userFound.imagePath;
+    const pictureNameToDelete =  userImagePath.split("com/");
+    let fileNameToDelete = pictureNameToDelete[2];
+
+    deleteFile(bucketName, fileNameToDelete);
+
+    const user = await   User.findByIdAndUpdate({
+      _id: req.userData.userId
+    }, {
+      $set: {
+        "imagePath": imagePath
+      }
+    });
+
     user.save();
+    await unlinkAsync(req.file.path)
     res.status(201).json({
+      
       message: "Avatar changed",
     });
-  }).catch(error => {
+
+
+  } catch(error) {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
     next(error);
-  });
-
+  }
 };
 ///////////////////////////////////////////////////////
 //              RESET PASSWORD FOR THE USER
 ///////////////////////////////////////////////////////
 exports.resetPasswordGetToken = async function (req, res, next) {
-  console.log('RESETE');
+  console.log('RESET');
   
   let token;
 
@@ -803,3 +834,38 @@ exports.changePassword = async function(req, res, next) {
   }
 
 };
+
+
+///////////////////////////////////////////////////////
+//              // UPLOAD IMAGE TO GOOGLE CLOUD
+///////////////////////////////////////////////////////
+
+
+async function uploadFile(bucketName, file) {
+
+
+  await storage.bucket(bucketName).upload(file, {
+
+    destination: `users/${file}`,
+    metadata: {
+      cacheControl: 'no-cache',
+    },
+  }).catch(error => console.log(error)
+  );
+
+  console.log(`${file} uploaded to ${bucketName}.`);
+  
+  let url = `https://storage.googleapis.com/${bucketNameMini}/users/${file}`;
+}
+
+
+async function deleteFile(bucketName, filename) {
+
+  await storage
+    .bucket(bucketName)
+    .file(filename)
+    .delete();
+
+  console.log(`gs://${bucketName}/${filename} deleted.`);
+  // [END storage_delete_file]
+}

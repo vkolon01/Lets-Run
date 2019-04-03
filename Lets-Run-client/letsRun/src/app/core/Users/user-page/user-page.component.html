@@ -3,7 +3,9 @@
     <div class="main">
 
         <div class="avatar-container" *ngIf="!form.get('image').valid" >
-        <div class="image_asPicker" *ngIf="user_id === current_user_id" (click)="filePicker.click()"></div>
+        <div class="image_asPicker" *ngIf="user_id === current_user_id" (click)="filePicker.click()"><i class="material-icons">
+          image_search
+          </i></div>
         <h1 class="user_title">{{ user?.firstName }} {{ user?.lastName }} </h1>
           <img src="{{ user?.imagePath }}" alt="avatar">
         </div>

@@ -4,7 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var mongoose = require('mongoose');
+
+var firebase = require("firebase");
+
 var morgan = require('morgan');
 var methodOverride = require('method-override');
 var User = require('./models/user_model');
@@ -47,6 +51,24 @@ mongoose
   );
   mongoose.set('debug', true);
 
+
+    //firebase storage
+
+    // var config = {
+    //   apiKey: process.env.FIREBASE_API_KEY,
+    //   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    //   databaseURL: process.env.DATABASE_URL,
+    //   storageBucket: process.env.STORAGE_BUCKED,
+    // };
+  
+    // firebase.initializeApp(config);
+  
+    // firebase.storage();
+  
+    
+
+
+
 // app.use(favicon(path.join(__dirname, 'public','images', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -55,6 +77,8 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(cookieParser());
 app.use(methodOverride());
 app.use(morgan('dev'));
+
+
 
 // const randNumber = Math.floor((Math.random() * 45));
 

@@ -3,6 +3,10 @@
     flex-direction: column;
 }
 
+app-forum-item {
+    cursor: pointer;
+}
+
 mat-form-field {
     margin-top: 2rem;
 }

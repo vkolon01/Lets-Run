@@ -17,16 +17,23 @@
   background: #ffffff;
 }
 
-.image_asPicker {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
 .avatar-container{
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   position: relative;
   width: 100%;
-
+  .image_asPicker {
+    position: absolute;
+    bottom: -95%;
+    left: 1%;
+    color: white;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
   h1 {
     position: absolute;
     color: $darkBlue;
@@ -79,7 +86,7 @@ nav {
 
 
 form {
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
@@ -100,3 +107,16 @@ input[type="file"] {
     width: 100%;
   }
 }
+
+
+@media screen and (min-width: 600px) {
+  .avatar-container {
+    width: 80%;
+  }
+ }
+
+ @media screen and (min-width: 1000px) {
+  .avatar-container {
+    width: 40%;
+  }
+ }

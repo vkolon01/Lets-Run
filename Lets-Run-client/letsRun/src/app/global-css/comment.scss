@@ -1,3 +1,4 @@
+@import "./variables";
 
 .main {
     z-index: 1;
@@ -11,9 +12,9 @@
 .comment-main-header {
     display: flex;
     flex-direction: column;
-    width: 98%;
-    align-items: baseline;
     justify-content: space-between;
+    align-items: baseline;
+    width: 98%;
 }
 
 .comment-main-quote{
@@ -66,16 +67,22 @@
     }
 
     .reply {
-        background: #0e2369;
+        background: $darkBlue;
         color: white;
 
-        &:active {
-            background: #1f3da1;
+        &:active,
+        &:hover {
+            background: $brightBlue;
         }
     }
 
     .report {
-        background: red;
+        background: rgb(177, 0, 0);
+        color: white;
+        &:active,
+        &:hover {
+            background: rgb(250, 20, 20);
+        }
     }
 }
 

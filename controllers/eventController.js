@@ -1,6 +1,12 @@
 const {
   validationResult
 } = require('express-validator/check');
+
+const fs = require('fs');
+const { promisify } = require('util');
+const unlinkAsync = promisify(fs.unlink);
+
+
 var constants = require('../constants/messages');
 var htmlTemplates = require('../constants/htmlTemplateForEmail');
 const quotes = require('../constants/emailQuotesArray');
@@ -9,6 +15,17 @@ var Event = require('../models/event_model');
 var Comment = require('../models/comment_model');
 
 var nodemailer = require('nodemailer');
+
+const {Storage} = require('@google-cloud/storage');
+
+const storage = new Storage({
+  projectId: "lets-run-bce4d",
+  keyFilename: 'lets-run-bce4d-firebase-adminsdk-98kk9-f06853bcf5.json'
+});
+
+// const bucket = storage.bucket("gs://lets-run-bce4d.appspot.com");
+const bucketName = "gs://lets-run-bce4d.appspot.com";
+const bucketNameMini = "lets-run-bce4d.appspot.com";
 
 
 var transporter = nodemailer.createTransport({
@@ -137,13 +154,20 @@ exports.getEvents = function (req, res, next) {
 ///////////////////////////////////////////////////////
 //              ADD EVENT
 ///////////////////////////////////////////////////////
-exports.addEvent = function (req, res, next) {
+exports.addEvent = async function (req, res, next) {
 
   let imagePath = req.body.imagePath;
 
+try {
+
   if (req.file) {
-    const url = req.protocol + "://" + req.get("host");
-    imagePath = url + "/images/" + req.file.filename;
+    const filenameDes = req.file.destination + "/" + req.file.filename;
+  
+    await uploadFile(bucketName, filenameDes)
+               .then(result => {
+                 let url = `https://storage.googleapis.com/${bucketNameMini}/events/${filenameDes}`;
+                 imagePath = url;
+               });
   }
 
   const event = new Event({
@@ -159,85 +183,79 @@ exports.addEvent = function (req, res, next) {
     privateEvent: req.body.privateEvent
   });
 
-  event.save()
-    .then(createdEvent => {
+  const createdEvent = await event.save();
 
-      User.update({
-        _id: req.userData.userId
-      }, {
-        $push: {
-          createdEvent: createdEvent._id
-        }
-      }, result => {
-        console.log(result);
-      })
+  await       User.update({
+    _id: req.userData.userId
+  }, {
+    $push: {
+      createdEvent: createdEvent._id
+    }
+  }, result => {
+    console.log(result);
+  })
 
-      User.findById(req.userData.userId)
-        .then(user => {
+  const user = await User.findById(req.userData.userId);
 
-          let html;
+  let html;
 
-          var boolValue = JSON.parse(req.body.privateEvent);
+  var boolValue = JSON.parse(req.body.privateEvent);
 
-          const randNumber = Math.floor((Math.random() * 45));
+  const randNumber = Math.floor((Math.random() * 45));
 
-          if(!boolValue) {
-            html = htmlTemplates.htmlEmailTemplate.header  +
-             `<h4>You have added new Event</h4>`    + 
-             htmlTemplates.htmlEmailTemplate.middle + 
-            `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile, by finding it on main page or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
-            htmlTemplates.htmlEmailTemplate.quoter +
-            `<p style=" color: #2dc394;">Random quote!</p>
-            <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
-             <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
-            htmlTemplates.htmlEmailTemplate.footer
-          } else if(req.body.privateEvent) {
-            html = htmlTemplates.htmlEmailTemplate.header  +
-            `<h4>You have added new <span style="color: red">private</span> Event</h4>`    + 
-            htmlTemplates.htmlEmailTemplate.middle + 
-           `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile in private events or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
-           htmlTemplates.htmlEmailTemplate.quoter +
-           `<p style=" color: #2dc394;">Random quote!</p>
-           <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
-            <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
-           htmlTemplates.htmlEmailTemplate.footer
-          }
+  if(!boolValue) {
+    html = htmlTemplates.htmlEmailTemplate.header  +
+     `<h4>You have added new Event</h4>`    + 
+     htmlTemplates.htmlEmailTemplate.middle + 
+    `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile, by finding it on main page or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
+    htmlTemplates.htmlEmailTemplate.quoter +
+    `<p style=" color: #2dc394;">Random quote!</p>
+    <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+     <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+    htmlTemplates.htmlEmailTemplate.footer
+  } else if(req.body.privateEvent) {
+    html = htmlTemplates.htmlEmailTemplate.header  +
+    `<h4>You have added new <span style="color: red">private</span> Event</h4>`    + 
+    htmlTemplates.htmlEmailTemplate.middle + 
+   `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile in private events or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
+   htmlTemplates.htmlEmailTemplate.quoter +
+   `<p style=" color: #2dc394;">Random quote!</p>
+   <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+    <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+   htmlTemplates.htmlEmailTemplate.footer
+  }
 
 
-          const emailToSend = {
-            from: '"LetsRun" <events@letsrun.com>',
-            to: user.email,
-            subject: "You have added new event",
-            text: "New event",
-            html: html,
-            attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate
-          };
+  const emailToSend = {
+    from: '"LetsRun" <events@letsrun.com>',
+    to: user.email,
+    subject: "You have added new event",
+    text: "New event",
+    html: html,
+    attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate
+  };
 
-          transporter.sendMail(emailToSend, function (err, info) {
-            if (err)
-              console.log(err)
-            else
-              console.log(info);
-          });
+  transporter.sendMail(emailToSend, function (err, info) {
+    if (err)
+      console.log(err)
+    else
+      console.log(info);
+  });
 
+  res.status(201).json({
+    message: "Event created",
+    event: {
+      ...createdEvent,
+      id: createdEvent._id
+    }
+  });
 
-        });
-
-      res.status(201).json({
-        message: "Event created",
-        event: {
-          ...createdEvent,
-          id: createdEvent._id
-        }
-      });
-
-    })
-    .catch(error => {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    });
+} catch(error) {
+  if (!error.statusCode) {
+    error.statusCode = 500;
+  }
+    next(error);
+}
 }
 
 
@@ -302,38 +320,55 @@ exports.getEvent = function (req, res, next) {
 ///////////////////////////////////////////////////////
 //              UPDATE EVENT
 ///////////////////////////////////////////////////////
-exports.updateEvent = function (req, res, next) {
+exports.updateEvent = async function (req, res, next) {
 
   let imagePath = req.body.picture;
 
-  if (req.file) {
-    const url = req.protocol + "://" + req.get("host");
-    imagePath = url + "/images/" + req.file.filename;
-  }
+  let file = req.file;
+  let image = req.body.picture;
 
-  const errors = validationResult(req);
+  try {
+    if (req.file) {
 
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
+      const filenameDes = req.file.destination + "/" + req.file.filename;
+  
+     await uploadFile(bucketName, filenameDes)
+                .then(result => {
+                  let url = `https://storage.googleapis.com/${bucketNameMini}/events/${filenameDes}`;
+                  imagePath = url;
+                });
+    }
 
-  const event = new Event({
-    _id: req.body.id,
-    location: req.body.location,
-    distance: req.body.distance,
-    pace: req.body.pace,
-    eventDate: req.body.eventDate,
-    eventTime: req.body.eventTime.toString(),
-    description: req.body.description,
-    title:  req.body.title,
-    picture: imagePath,
-    privateEvent: req.body.privateEvent
-  })
+    const eventFound = await  Event.findById(req.body.id);
+    const eventImagePath = await eventFound.picture;
+    const pictureNameToDelete =  eventImagePath.split("com/");
+    let fileNameToDelete = pictureNameToDelete[2];
 
-  Event.updateOne({
+    deleteFile(bucketName, fileNameToDelete);
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed.');
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
+    
+    const event = new Event({
+      _id: req.body.id,
+      location: req.body.location,
+      distance: req.body.distance,
+      pace: req.body.pace,
+      eventDate: req.body.eventDate,
+      eventTime: req.body.eventTime,
+      description: req.body.description,
+      title:  req.body.title,
+      picture: imagePath,
+      privateEvent: req.body.privateEvent
+    })
+
+   const result = await Event.updateOne({
       _id: req.body.id,
       author: req.userData.userId
     }, {
@@ -351,24 +386,20 @@ exports.updateEvent = function (req, res, next) {
       }
     })
 
-    .then(result => {
+    if (result.n > 0) {
+      const error = new Error('Update successful!');
+      await unlinkAsync(req.file.path)
+      error.statusCode = 201;
+      throw error;
+    } else {
+      const error = new Error('Not authorized!');
+      error.statusCode = 401;
+      throw error;
+    }
 
-      if (result.n > 0) {
-        const error = new Error('Update successful!');
-        error.statusCode = 201;
-        throw error;
-      } else {
-        const error = new Error('Not authorized!');
-        error.statusCode = 401;
-        throw error;
-      }
-    })
-    .catch(error => {
-      if (!error.statusCode) {
-        error.statusCode = 500;
-      }
-      next(error);
-    });
+  } catch(error) {
+    next(error);
+}
 }
 
 ///////////////////////////////////////////////////////
@@ -819,4 +850,38 @@ exports.getEventsForHomeComponent = async function(req, res, next) {
   } catch(error) {
       next(error);
   }
+}
+
+///////////////////////////////////////////////////////
+//              // UPLOAD IMAGE TO GOOGLE CLOUD
+///////////////////////////////////////////////////////
+
+
+async function uploadFile(bucketName, file) {
+
+
+  await storage.bucket(bucketName).upload(file, {
+
+    destination: `events/${file}`,
+    metadata: {
+      cacheControl: 'no-cache',
+    },
+  }).catch(error => console.log(error)
+  );
+
+  console.log(`${file} uploaded to ${bucketName}.`);
+  
+  let url = `https://storage.googleapis.com/${bucketNameMini}/events/${file}`;
+}
+
+
+async function deleteFile(bucketName, filename) {
+
+  await storage
+    .bucket(bucketName)
+    .file(filename)
+    .delete();
+
+  console.log(`gs://${bucketName}/${filename} deleted.`);
+  // [END storage_delete_file]
 }

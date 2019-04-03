@@ -1,9 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Cinzel');
 
-$darkBlue: rgb(14, 35, 105);
-$highlightBlue: #42528b;
-$grey: rgb(184, 174, 174);
-$backgroundColor: #e9ebee;
-$linkTextColor: yellow;
+$darkBlue: rgb(14, 35, 105); //main color
+$brightBlue: $darkBlue + rgb(0, 0, 100); //shine main color
 
-$fontMenu: 'Cinzel', serif;
+$grey: rgb(184, 174, 174); //border in main list
+$backgroundColor: #e9ebee; // main background color of all pages
+
+//FORUM AND COMMENT EVEN/ODD COLORS
+
+$evenColor: #7289d6;
+$oddColor: #8a9fd1;
+
+$linkTextColor: yellow; //link colors
+
+$fontMenu: 'Cinzel', serif; //main font
+
+
+$buttonBorderColor: #542771;

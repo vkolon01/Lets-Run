@@ -5,8 +5,6 @@ const MIME_TYPE_MAP = {
   "image/jpeg": "jpg",
   "image/jpg": "jpg",
   "image/gif": "gif"
-
-
 };
 
 const storage = multer.diskStorage({

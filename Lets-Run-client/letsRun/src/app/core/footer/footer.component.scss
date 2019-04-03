@@ -1,3 +1,5 @@
+@import "../../global-css/variables";
+
 .svgLine {
     position: relative;
     .svgImage{
@@ -37,7 +39,7 @@
           flex-direction: row;
           color: white;
           width: 100%;
-          background: rgb(14, 34, 103);
+          background: $darkBlue;
           align-content: space-between;
           height: 100px;
         .links {
@@ -83,19 +85,15 @@
         display: flex;
         flex-direction: row;
         align-content: center;
-        background: #0e2369;
+        background: $darkBlue;
         justify-content: space-around;
         color: white;
         width: 100%;
-        // div {
-        //     text-align: center;
-
             p {
                 &:last-of-type {
                     text-align: right;
                 }
             }
-        // }
       }
 
       // MEDIA QUERIES
