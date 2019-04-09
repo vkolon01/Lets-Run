@@ -63,14 +63,14 @@ export class PostDetailComponent implements OnInit {
       this.forumService.getPostById(this.post_id).subscribe((result: {post: PostModel}) => {
         this.post = result.post;
 
-        console.log('post?.author._id');
-        console.log(this.post.author._id);
+        // console.log('post?.author._id');
+        // console.log(this.post.author._id);
 
-        console.log('userId');
-        console.log(this.userId);
+        // console.log('userId');
+        // console.log(this.userId);
 
-        console.log('userId === ');
-        console.log(this.userId === this.post.author._id);
+        // console.log('userId === ');
+        // console.log(this.userId === this.post.author._id);
 
       });
 

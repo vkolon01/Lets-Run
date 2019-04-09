@@ -3,7 +3,7 @@
 
   </div>
   <div class="comment-main-header">
-    <h3>{{comment?.author.username}}</h3>
+    <h3 *ngIf="comment?.author !== null">{{comment?.author.username}}</h3> <h3 *ngIf="comment?.author === null">User deleted</h3>
     <span>Created:  {{createdDate}}</span>
     <span>Modified {{modifiedDate}}</span>
   </div>
@@ -17,7 +17,7 @@
     <p>{{comment?.content}}</p>
   </div>
   <div class="comment-main-settings" *ngIf="!updateField && !replyField">
-    <div *ngIf="userId === comment?.author._id">
+    <div *ngIf="comment?.author !== null && userId === comment?.author._id">
       <i class="material-icons" (click)="updateCommentToggle()">settings</i>
       <i class="material-icons" (click)="deleteComment()">delete_sweep</i> 
     </div>

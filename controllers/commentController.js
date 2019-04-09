@@ -213,13 +213,19 @@ exports.replyToComment = async function(req, res, next) {
       const commentToQuote = await Comment.findById(comment_id);
   
       const quoteContent = commentToQuote.content;
+
+
   
       const authorOfQuote = await User.findById(commentToQuote.author._id);
   
-      const quoteAuthor = authorOfQuote.username;
-  
-      // console.log('authorOfQuote.username');
-      // console.log(authorOfQuote.username);
+      
+      let quoteAuthor;
+         
+      if(authorOfQuote) {
+         quoteAuthor = authorOfQuote.username;
+      } else {
+         quoteAuthor = "User deleted";
+      }
   
       var newComment = new Comment({
         content: req.body.content,

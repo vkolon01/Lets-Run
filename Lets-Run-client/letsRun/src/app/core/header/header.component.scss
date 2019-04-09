@@ -180,13 +180,22 @@ header {
 
   .header_menu-navigation {
 
+    a {
+      &:hover  {
+        background: #314ca6;
+      }
+    }
+
     ul {
       li {
 
           &:first-child {
             a { 
               border-top-left-radius: 20px;
+
             }
+
+
             
           }
 
@@ -238,6 +247,12 @@ header {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+
+    a {
+      &:hover  {
+        background: #314ca6;
+      }
+    }
   }
 }
 

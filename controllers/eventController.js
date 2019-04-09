@@ -14,16 +14,19 @@ var User = require('../models/user_model');
 var Event = require('../models/event_model');
 var Comment = require('../models/comment_model');
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 var nodemailer = require('nodemailer');
 
 const {Storage} = require('@google-cloud/storage');
 
 const storage = new Storage({
-  projectId: "lets-run-bce4d",
+  projectId: process.env.FIREBASE_ID,
   keyFilename: 'lets-run-bce4d-firebase-adminsdk-98kk9-f06853bcf5.json'
 });
 
-// const bucket = storage.bucket("gs://lets-run-bce4d.appspot.com");
+
 const bucketName = "gs://lets-run-bce4d.appspot.com";
 const bucketNameMini = "lets-run-bce4d.appspot.com";
 
@@ -207,7 +210,7 @@ try {
     html = htmlTemplates.htmlEmailTemplate.header  +
      `<h4>You have added new Event</h4>`    + 
      htmlTemplates.htmlEmailTemplate.middle + 
-    `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile, by finding it on main page or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
+    `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile, by finding it on main page or simply by clicking on this <a href="https://let-run-today.tk/events/${createdEvent._id}">link</a></p>` +
     htmlTemplates.htmlEmailTemplate.quoter +
     `<p style=" color: #2dc394;">Random quote!</p>
     <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
@@ -217,7 +220,7 @@ try {
     html = htmlTemplates.htmlEmailTemplate.header  +
     `<h4>You have added new <span style="color: red">private</span> Event</h4>`    + 
     htmlTemplates.htmlEmailTemplate.middle + 
-   `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile in private events or simply by clicking on this <a href="http://localhost:4200/events/${createdEvent._id}">link</a></p>` +
+   `<p style="text-align: center; font-size: 1.5rem;">You can visit it from your profile in private events or simply by clicking on this <a href="https://let-run-today.tk/events/${createdEvent._id}">link</a></p>` +
    htmlTemplates.htmlEmailTemplate.quoter +
    `<p style=" color: #2dc394;">Random quote!</p>
    <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
@@ -225,22 +228,41 @@ try {
    htmlTemplates.htmlEmailTemplate.footer
   }
 
-
-  const emailToSend = {
-    from: '"LetsRun" <events@letsrun.com>',
+  const msg = {
     to: user.email,
-    subject: "You have added new event",
-    text: "New event",
-    html: html,
-    attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate
+    from: 'no_replay_events@letsrun.com',
+    subject: 'You have added new event',
+    text: 'New event',
+    // attachments: [
+    //   {
+    //     content: 'public/images/flogo-HexRBG-Wht-58.png',
+    //     filename: 'flogo-HexRBG-Wht-58.png',
+    //     // type: 'image/png',
+    //     // disposition: 'attachment',
+    //     // content_id: 'facebook@logo'
+    //   },
+    // ],
+    html: html
   };
 
-  transporter.sendMail(emailToSend, function (err, info) {
-    if (err)
-      console.log(err)
-    else
-      console.log(info);
-  });
+  sgMail.send(msg);
+
+
+  // const emailToSend = {
+  //   from: '"LetsRun" <events@letsrun.com>',
+  //   to: user.email,
+  //   subject: "You have added new event",
+  //   text: "New event",
+  //   html: html,
+  //   attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate
+  // };
+
+  // transporter.sendMail(emailToSend, function (err, info) {
+  //   if (err)
+  //     console.log(err)
+  //   else
+  //     console.log(info);
+  // });
 
   res.status(201).json({
     message: "Event created",
@@ -460,12 +482,11 @@ exports.deleteEvent = function (req, res, next) {
 
           const randNumber = Math.floor((Math.random() * 45));
 
-          const emailToSend = {
-            from: '"LetsRun" <events@letsrun.com>',
+          const msg = {
             to: user.email,
-            subject: "You have deleted event",
-            text: "Delete event",
-            attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+            from: 'no_replay_events@letsrun.com',
+            subject: 'You have deleted event',
+            text: 'Delete event',
             html: htmlTemplates.htmlEmailTemplate.header  +
             `<h4>You have <span style="color: red"> deleted </span> your event!</h4>`    + 
             htmlTemplates.htmlEmailTemplate.middle + 
@@ -476,13 +497,33 @@ exports.deleteEvent = function (req, res, next) {
             <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
            htmlTemplates.htmlEmailTemplate.footer
           };
+        
+          sgMail.send(msg);
 
-          transporter.sendMail(emailToSend, function (err, info) {
-            if (err)
-              console.log(err)
-            else
-              console.log(info);
-          });
+
+          // const emailToSend = {
+          //   from: '"LetsRun" <events@letsrun.com>',
+          //   to: user.email,
+          //   subject: "You have deleted event",
+          //   text: "Delete event",
+          //   attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+          //   html: htmlTemplates.htmlEmailTemplate.header  +
+          //   `<h4>You have <span style="color: red"> deleted </span> your event!</h4>`    + 
+          //   htmlTemplates.htmlEmailTemplate.middle + 
+          //  `<p style="text-align: center; font-size: 1.5rem;">We are waiting more events from you!</p>` +
+          //  htmlTemplates.htmlEmailTemplate.quoter +
+          //  `<p style=" color: #2dc394;">Random quote!</p>
+          //  <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+          //   <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+          //  htmlTemplates.htmlEmailTemplate.footer
+          // };
+
+          // transporter.sendMail(emailToSend, function (err, info) {
+          //   if (err)
+          //     console.log(err)
+          //   else
+          //     console.log(info);
+          // });
 
         })
 
@@ -535,30 +576,50 @@ exports.sendInvitesToTheFriends = async function (req, res, next) {
 
       const randNumber = Math.floor((Math.random() * 45));
 
-      const emailToSend = {
-        from: '"LetsRun" <events@letsrun.com>',
+
+      const msg = {
         to: foundUser.email,
-        subject: "You have been invited to the private event!",
-        text: "You have been invited to join the private event!",
-        attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
-            html: htmlTemplates.htmlEmailTemplate.header  +
-            `<h4>You have been invited to join the private event!</h4>`    + 
-            htmlTemplates.htmlEmailTemplate.middle + 
-           `<p style="text-align: center; font-size: 1.5rem;">You have been invited to the private event by ${foundUser.username}</p>
-           <p style="text-align: center; font-size: 1.5rem;">You can find it simply by clicking at this <a href="http://localhost:4200/events/${event._id}">link</a>! or by finding it in your profile page under privite invites menu!</p>` +
-           htmlTemplates.htmlEmailTemplate.quoter +
-           `<p style=" color: #2dc394;">Random quote!</p>
-           <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
-            <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
-           htmlTemplates.htmlEmailTemplate.footer
+        from: 'no_replay_events@letsrun.com',
+        subject: 'You have been invited to the private event!',
+        text: 'You have been invited to join the private event!',
+        html: htmlTemplates.htmlEmailTemplate.header  +
+        `<h4>You have been invited to join the private event!</h4>`    + 
+        htmlTemplates.htmlEmailTemplate.middle + 
+       `<p style="text-align: center; font-size: 1.5rem;">You have been invited to the private event by ${foundUser.username}</p>
+       <p style="text-align: center; font-size: 1.5rem;">You can find it simply by clicking at this <a href="https://let-run-today.tk/events/${event._id}">link</a>! or by finding it in your profile page under privite invites menu!</p>` +
+       htmlTemplates.htmlEmailTemplate.quoter +
+       `<p style=" color: #2dc394;">Random quote!</p>
+       <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+        <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+       htmlTemplates.htmlEmailTemplate.footer
       };
+    
+      sgMail.send(msg);
+
+      // const emailToSend = {
+      //   from: '"LetsRun" <events@letsrun.com>',
+      //   to: foundUser.email,
+      //   subject: "You have been invited to the private event!",
+      //   text: "You have been invited to join the private event!",
+      //   attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+      //       html: htmlTemplates.htmlEmailTemplate.header  +
+      //       `<h4>You have been invited to join the private event!</h4>`    + 
+      //       htmlTemplates.htmlEmailTemplate.middle + 
+      //      `<p style="text-align: center; font-size: 1.5rem;">You have been invited to the private event by ${foundUser.username}</p>
+      //      <p style="text-align: center; font-size: 1.5rem;">You can find it simply by clicking at this <a href="https://let-run-today.tk/events/${event._id}">link</a>! or by finding it in your profile page under privite invites menu!</p>` +
+      //      htmlTemplates.htmlEmailTemplate.quoter +
+      //      `<p style=" color: #2dc394;">Random quote!</p>
+      //      <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+      //       <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+      //      htmlTemplates.htmlEmailTemplate.footer
+      // };
   
-      transporter.sendMail(emailToSend, function (err, info) {
-        if (err)
-          console.log(err)
-        else
-          console.log(info);
-      });
+      // transporter.sendMail(emailToSend, function (err, info) {
+      //   if (err)
+      //     console.log(err)
+      //   else
+      //     console.log(info);
+      // });
 
       foundUser.save();
      }
@@ -654,14 +715,13 @@ exports.eventLikeSwitcher = function (req, res, next) {
               
               const randNumber = Math.floor((Math.random() * 45));
 
-              const emailToSend = {
-                from: '"LetsRun" <events@letsrun.com>',
+              const msg = {
                 to: user.email,
+                from: 'no_replay_events@letsrun.com',
                 subject: "You'r event liked",
-                text: "Liked event",
-                attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+                text: "You'r event liked",
                 html: htmlTemplates.htmlEmailTemplate.header +
-                      `<h4  style="text-align: center;">You'r event have been liked, you can find it by clicking this <a style="color: #67e634; text-decoration: none;" href="http://localhost:4200/events/${eventId}">link!</a></h4>` +
+                      `<h4  style="text-align: center;">You'r event have been liked, you can find it by clicking this <a style="color: #67e634; text-decoration: none;" href="https://let-run-today.tk/events/${eventId}">link!</a></h4>` +
                       htmlTemplates.htmlEmailTemplate.middle + 
                       htmlTemplates.htmlEmailTemplate.quoter +
                       `<p style=" color: #2dc394;">Random quote!</p>
@@ -669,13 +729,31 @@ exports.eventLikeSwitcher = function (req, res, next) {
                        <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
                       htmlTemplates.htmlEmailTemplate.footer
               };
+            
+              sgMail.send(msg);
 
-              transporter.sendMail(emailToSend, function (err, info) {
-                if (err)
-                  console.log(err)
-                else
-                  console.log(info);
-              });
+              // const emailToSend = {
+              //   from: '"LetsRun" <events@letsrun.com>',
+              //   to: user.email,
+              //   subject: "You'r event liked",
+              //   text: "Liked event",
+              //   attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+              //   html: htmlTemplates.htmlEmailTemplate.header +
+              //         `<h4  style="text-align: center;">You'r event have been liked, you can find it by clicking this <a style="color: #67e634; text-decoration: none;" href="https://let-run-today.tk/events/${eventId}">link!</a></h4>` +
+              //         htmlTemplates.htmlEmailTemplate.middle + 
+              //         htmlTemplates.htmlEmailTemplate.quoter +
+              //         `<p style=" color: #2dc394;">Random quote!</p>
+              //         <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+              //          <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+              //         htmlTemplates.htmlEmailTemplate.footer
+              // };
+
+              // transporter.sendMail(emailToSend, function (err, info) {
+              //   if (err)
+              //     console.log(err)
+              //   else
+              //     console.log(info);
+              // });
 
             })
           event.likes.push(req.userData.userId);
@@ -758,14 +836,13 @@ exports.participateAtEvent = function (req, res, next) {
 
               const randNumber = Math.floor((Math.random() * 45));
 
-              const emailToSend = {
-                from: '"LetsRun" <events@letsrun.com>',
+              const msg = {
                 to: user.email,
+                from: 'no_replay_events@letsrun.com',
                 subject: "You'r event heve new attempt",
-                text: "New attempt event",
-                attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+                text: "You'r event heve new attempt",
                 html: htmlTemplates.htmlEmailTemplate.header +
-                      `<h4  style="text-align: center;">You'r <a href="http://localhost:4200/events/${eventId}">event</a> have new attempt</h4>` +
+                      `<h4  style="text-align: center;">You'r <a href="https://let-run-today.tk/events/${eventId}">event</a> have new attempt</h4>` +
                       htmlTemplates.htmlEmailTemplate.middle + 
                       htmlTemplates.htmlEmailTemplate.quoter +
                       `<p style=" color: #2dc394;">Random quote!</p>
@@ -773,13 +850,31 @@ exports.participateAtEvent = function (req, res, next) {
                        <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
                       htmlTemplates.htmlEmailTemplate.footer
               };
+            
+              sgMail.send(msg);
 
-              transporter.sendMail(emailToSend, function (err, info) {
-                if (err)
-                  console.log(err)
-                else
-                  console.log(info);
-              });
+              // const emailToSend = {
+              //   from: '"LetsRun" <events@letsrun.com>',
+              //   to: user.email,
+              //   subject: "You'r event heve new attempt",
+              //   text: "New attempt event",
+              //   attachments: htmlTemplates.htmlEmailTemplate.attachmentsTemplate,
+              //   html: htmlTemplates.htmlEmailTemplate.header +
+              //         `<h4  style="text-align: center;">You'r <a href="https://let-run-today.tk/events/${eventId}">event</a> have new attempt</h4>` +
+              //         htmlTemplates.htmlEmailTemplate.middle + 
+              //         htmlTemplates.htmlEmailTemplate.quoter +
+              //         `<p style=" color: #2dc394;">Random quote!</p>
+              //         <p>&#65282;${quotes.quotesArray[randNumber].qoute}&#65282;</p> 
+              //          <p style="text-align: right; color: #2dc394;">&#9400;${quotes.quotesArray[randNumber].author}</p>` +
+              //         htmlTemplates.htmlEmailTemplate.footer
+              // };
+
+              // transporter.sendMail(emailToSend, function (err, info) {
+              //   if (err)
+              //     console.log(err)
+              //   else
+              //     console.log(info);
+              // });
 
             })
           event.runners.push(req.userData.userId);

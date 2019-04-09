@@ -26,10 +26,10 @@ exports.htmlEmailTemplate = {
                                 <a style="text-decoration:none; color: #a0a914;" href="http://localhost:4200">Home page</a>
                             </td>
                             <td align="center" bgcolor="#0e2369" style="width: 33%; font-size: 30px; ">
-                                <a style="text-decoration:none; color: #a0a914;"  href="http://localhost:4200/events">Events list</a>
+                                <a style="text-decoration:none; color: #a0a914;"  href="https://let-run-today.tk/events">Events list</a>
                             </td>
                             <td align="center" bgcolor="#0e2369" style="width: 33%; padding: 5px 0 5px 0; font-size: 30px; ">
-                                <a style="text-decoration:none; color: #a0a914;"  href="http://localhost:4200/forum">Forum</a>
+                                <a style="text-decoration:none; color: #a0a914;"  href="https://let-run-today.tk/forum">Forum</a>
                             </td>
                         </tr>
                     </tbody>
@@ -110,14 +110,14 @@ exports.htmlEmailTemplate = {
         <td align="left" bgcolor="#0e2369" style="padding: 0 0 0 0;">
             <p style="color: #a0a914; font-size: 18px; margin-left: 10px; margin-bottom: 0; ">Message
                 was send from: <a style="color: #2dc394; font-size: 18px;  text-decoration:none; cursor: pointer"
-                    href="http://localhost:4200/">letsrun.com</a></p>
+                    href="https://let-run-today.tk/">let-run-today.tk</a></p>
         </td>
     </tr>
     <tr>
         <td align="left" bgcolor="#0e2369" style="padding: 0 0 20px 0;">
             <p style="color: #a0a914; font-size: 18px; margin-left: 10px;">If you don't want to
                 receive messages from us click <a style="color: #2dc394; font-size: 18px;  text-decoration:none;"
-                    href="http://localhost:4200/">here</a> to unsubscribe!</p>
+                    href="https://let-run-today.tk/">here</a> to unsubscribe!</p>
         </td>
     </tr>
 </tbody>

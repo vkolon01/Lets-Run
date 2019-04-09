@@ -541,7 +541,17 @@ exports.replyToCommentInPost = async function(req, res, next) {
 
     const authorOfQuote = await User.findById(commentToQuote.author._id);
 
-    const quoteAuthor = authorOfQuote.username;
+    console.log('authorOfQuote.username');
+    console.log(authorOfQuote);
+
+    let quoteAuthor;
+
+    if(authorOfQuote) {
+       quoteAuthor = authorOfQuote.username;
+    } else {
+       quoteAuthor = "User deleted";
+    }
+    
 
     // console.log('authorOfQuote.username');
     // console.log(authorOfQuote.username);

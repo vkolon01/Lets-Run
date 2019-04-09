@@ -44,11 +44,11 @@
  
    <div *ngIf="!editMode" class="general-component--item">
      <div class="general-component--item-icon">
-         <div class="item-image">
+         <!-- <div class="item-image">
            <img src="{{post?.author.imagePath}}" alt="author avatar">
-         </div>
+         </div> -->
              <p>views: {{post?.visitsCount}}</p>
-             <div class="settings"  *ngIf="userId === post?.author._id">
+             <div class="settings"  *ngIf="post?.author !== null && userId === post?.author._id">
               <i class="material-icons" (click)="updateModeToggle()">settings</i> 
               <i class="material-icons" (click)="deletePost()">delete_sweep</i> 
              </div>
@@ -57,7 +57,6 @@
          <h2> <a>{{post?.description}}</a></h2>
          <p>{{post?.content}}</p>
        </div>
-       
    </div>
    <form  class="add-comment" [formGroup]="addCommentForm" (ngSubmit)="addCommentToThePost()">
      <mat-form-field>
@@ -82,7 +81,7 @@
  
    <app-paginator [pager]="pager" (page)="setPage($event)"></app-paginator>
  </div>
- <div class="advertisement">
+ <div class="adve">
     <div class="ad">
       <p>
         Your ad here!

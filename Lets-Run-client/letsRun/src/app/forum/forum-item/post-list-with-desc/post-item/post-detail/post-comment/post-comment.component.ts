@@ -57,7 +57,8 @@ export class PostCommentComponent implements OnInit {
     })
     this.replyToCommentForm = new FormGroup({
       'content': new FormControl(null, { validators: [Validators.required] })
-    })
+    })  
+    
     // this.createdDate = moment(this.comment.createdAt).format('DD-MM-YYYY H-mm').toString();
     this.createdDate = moment(this.comment.createdAt).format('LLLL');
     // this.createdDate = moment(this.comment.createdAt).locale('fr').toString();
