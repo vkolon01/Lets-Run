@@ -68,12 +68,15 @@
         [checked]="checked"
         color="primary"
         (change)="changed()">
-      <!-- Private Event? (Off by default) -->
+      <!-- Private Event? (Off by default) *ngIf="!loaded && pressedLogin" -->
       {{checked}}
     </mat-slide-toggle>
-      <button class="buttonMain"  type="submit" *ngIf="!data">Add event</button>
-      <button class="buttonMain"  type="submit" *ngIf="data">Update event</button>
-
+      <button class="buttonMain"  type="submit" *ngIf="!data && !pressedAdd">Add event</button>
+      <button class="buttonMain"  type="submit" *ngIf="data && !pressedAdd">Update event</button>
+      <mat-progress-spinner
+      *ngIf="!loaded && pressedAdd"
+      [mode]="mode"
+      ></mat-progress-spinner>
     </div>
 
   </form>

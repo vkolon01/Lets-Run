@@ -137,19 +137,25 @@ header {
   }
 
 
-}
+} 
 
-@keyframes hide {
-  0% { opacity: 1; transform: translateY(0px); }
-  50% {opacity: 0.2; transform: translateY(-500px); }
-  99% {opacity: 0; transform: translateY(-100px);}
-  100% {opacity: 0; transform: translateY(-200px);}
-}
+// .custom-select {
+//   font-family: Arial;
+  
+//   select {
+//     height: 30px;
+//     background: #25377600;
+//     border: none;
+//     color: #d1c83a;
+//     outline: none;
+//     font-size: 1.5rem;
+//     textarea {
+//       background: red !important;
+//     }
+//   }
 
-@keyframes show {
-  0% { opacity: 0; transform: translateY(-200px); }
-  100% {opacity: 1; transform: translateY(0px);}
-}
+  
+// }
 
 
 

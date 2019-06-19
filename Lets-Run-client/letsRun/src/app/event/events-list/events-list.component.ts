@@ -21,6 +21,9 @@ import { PagerService } from 'src/app/services/pager.service';
 })
 export class EventsListComponent implements OnInit, OnDestroy {
 
+  mode="indeterminate"
+  loaded = false;
+
   searchEventModule = false;
 
   eventSearchForm: FormGroup;
@@ -87,7 +90,7 @@ console.log('setPage');
       .subscribe((value: { events: EventModule[], eventCount: number }) => {
         this.events = value.events;
         this.totalEvents = value.eventCount;
-
+        this.loaded = true;
         this.pager = this.pagerService.getPager(this.totalEvents, page);
       });
     

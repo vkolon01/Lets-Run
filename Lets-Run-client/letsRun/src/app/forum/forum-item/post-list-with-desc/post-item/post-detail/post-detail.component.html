@@ -68,6 +68,10 @@
          </i></button>
    </form>
  
+   <mat-progress-spinner
+   *ngIf="!loaded"
+   [mode]="mode"
+   ></mat-progress-spinner>
  
    <div [ngClass]="{'evenStyle': (i % 2) === 0, 'oddStyle': (i % 2) !== 0}" *ngFor="let comment of postComments; index as i"> 
        

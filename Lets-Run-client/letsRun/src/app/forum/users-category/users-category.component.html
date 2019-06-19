@@ -2,6 +2,10 @@
     <div class="general-category--main">
       <h1>User Category</h1>
     </div>
+    <mat-progress-spinner
+*ngIf="!loaded"
+[mode]="mode"
+></mat-progress-spinner>
     <button  class="arrow_box"  (click)="showAddField()" *ngIf="userRole === 'admin' && !showGeneralAddField">Add topic in common section!</button>
     <button  class="arrow_box opened"  (click)="showAddField()" *ngIf="userRole === 'admin' && showGeneralAddField">Cancel</button>
 <form *ngIf="showGeneralAddField" class="general-add" [formGroup]="commonFormAdd" (ngSubmit)="addCommonForumSection()">

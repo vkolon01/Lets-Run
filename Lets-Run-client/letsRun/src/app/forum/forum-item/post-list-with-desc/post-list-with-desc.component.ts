@@ -14,6 +14,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class PostListWithDescComponent implements OnInit {
 
+  mode="indeterminate"
+  loaded = false;
+
   forumList_id;
   topic: TopicCategoryModel; 
   addMode = false;
@@ -55,6 +58,7 @@ export class PostListWithDescComponent implements OnInit {
       this.forumService.getTopicById(this.forumList_id).subscribe((result: {foundTopic: TopicCategoryModel}) => {
         this.topic = result.foundTopic;
         this.forOwnersOnly = this.topic.forOwnersOnly;
+        this.loaded = true;
     });
 
     this.setPage(1);

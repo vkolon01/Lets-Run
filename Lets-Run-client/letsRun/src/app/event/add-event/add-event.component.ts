@@ -18,6 +18,10 @@ export class AddEventComponent implements OnInit {
 
   checked = false;
 
+  mode = "indeterminate"
+  pressedAdd = false;
+  loaded = false;
+
   eventForm: FormGroup;
   imagePreview: string;
   distances = [
@@ -107,10 +111,12 @@ export class AddEventComponent implements OnInit {
   }
 
   addEvent() {
+    this.pressedAdd = true;
 
     if(!this.data) {
       if (this.eventForm.invalid) {
         this.snackBarService.showMessage('Please fill the required fields', 'OK');
+        this.pressedAdd = false;
         return;
       }
   

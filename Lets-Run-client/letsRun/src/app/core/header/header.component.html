@@ -72,6 +72,13 @@
     <a *ngIf="!userIsAuthenticated" [@links]="animation_links" (click)="onRegister()" (click)="toggle_animation_state()">Register</a>
     <a *ngIf="userIsAuthenticated" [@links]="animation_links" [routerLink]="['/userpage', userId , 'info']" (click)="toggle_animation_state()">{{
       username }}</a>
+
+      <!-- <div class="custom-select" >
+        <select>
+          <option value="Rus">Russian</option>
+          <option value="Eng">English</option>
+        </select>
+      </div> -->
   </div>
 </div>
 

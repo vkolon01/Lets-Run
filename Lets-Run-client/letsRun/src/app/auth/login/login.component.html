@@ -15,10 +15,15 @@
                 <mat-error *ngIf="logInFrom.get('password').errors">Password is must be min lenght 8 symbols!</mat-error>
             </mat-form-field>
 
-      <button class="buttonMain" type="submit">LogIn</button>
+      <button *ngIf="!pressedLogin" class="buttonMain" type="submit">LogIn</button>
     <p *ngIf="logInFrom.invalid && logInFrom.touched">Please check your form</p>
 
   </form>
+
+  <mat-progress-spinner
+  *ngIf="!loaded && pressedLogin"
+  [mode]="mode"
+  ></mat-progress-spinner>
 
   <a [routerLink]="['auth/resetPassword']" (click)="onClose()">forgot your password?</a> 
 

@@ -30,7 +30,10 @@
         </form>
       </div>
     
-    
+      <mat-progress-spinner
+      *ngIf="!loaded"
+      [mode]="mode"
+      ></mat-progress-spinner>
     
       <div class="event-list">
         <div class="event-list--noEvents" *ngIf="events.length === 0">

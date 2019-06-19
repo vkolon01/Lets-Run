@@ -15,6 +15,9 @@ export class UsersCategoryComponent implements OnInit {
 
   commonFormAdd: FormGroup;
 
+  mode="indeterminate"
+  loaded = false;
+
   checked = false;
   showGeneralAddField = false;
 
@@ -42,6 +45,7 @@ export class UsersCategoryComponent implements OnInit {
     this.forumSub = this.forumService.getCategory('Common')
         .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.commonCategory = result.forumCategory;
+          this.loaded = true;
         })
   }
 

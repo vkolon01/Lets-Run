@@ -24,6 +24,11 @@
       </div>
     
       <h1>Posts List</h1>
+
+      <mat-progress-spinner
+      *ngIf="!loaded"
+      [mode]="mode"
+      ></mat-progress-spinner>
     
       <button class="arrow_box" *ngIf="(!addMode && forOwnersOnly === false) || (!addMode && userRole === 'admin')" (click)="addModeToggle()">Add post!</button>
       <button class="arrow_box opened" *ngIf="addMode" (click)="addModeToggle()">Cancel</button>

@@ -62,10 +62,16 @@
         [type]={{type}} -->
   
         <div class="formButtons">
-            <button  class="buttonMain" type="submit" >Register</button>
+            <button *ngIf="!pressedRegister"  class="buttonMain" type="submit" >Register</button>
           </div>
+          <mat-progress-spinner
+          *ngIf="!loaded && pressedRegister"
+          [mode]="mode"
+          ></mat-progress-spinner>
           <p *ngIf="signInFrom.invalid && signInFrom.touched" class="error">Please check the form for errors</p>
    
     </form>
+
+
   
 </div>

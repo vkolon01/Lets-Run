@@ -16,6 +16,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class PostDetailComponent implements OnInit {
 
+  mode="indeterminate"
+  loaded = false;
+
   updatePostForm: FormGroup;
   addCommentForm: FormGroup;
 
@@ -62,7 +65,7 @@ export class PostDetailComponent implements OnInit {
 
       this.forumService.getPostById(this.post_id).subscribe((result: {post: PostModel}) => {
         this.post = result.post;
-
+        this.loaded = true;
         // console.log('post?.author._id');
         // console.log(this.post.author._id);
 

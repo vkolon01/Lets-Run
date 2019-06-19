@@ -17,6 +17,9 @@ export class GeneralCategoryComponent implements OnInit {
 
   generalFormAdd: FormGroup;
 
+  mode="indeterminate"
+  loaded = false;
+
   checked = false;
   showGeneralAddField = false;
 
@@ -44,6 +47,7 @@ export class GeneralCategoryComponent implements OnInit {
     this.forumSub = this.forumService.getCategory('General')
         .subscribe((result: {forumCategory: TopicCategoryModel[]}) => {
           this.generalCategory = result.forumCategory;
+          this.loaded = true;
         })
   }
 

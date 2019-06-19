@@ -13,6 +13,11 @@ import { Subscription } from 'rxjs';
               ]
 })
 export class LoginComponent implements OnInit {
+
+  mode = "indeterminate"
+  pressedLogin = false;
+  loaded = false;
+
   logInFrom: FormGroup;
   hide = true;
   private authListenerSubs: Subscription;
@@ -31,9 +36,11 @@ export class LoginComponent implements OnInit {
   }
 
   onlognin(){
+    this.pressedLogin = true;
     
     if (this.logInFrom.invalid) {
       this.snackBarService.showMessage('Please check your login information!', 'OK');
+      this.pressedLogin = false;
       return;
     }
 
@@ -42,6 +49,8 @@ export class LoginComponent implements OnInit {
     this.authService.getAuthStatusListener().subscribe(result => {
       if(result === true) {
         this.onClose();
+      } else {
+        this.pressedLogin = false;
       }
 
     })

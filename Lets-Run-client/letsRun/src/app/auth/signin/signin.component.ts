@@ -13,6 +13,10 @@ import { environment } from "../../../environments/environment"
 })
 export class SigninComponent implements OnInit {
 
+  mode = "indeterminate"
+  pressedRegister = false;
+  loaded = false;
+
   signInFrom: FormGroup;
   success;
   private authSub: Subscription;
@@ -42,10 +46,11 @@ export class SigninComponent implements OnInit {
   }
 
   onSignin() {
-    console.log(this.signInFrom);
+    this.pressedRegister = true;
     
     if(this.signInFrom.invalid) {
       this.snackBarService.showMessage('Please check your registration information!', 'OK');
+      this.pressedRegister = false;
       return;
     }
     
@@ -61,6 +66,8 @@ export class SigninComponent implements OnInit {
         this.authSub = this.authService.getRegisteredListener().subscribe(result => {
           if(result === true) {
             this.onClose();
+          } else {
+            this.pressedRegister = true;
           }
         })
         
