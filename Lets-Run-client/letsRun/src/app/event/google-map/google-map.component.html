@@ -1,6 +1,0 @@
-
-<button class="arrow_box" *ngIf="animation_state === 'up'" (click)="toggle_animation_state()">Show Map</button>
-<button class="arrow_box opened"  *ngIf="animation_state === 'down'" (click)="toggle_animation_state()">Close Map</button>
-<div #gmap class="gmap" [@dropDownUp]="animation_state">
-
-</div>

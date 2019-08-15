@@ -22,7 +22,7 @@
     description: {
       type: String,
       required: true,
-      default: 'No description yeat added'  //http://localhost:8080/images/manchester-1544911854844.jpg
+      default: 'No description yet added'  //http://localhost:8080/images/manchester-1544911854844.jpg
     },
     title: {
       type: String,
